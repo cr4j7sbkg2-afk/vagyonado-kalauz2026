@@ -106,32 +106,32 @@
     </dl>
   </div>
 </section>
-<!-- Gyorsbecslő: 30 másodperces vagyonadó-becslés; a pontos számítás a kalkulátor fülön -->
+<!-- Gyorsbecslő: egysoros becslés a hero alatt; a részletes bontás összecsukva -->
 <section class="quick" id="quick" aria-labelledby="quick-h">
   <div class="wrap">
-    <div class="quick-head">
-      <div class="eyebrow">Gyorsbecslő</div>
-      <h2 id="quick-h">Érint-e a vagyonadó? Fél perc alatt.</h2>
-      <p>Adja meg nagyságrendileg a vagyonát millió forintban – a becslő a tervezet kulcsai szerint számol. A részletekhez (értékelési szabályok, haszonélvezet, cégképlet, BVK) a teljes kalkulátor való.</p>
-    </div>
-    <form class="quick-form" id="qf" autocomplete="off" novalidate>
+    <form class="quick-row" id="qf" autocomplete="off" novalidate>
+      <label class="q-main" for="q_net"><span class="q-lab" id="quick-h">Érint-e a vagyonadó?</span><span class="q-sub">Nettó vagyonom (tartozások nélkül) kb.</span></label>
+      <div class="q-input">
+        <span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_net" placeholder="1 500"><span>M Ft</span></span>
+        <div class="q-chips" role="group" aria-label="Gyorsválasztás"><button type="button" data-q="800">800</button><button type="button" data-q="1500">1 500</button><button type="button" data-q="3000">3 000</button><button type="button" data-q="10000">10 000</button></div>
+      </div>
+      <label class="chk q-mar"><input type="checkbox" id="q_mar"> Házas vagyok</label>
+      <span class="q-break" aria-hidden="true"></span>
+      <div class="q-out" aria-live="polite"><span class="badge b-info" id="qBadge">Adja meg az összeget</span><span class="q-tax" id="qTax"></span><span class="q-range" id="qRange"></span></div>
+      <button type="button" class="cta q-go" id="qGo" disabled>Pontos számítás →</button>
+    </form>
+    <details class="q-details" id="qDetails">
+      <summary>Részletezem: ingatlan, cég, pénzügyi vagyon, tartozás, illetőség</summary>
       <div class="quick-grid">
         <label class="qfld"><span>Ingatlanok</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_re" placeholder="0"><span>M Ft</span></span><small>lakás, nyaraló, telek, külföldi ingatlan – piaci értéken</small></label>
-        <label class="qfld"><span>Cégrészesedések</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_co" placeholder="0"><span>M Ft</span></span><small>a tervezet képlete szerinti értéken – <a href="cegertek.html">számolja ki →</a></small></label>
+        <label class="qfld"><span>Cégrészesedések</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_co" placeholder="0"><span>M Ft</span></span><small>a tervezet képlete szerint – <a href="cegertek.html">cégérték-kalkulátor →</a></small></label>
         <label class="qfld"><span>Pénzügyi vagyon</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_fin" placeholder="0"><span>M Ft</span></span><small>bankszámla, értékpapír, alap, kripto, biztosítás</small></label>
         <label class="qfld"><span>Egyéb</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_oth" placeholder="0"><span>M Ft</span></span><small>műtárgy, jármű, kölcsönök, jogok</small></label>
         <label class="qfld"><span>Tartozások</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_debt" placeholder="0"><span>M Ft</span></span><small>okiratba foglalt hitel, kölcsön</small></label>
-        <div class="qfld qopts">
-          <label class="chk"><input type="checkbox" id="q_mar"> Házas vagyok (közös vagyon, fele-fele)</label>
-          <label class="chk"><input type="checkbox" id="q_bel" checked> Belföldi illetőségű vagyok</label>
-        </div>
+        <div class="qfld qopts"><label class="chk"><input type="checkbox" id="q_bel" checked> Belföldi illetőségű vagyok</label><small>ha nem: csak a magyar ingatlan és cégrészesedés adózik</small></div>
       </div>
-      <div class="quick-out" aria-live="polite">
-        <div class="qo-main"><span class="badge b-info" id="qBadge">Adja meg az adatokat</span><div class="qo-tax" id="qTax">–</div><div class="qo-lbl">becsült éves vagyonadó, 2026 – <span id="qRange"></span></div></div>
-        <p class="qo-note" id="qNote">A becslés nem veszi figyelembe a haszonélvezetet, a kisebbségi diszkontot, az egyezményeket és a bizalmi vagyonkezelést; az értékek ±15%-os bizonytalanságával számol.</p>
-        <div class="qo-btns"><button type="button" class="cta" id="qGo">Pontos számítás a kalkulátorral</button><a class="cta outline" href="cegertek.html">Cégérték-kalkulátor</a></div>
-      </div>
-    </form>
+      <p class="qo-note" id="qNote">A becslés nem veszi figyelembe a haszonélvezetet, a kisebbségi diszkontot, az egyezményeket és a bizalmi vagyonkezelést; az értékek ±15%-os bizonytalanságával számol.</p>
+    </details>
   </div>
 </section>
 <!-- Szakterületi színsáv feliratokkal (a weboldal és a sablon négyszegmensű vonala) -->
