@@ -26,6 +26,13 @@ A build a **bekespartners.com arculatát** követi (mintha a főoldal egy extra 
 3. **Fejléc stílusa, sarkok, fülek stb.:** `index.html`, az `<html …>` elem `data-*` attribútumai; a lehetséges értékek a fájl tetején fel vannak sorolva.
 4. **Szövegállapot-bélyeg:** jelenleg nincs a fejlécen; az `index.html` fejlécében megjegyzésként ott a minta, ha később kellene.
 
+## Kalkulátor-viselkedés
+
+- Üres indulás („Kezdjük” kártya); a példák a „Példa betöltése ▾” legördülőből tölthetők, a mentés/export a „Mentés és export ▾” menüben.
+- Mobilon rögzített alsó sáv mutatja a becsült adót; koppintásra az eredménypanelhez görget.
+- „Teljes kalauz” fül: a II–IV. fül egy oldalon, görgetve.
+- A szakmai szabályok a tervezet szövegével egyeztetve (2026. 10. 20.): kisebbségi diszkont választható, közvetlen + közvetett hányaddal (1. mell. V. b)); halasztott adó becslés hiányában a rejtett tartalék 15 %-a (2. § 14.); közös szülői felügyelet házasságtól függetlenül fele-fele (7. § (4)); névre szóló közös elem csak a nyilvántartott házastársnál 100 % vagy fele-fele (7. § (2) b)); házastárs illetősége külön kérdés; termőföld kivétel az 500 M Ft-os szakértői szabály alól (19. § (3)); értékelési díj csak kötelező értékelésnél (9. § (2) a)).
+
 ## Tartalom módosítása
 
 - A II–IV. fül szövege az `index.html` megfelelő `<section>` elemében van; a `§`-hivatkozások `<span class="ref">…</span>` jelöléssel.

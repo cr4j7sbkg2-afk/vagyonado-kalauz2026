@@ -47,6 +47,8 @@
 <meta name="color-scheme" content="light dark">
 <title>Vagyonadó-kalauz</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231B4180'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' font-weight='700' text-anchor='middle' fill='%23fff'%3E%C2%A7%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/montserrat-latin-ext-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/montserrat-latin-ext-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -94,7 +96,8 @@
     <a class="practice-chip" href="https://www.bekespartners.com/ado/" target="_blank" rel="noopener noreferrer"><span class="pc-dot"></span>Adó<span class="pc-sep">·</span><span class="pc-tag">Az adótervezés tudománya</span></a>
     <div class="eyebrow">2026. évi … törvény a vagyonadóról · tervezet</div>
     <h1>Vagyonadó-kalauz</h1>
-    <p class="lead">Számolja ki, mennyire érinti Önt a vagyonadó – majd olvassa el, mit jelent a kormany.hu-n közzétett törvénytervezet a vagyonos magánszemélyeknek, hogyan értékelné egy adótanácsadó, és mi a helyzet a bizalmi vagyonkezeléssel.</p>
+    <p class="lead lead-full">Számolja ki, mennyire érinti Önt a vagyonadó – majd olvassa el, mit jelent a kormany.hu-n közzétett törvénytervezet a vagyonos magánszemélyeknek, hogyan értékelné egy adótanácsadó, és mi a helyzet a bizalmi vagyonkezeléssel.</p>
+    <p class="lead lead-short">Számolja ki, mennyire érinti Önt a vagyonadó, és olvassa el, mit jelent a 2026-os tervezet.</p>
     <dl class="facts">
       <div class="f-tax"><dt>Mentes sáv</dt><dd>1 Mrd Ft<small>nettó vagyon, adóalanyonként</small></dd></div>
       <div class="f-legal"><dt>Adókulcs</dt><dd>1% · 1,5%<small>100 Mrd Ft adóalap felett 1,5%</small></dd></div>
@@ -118,6 +121,7 @@
       <button class="tab" role="tab" id="t-osszefoglalo" data-target="osszefoglalo" aria-controls="osszefoglalo" aria-selected="false"><span class="n">II.</span>Kit és mit érint</button>
       <button class="tab" role="tab" id="t-szakmai" data-target="szakmai" aria-controls="szakmai" aria-selected="false"><span class="n">III.</span>Adótanácsadói elemzés</button>
       <button class="tab" role="tab" id="t-bvk" data-target="bvk" aria-controls="bvk" aria-selected="false"><span class="n">IV.</span>Bizalmi vagyonkezelés</button>
+      <button class="tab tab-all" role="tab" id="t-all" data-target="all" aria-controls="osszefoglalo szakmai bvk" aria-selected="false"><span class="n">≡</span>Teljes kalauz</button>
     </div>
   </div>
 </nav>
@@ -133,22 +137,27 @@
   <noscript><div class="note"><b>A kalkulátorhoz JavaScript szükséges.</b>A II–IV. fül tartalma enélkül is olvasható.</div></noscript>
 
   <div class="kbar" id="kBar">
-    <span class="kbar-l" id="kStatus"><strong>Példaadatok.</strong> Írja felül a sajátjával.</span>
+    <span class="kbar-l" id="kStatus"><strong>Saját adatok</strong> – csak ebben a lapfülben.</span>
     <span class="bar-actions">
-      <select class="sel small" id="kPreset" aria-label="Példa kiválasztása">
-        <option value="family">Példa: vállalkozó házaspár</option>
-        <option value="bvk">Példa: külföldi állampolgár magyar BVK-val</option>
-        <option value="abroad">Példa: külföldön élő kettős állampolgár</option>
+      <select class="sel small" id="kPreset" aria-label="Példa betöltése">
+        <option value="">Példa betöltése ▾</option>
+        <option value="family">Vállalkozó házaspár</option>
+        <option value="bvk">Külföldi állampolgár magyar BVK-val</option>
+        <option value="abroad">Külföldön élő kettős állampolgár</option>
       </select>
-      <button type="button" class="btn small" id="kLoadPreset">Példa betöltése</button>
-      <button type="button" class="btn small" id="kClear">Üres űrlap</button>
-      <button type="button" class="btn small" id="kSave">Mentés fájlba</button>
-      <button type="button" class="btn small" id="kFileBtn">Betöltés fájlból</button>
-      <input type="file" id="kFile" accept="application/json,.json" hidden>
-      <button type="button" class="btn small" id="kPrint">Jelentés nyomtatása</button>
-      <button type="button" class="btn small" id="kReportDl">Jelentés letöltése</button>
-      <label class="chk small" title="Alapból az adatok csak a lap bezárásáig maradnak meg. Bekapcsolva ezen az eszközön tárolódnak, amíg nem törli."><input type="checkbox" id="kRemember"> Megjegyzés ezen az eszközön</label>
-      <button type="button" class="btn small danger" id="kWipe">Adatok törlése</button>
+      <details class="kmenu">
+        <summary class="btn small">Mentés és export ▾</summary>
+        <div class="kmenu-list">
+          <button type="button" class="btn small" id="kSave">Mentés fájlba (JSON)</button>
+          <button type="button" class="btn small" id="kFileBtn">Betöltés fájlból</button>
+          <input type="file" id="kFile" accept="application/json,.json" hidden>
+          <button type="button" class="btn small" id="kReportDl">Jelentés letöltése (HTML)</button>
+          <button type="button" class="btn small" id="kPrint">Jelentés nyomtatása / PDF</button>
+          <label class="chk small" title="Alapból az adatok csak a lap bezárásáig maradnak meg. Bekapcsolva ezen az eszközön tárolódnak, amíg nem törli."><input type="checkbox" id="kRemember"> Megjegyzés ezen az eszközön</label>
+          <button type="button" class="btn small" id="kClear">Üres űrlap</button>
+          <button type="button" class="btn small danger" id="kWipe">Adatok törlése</button>
+        </div>
+      </details>
       <span class="ksub" id="kMsg" aria-live="polite"></span>
     </span>
   </div>
@@ -157,7 +166,7 @@
     <form class="form" id="kf" autocomplete="off" novalidate>
       <fieldset>
         <legend>1. Adóalany és illetőség</legend>
-        <p class="fhint">Az illetőség dönti el, hogy a teljes (világ)vagyon vagy csak a magyarországi elemek adóznak. A házastárs ugyanazzal az illetőséggel számol.</p>
+        <p class="fhint">Az illetőség dönti el, hogy a teljes (világ)vagyon vagy csak a magyarországi elemek adóznak. A házastársak külön adóalanyok, illetőségük külön vizsgálandó. <span class="ref">2. § 3. pont, 4. §, 7. §</span></p>
         <div class="q">
           <p>Magyar állampolgár (akár kettős állampolgárként is)?</p>
           <div class="choice">
@@ -177,13 +186,21 @@
           <div class="choice">
             <label><input type="radio" name="kfst" value="res" data-p="fst"> Magyarországon élek (itt van a létérdekeim központja, vagy legalább 183 napot töltök itt)</label>
             <label><input type="radio" name="kfst" value="post" data-p="fst"> Külföldi munkáltató kiküldöttjeként dolgozom itt, kevesebb mint 5 éve</label>
-            <label><input type="radio" name="kfst" value="ltr" data-p="fst"> Huzamos tartózkodási jogom van, de az évben 183 napnál kevesebbet vagyok itt</label>
+            <label><input type="radio" name="kfst" value="ltr" data-p="fst"> Huzamos tartózkodási jogosultságom van (harmadik országbeli állampolgárként), de az évben 183 napnál kevesebbet vagyok itt</label>
             <label><input type="radio" name="kfst" value="no" data-p="fst"> Nem élek Magyarországon</label>
           </div>
         </div>
         <div class="q">
           <label class="chk"><input type="checkbox" data-p="mar"> Házas vagyok – a házastárs külön adóalany, saját 1 Mrd Ft-os mentes sávval</label>
-          <label class="chk" id="kq-cust"><input type="checkbox" data-p="cust"> A kiskorú gyermek feletti szülői felügyeletet közösen gyakoroljuk</label>
+          <label class="chk"><input type="checkbox" data-p="cust"> A kiskorú gyermek feletti szülői felügyeletet a másik szülővel közösen gyakoroljuk (a gyermek nem örökölt vagyona fele-fele arányban a két szülőnél adózik)</label>
+        </div>
+        <div class="q" id="kq-spres">
+          <p>A házastárs illetősége</p>
+          <div class="choice">
+            <label><input type="radio" name="kspres" value="same" data-p="spres"> Ugyanaz, mint az enyém</label>
+            <label><input type="radio" name="kspres" value="bel" data-p="spres"> Belföldi illetőségű (a teljes vagyona adózik)</label>
+            <label><input type="radio" name="kspres" value="kul" data-p="spres"> Külföldi illetőségű (csak a magyar ingatlanjai és cégrészesedései adóznak)</label>
+          </div>
         </div>
       </fieldset>
 
@@ -251,6 +268,7 @@
     </aside>
   </div>
 
+  <button type="button" class="kmini" id="kMini" aria-label="Ugrás az eredményhez"><span class="kmini-l">Becsült vagyonadó</span><span class="kmini-v" id="kMiniTax">0 Ft</span><span class="kmini-b" id="kMiniBadge">—</span></button>
   <div class="kdetail" id="kDetail">
     <div class="ktabs" role="tablist" aria-label="Részletes eredmény">
       <button type="button" class="ktab" role="tab" data-kp="lev" aria-selected="true">Levezetés adóalanyonként</button>
@@ -292,6 +310,7 @@
   <div class="prose">
     <h2>Mit jelent a vagyonadó Önnek?</h2>
     <div class="postmeta"><span>2026. október</span><span class="tags">#vagyonadó #adótervezés #magánvagyon</span></div>
+    <div class="note info"><b>Tervezetről van szó.</b>Az alábbiak a kormany.hu-n közzétett, 2026. október 7-i szövegállapotú törvénytervezetre épülnek. A kihirdetett törvény ettől eltérhet; a kalauzt a végleges szöveg alapján felülvizsgáljuk. Ahol a szöveg kijelentő módban ír, az a tervezet rendelkezését jelenti, nem hatályos szabályt.</div>
     <p class="intro">Akinek a teljes vagyona, a hitelei levonása után, december 31-én meghaladja az 1 milliárd forintot, annak évente a milliárd feletti rész 1 százalékát kell befizetnie. A tervezet szerint ez már 2026. december 31-ére vonatkozik, az első befizetés 2027. augusztus 31.</p>
     <div class="statband" role="group" aria-label="A tervezet hatásvizsgálatának kulcsszámai">
       <div class="stat s-tax"><div class="stat-n">≈ 15 000</div><div class="stat-l">érintett vagyonos magánszemély</div></div>
@@ -304,7 +323,7 @@
     <ul>
       <li><strong>Magyarországon élő magánszemélyeket</strong>, a világ bármely pontján lévő teljes vagyonukkal. <span class="ref">4. § (1)</span></li>
       <li><strong>Külföldön élő magyar állampolgárokat is</strong>, kettős állampolgárokat is, magyar lakcím nélkül is, egészen addig, amíg legalább 10 éve életvitelszerűen külföldön nem élnek. <span class="ref">2. § 3. pont</span></li>
-      <li><strong>Külföldieket</strong> csak a magyarországi ingatlanjaik és a magyar (vagy magyar ingatlanos) cégekben lévő részesedéseik után. <span class="ref">4. § (2)</span></li>
+      <li><strong>Külföldi illetőségű személyeket</strong> csak a magyarországi ingatlanjaik és a magyar (vagy magyar ingatlanos) cégekben lévő részesedéseik után. <span class="ref">4. § (2)</span></li>
       <li><strong>Bizalmi vagyonkezelésben (BVK), magánalapítványban vagy külföldi trustban tartott vagyont</strong>, mint önálló adóalanyt. <span class="ref">3. §, 2. § 41. pont</span> A bizalmi vagyonkezelés részletes szabályai a <button type="button" class="linkbtn" data-goto="bvk">Bizalmi vagyonkezelés</button> fülön vannak.</li>
     </ul>
     <p>A házastársak külön-külön adóalanyok, mindkettőjüket megilleti a saját 1 milliárdos mentes sáv. A kiskorú gyermek vagyonát főszabály szerint a szülőnél kell figyelembe venni, kivéve azt, amit a gyermek örökölt vagy saját munkájával szerzett. <span class="ref">7. § (2)–(5)</span></p>
@@ -378,7 +397,7 @@
 
     <h3>Hogyan értékelik a vagyont?</h3>
     <ul>
-      <li><strong>Ingatlan:</strong> ha az elmúlt 12 hónapban adásvétel vagy öröklés történt, annak értéke; ha 10 éven belül, akkor indexálva; egyébként a NAV tömeges értékelési modellje. Ön mindig választhat független szakértői értékbecslést is, ami sok esetben kedvezőbb és bírságvédelmet ad. <span class="ref">15–19. §, 27. § (2)</span></li>
+      <li><strong>Ingatlan:</strong> ha az elmúlt 12 hónapban adásvétel vagy öröklés történt, annak értéke; ha 10 éven belül, akkor indexálva; egyébként a NAV tömeges értékelési modellje. Az indexált érték és a NAV-modell helyett Ön szabadon választhat független szakértői értékbecslést, ami sok esetben kedvezőbb és bírságvédelmet ad; a 12 hónapon belüli adásvételi vagy öröklési érték helyett viszont szakértői érték csak kivételesen, az ügylet sajátos körülményeinek igazolásával alkalmazható. <span class="ref">15–19. §, 17. § (4), 27. § (2)</span></li>
       <li><strong>Nem tőzsdei cég:</strong> a saját tőke egyharmad és a tőkésített nyereségképesség (az elmúlt három év átlagos adózott eredménye ÷ 0,15) kétharmad súllyal, azaz V = (ST + 2 × H) ÷ 3; kisebbségi részesedésnél 25–30% diszkont vehető igénybe. <span class="ref">1. melléklet I., V. b)</span></li>
       <li><strong>Tőzsdei papír, kripto, arany:</strong> az év végi piaci ár.</li>
     </ul>
@@ -388,7 +407,7 @@
     <ul>
       <li><strong>A vagyonhoz nem jár likviditás.</strong> Az adót akkor is ki kell fizetni, ha a vagyon ingatlanban vagy cégben van. Kérelemre legfeljebb 12, kivételesen 24 havi részletfizetés adható; az automatikus részletfizetés nem alkalmazható. <span class="ref">26. §</span></li>
       <li><strong>Házastársak:</strong> a közös vagyon főszabály szerint fele-fele arányban oszlik meg; a névre szóló nyilvántartott vagyonelemekről közösen dönthetnek, ehhez azonos tartalmú nyilatkozat kell augusztus 31-ig. <span class="ref">7. § (2)–(3)</span></li>
-      <li><strong>Alapítványok, BVK:</strong> az ugyanattól a vagyonrendelőtől, egymás Ptk. szerinti hozzátartozóitól (ez a közeli hozzátartozónál tágabb kör: élettárs, jegyes, sógor, a testvér házastársa stb.) vagy kapcsolt vállalkozásoktól származó vagyonkezelők osztozni kénytelenek egyetlen 1 milliárdos mentes sávon. A már működő vagyonkezelőket a hatálybalépéstől számított 30 napon belül be kell jelenteni a NAV-nál. <span class="ref">24. § (3)–(6), 35. § (4)</span></li>
+      <li><strong>Alapítványok, BVK:</strong> az ugyanattól a vagyonrendelőtől, egymás Ptk. szerinti hozzátartozóitól (ez a közeli hozzátartozónál tágabb kör: az élettárs, az egyeneságbeli rokon házastársa, a házastárs egyeneságbeli rokona és testvére, valamint a testvér házastársa is – <span class="ref">Ptk. 8:1. § (1) 2. pont</span>) vagy kapcsolt vállalkozásoktól származó vagyonkezelési adóalanyok osztozni kénytelenek egyetlen 1 milliárdos mentes sávon. A már működő vagyonkezelési adóalanyokat a hatálybalépéstől számított 30 napon belül be kell jelenteni a NAV-nál. <span class="ref">24. § (3)–(6), 35. § (4)</span></li>
       <li><strong>Kiköltözés:</strong> az adott évi kötelezettség a belföldi illetőség megszűnése előtti napra vonatkozó vagyon alapján akkor is keletkezik. <span class="ref">2. § 33. pont</span></li>
       <li>Az adó 5%-áról rendelkezhet a Nemzeti Együttműködési Alap javára. <span class="ref">31. § (2)</span></li>
     </ul>
@@ -410,7 +429,10 @@
       <div class="eyebrow">Vagyonadó-kalkulátor</div>
       <h3>Mennyire érint engem?</h3>
       <p>Vegye fel vagyonelemeit, és a kalkulátor a tervezet értékelési szabályai szerint kiszámolja az adóalapot és a fizetendő adót – adóalanyonként, bizalmi vagyonkezeléssel együtt.</p>
-      <button class="cta ghost" type="button" data-goto="teszt">Tovább a kalkulátorhoz</button>
+      <div class="band-btns">
+        <button class="cta ghost" type="button" data-goto="teszt">Tovább a kalkulátorhoz</button>
+        <a class="cta ghost" href="mailto:office@bekespartners.com?subject=Vagyonad%C3%B3%20%E2%80%93%20egyeztet%C3%A9s%20k%C3%A9r%C3%A9se">Egyeztetés kérése</a>
+      </div>
     </div>
   </div>
 </section>
@@ -443,7 +465,7 @@
       </table>
     </div>
     <h4>Az illetőségi definíció kiterjesztése</h4>
-    <p>A tervezet az <span class="ref">Szja tv. 3. § 2. pont</span> illetőségi fogalmát kiterjeszti a belföldi lakcímmel nem rendelkező kettős állampolgárokra is. Ezzel gyakorlatilag <strong>állampolgársági alapú adókötelezettséget</strong> vezet be, amely csak akkor szűnik meg, ha a magyar állampolgár a tárgyév utolsó napján legalább 10 éve életvitelszerűen külföldön él. <span class="ref">2. § 3. pont b)</span> További kivételek: a nem magyar állampolgár kiküldött munkavállaló az itteni munkavégzés kezdetétől 5 évig, és a huzamos tartózkodási engedélyes, ha az évben 183 napnál kevesebbet tartózkodik Magyarországon.</p>
+    <p>A tervezet az <span class="ref">Szja tv. 3. § 2. pont</span> illetőségi fogalmát kiterjeszti a belföldi lakcímmel nem rendelkező kettős állampolgárokra is. Ezzel gyakorlatilag <strong>állampolgársági alapú adókötelezettséget</strong> vezet be, amely csak akkor szűnik meg, ha a magyar állampolgár a tárgyév utolsó napján legalább 10 éve életvitelszerűen külföldön él. <span class="ref">2. § 3. pont b)</span> További kivételek: a nem magyar állampolgár kiküldött munkavállaló az itteni munkavégzés kezdetétől 5 évig, és a huzamos tartózkodási jogosultsággal rendelkező harmadik országbeli állampolgár, ha az évben 183 napnál kevesebbet tartózkodik Magyarországon. <span class="ref">2. § 3. pont a), c)</span> A kiküldöttek 5 éves időtartama a hatálybalépéskor már itt dolgozóknál a hatálybalépéstől számít. <span class="ref">34. § (1)</span></p>
     <p>A vagyonkezelési adóalany <strong>tényleges irányítási helyét</strong> megdönthető vélelem Magyarországra helyezi, ha bármely vagyonrendelője belföldi illetőségű, vagy ha belföldi kedvezményezett tényleges befolyással bír a döntésekre. <span class="ref">2. § 35. pont</span> A külföldi trust-struktúrák magyar kapcsolódása így főszabállyá válik, a vélelem megdöntése érdemi bizonyítási teherrel jár.</p>
 
     <h3>3. Adóalap és adó</h3>
@@ -459,9 +481,11 @@
     <h3>4. Hozzárendelési szabályok</h3>
     <ul>
       <li><strong>Közös tulajdon:</strong> tulajdoni hányad szerint. <span class="ref">7. § (1)</span></li>
-      <li><strong>Házastársi közös vagyon:</strong> elsődlegesen a vagyonjogi szerződés; ennek hiányában a névre nyilvántartott vagyonelemeknél választás (egyik félnél teljes egészében vagy fele-fele), egyéb elemeknél fele-fele. A választás azonos tartalmú, évenként megtehető nyilatkozattal érvényes. <span class="ref">7. § (2)–(3)</span> Tervezési szempontból ez adóalanyonként külön 1 Mrd Ft mentes sávot jelent, a választási jog a sávok kihasználását optimalizálja.</li>
+      <li><strong>Házastársi közös vagyon:</strong> elsődlegesen a vagyonjogi szerződés; ennek hiányában a névre nyilvántartott vagyonelemeknél választás (a nyilvántartott házastársnál teljes egészében vagy fele-fele), egyéb elemeknél fele-fele. A választás azonos tartalmú, évenként megtehető nyilatkozattal érvényes. <span class="ref">7. § (2)–(3)</span> Tervezési szempontból ez adóalanyonként külön 1 Mrd Ft mentes sávot jelent, a választási jog a sávok kihasználását optimalizálja.</li>
       <li><strong>Kiskorú gyermek:</strong> a szülői felügyeletet gyakorló szülőnél, közös felügyeletnél fele-fele; az örökölt, saját keresményből szerzett és helyettesítő vagyon a gyermeknél. <span class="ref">7. § (4)–(5)</span> A szülőtől kapott ajándék tehát nem képez külön mentes sávot.</li>
       <li><strong>Átlátható szervezetek</strong> (polgári jogi társaság, átlátható partnership): a tagoknál, a rájuk eső tartozással együtt. <span class="ref">7. § (6)–(7)</span></li>
+      <li><strong>Eltérő illetőségű házastársak:</strong> a házastársak külön adóalanyok, illetőségüket külön kell vizsgálni. A közös vagyon megosztása a külföldi illetőségű házastársra is irányadó, nála azonban a ráeső hányadból csak a belföldi ingatlan és a magyar társasági részesedés adózik, és csak az ezekhez kapcsolódó tartozás vonható le. A megosztási választás így illetőség-tervezési eszköz is, amelyet az <span class="ref">1. § (4)–(6)</span> szerinti vizsgálat érinthet. <span class="ref">2. § 3. pont, 4. § (2), 6. § (2), 7. § (2)</span></li>
+      <li><strong>Élettársak:</strong> a 7. § (2)–(3) szerinti megosztási választás kizárólag házastársakat illet meg; élettársaknál minden vagyonelem a polgári jogi tulajdoni hányad szerint adózik. <span class="ref">7. § (1)</span> Az élettárs ugyanakkor a Ptk. szerinti hozzátartozó, ezért az élettársak által létrehozott vagyonkezelési adóalanyok kapcsoltak, és egy mentes sávon osztoznak. <span class="ref">Ptk. 8:1. § (1) 2. pont, 24. § (3)</span></li>
     </ul>
 
     <h3>5. Értékelési szabályok vagyonelemenként</h3>
@@ -498,8 +522,8 @@
       <li>Veszteséges vagy alacsony hozamú, tőkeintenzív társaságnál az érték a saját tőke egyharmadáig süllyedhet, mert negatív átlagnál H = 0.</li>
       <li><strong>Holdingvállalkozás</strong> (a részesedések az eszközök legalább 90%-át teszik ki): V = ST × hányad, hozamelem nélkül. <span class="ref">1. mell. II., 2. § 15. pont</span></li>
       <li><strong>Új, jogelőd nélküli társaság:</strong> az alapítás évében és az azt követő két évben H = 0, kivéve ha a saját tőke 500 millió Ft feletti, vagy a hozamérték a saját tőke 25%-át meghaladja. <span class="ref">1. mell. III.</span></li>
-      <li><strong>500 millió Ft feletti saját tőkénél</strong> a saját tőkét a befektetett ingatlanok, részesedések és értékpapírok könyvvizsgáló által felülvizsgált rejtett tartalékával növelni kell (halasztott adóval csökkentve, becslés hiányában 15%). A társaságot ehhez önálló adatszolgáltatási kötelezettség terheli a beszámoló elfogadását követő 30 napon belül. <span class="ref">1. mell. IV., 30. § (1)</span></li>
-      <li>Kisebbségi diszkont (közvetlen és közvetett hányad 50% alatt): 33% felett 25%, alatta 30%. <span class="ref">1. mell. V. b)</span></li>
+      <li><strong>500 millió Ft feletti saját tőkénél</strong> a saját tőkét a befektetett ingatlanok, részesedések és értékpapírok könyvvizsgáló által felülvizsgált rejtett tartalékával növelni kell, a kapcsolódó halasztott adókötelezettséggel csökkentve; ha a várható nyereségadó megalapozottan nem becsülhető, a halasztott adó a rejtett tartalék 15%-a. <span class="ref">2. § 14. pont</span> A társaságot ehhez önálló adatszolgáltatási kötelezettség terheli a beszámoló elfogadását követő 30 napon belül. <span class="ref">1. mell. IV., 30. § (1)</span></li>
+      <li>Kisebbségi diszkont: ha a közvetlen és közvetett tulajdoni hányad együtt 50% alatti, a képlet szerinti érték <em>csökkenthető</em> – 33%-ot elérő hányadnál 25%-kal, az alatt 30%-kal. A tervezet szövege szerint ez választható kedvezmény, nem kötelező korrekció. <span class="ref">1. mell. V. b)</span></li>
       <li>Anyavállalatnál a konszolidált beszámoló adatai az irányadók. <span class="ref">1. mell. VII.</span> 10% feletti független tranzakció ára egy évig alkalmazható. <span class="ref">1. mell. V. c)</span></li>
       <li>Független cégértékelés csak hiányzó adat, lényeges változás vagy különleges részvényjogok esetén választható, és csak jelentős, igazolt árbevételű értékelőtől (évi 250 millió Ft, vagy legalább 25% és 50 millió Ft). <span class="ref">12. § (4)–(7)</span> Ez 2027 első félévében piaci kapacitásszűkületet okozhat.</li>
     </ul>
@@ -518,7 +542,7 @@
     <h3>7. Ingatlanértékelés: sorrend és szakértői mozgástér</h3>
     <p>A 12 hónapon belüli ügyleti érték főszabályként kötelező; ettől szakértői érték csak kivételesen, az ügylet sajátos körülményeinek igazolásával térhet el. <span class="ref">17. § (1), (4)</span> Az indexált érték és a NAV-modell helyett viszont az adóalany szabadon választhat szakértői forgalmi értéket. Ha ez több mint 20%-kal eltér, részletes indokolás kell, de az eltérés önmagában nem zárja ki az alkalmazást. <span class="ref">17. § (5)</span></p>
     <ul>
-      <li>Az 500 millió Ft-ot elérő („kiemelt értékű”) ingatlant csak igazságügyi ingatlanforgalmi szakértő értékelheti, legalább két módszerrel, súlyozással és a mellőzött módszer indokolásával. <span class="ref">19. § (3), (7)–(9)</span></li>
+      <li>A termőföldnek nem minősülő, 500 millió Ft-ot elérő („kiemelt értékű”) belföldi ingatlant csak igazságügyi ingatlanforgalmi szakértő értékelheti, legalább két módszerrel, súlyozással és a mellőzött módszer indokolásával. <span class="ref">19. § (3), (7)–(9)</span></li>
       <li>Ha a szakértői értéket a NAV később felülírja, adóbírság és késedelmi pótlék nem szabható ki, feltéve hogy az értékelés szabályszerű és az adóalany teljes körűen tájékoztatta a szakértőt. <span class="ref">27. § (2)</span> Ez a szakértői út legfontosabb előnye.</li>
       <li>A NAV egy éven belüli három jogerős, 70% alatti alulértékelés miatt törölheti a szakértőt a nyilvántartásából. <span class="ref">19. § (10)</span></li>
       <li>Az adóelkerülési céllal alacsonyan meghatározott ügyleti érték helyett a NAV a szokásos piaci értéket alkalmazza. <span class="ref">27. § (4)</span></li>
@@ -533,7 +557,29 @@
     </ul>
 
     <h3>9. Nemzetközi vonatkozások</h3>
-    <p>A kettős adóztatási egyezmény akkor alkalmazandó, ha kifejezetten kiterjed a vagyonadóra. <span class="ref">8. §</span> Az egyezményenkénti vizsgálat kulcskérdése, hogy a „hatálya alá tartozó adók” cikk és a későbbi hasonló adókra vonatkozó záradék lefedi-e az új adót. Ahol a másik állam adóztathat, a tervezet progresszióval történő mentesítést ír elő. <span class="ref">9. § (3)</span> Egyezmény hiányában a külföldi vagyonadó (például spanyol, svájci, norvég) nem számítható be, csak a helyi ingatlanadó-jellegű külföldi adók. Ez valós kettős adóztatási kockázat.</p>
+    <p>A kettős adóztatási egyezmény akkor alkalmazandó, ha kifejezetten kiterjed a vagyonadóra. <span class="ref">8. §</span> Az egyezményenkénti vizsgálat kulcskérdése, hogy a „hatálya alá tartozó adók” cikk és a későbbi hasonló adókra vonatkozó záradék lefedi-e az új adót. Ahol az egyezmény a vagyonelem adóztatását a másik államnak engedi, de a magyar adó számításánál figyelembe vehető, a tervezet szerint az adót a teljes (belföldi és külföldi) vagyonra kell kiszámítani, és abból le kell vonni a mentesített vagyonelemekre jutó, a 9. § (2) b) szerinti levonások nélkül számított adót – ez progresszióval történő mentesítés. <span class="ref">8. § (2), 9. § (3)</span> A „jutó adó” felosztásának módját a tervezet nem rögzíti; a kalkulátor a mentesített elemek bruttó vagyonhányada szerint arányosít. Egyezmény hiányában a külföldi vagyonadó nem számítható be, csak a helyi ingatlanadó-jellegű külföldi adók. Ez valós kettős adóztatási kockázat.</p>
+    <h4>Mely egyezmények terjednek ki a vagyonadóra?</h4>
+    <p>A magyar egyezmények egy része a jövedelem- <em>és vagyonadókra</em> szól, és az OECD-modell szerinti záradékkal az aláírás után bevezetett azonos vagy lényegét tekintve hasonló adókra is kiterjed; ezeknél a magyar vagyonadó várhatóan az egyezmény vagyonról szóló cikke alá esik (ingatlan a fekvés államában, egyéb vagyon az illetőség államában adóztatható). Más egyezmények csak jövedelemadókra vonatkoznak. A hatályos egyezmények szövege alapján, egyedi esetben ellenőrizendő:</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Állam</th><th scope="col">Kihirdető jogszabály</th><th scope="col">Hatálya alá tartozó adók</th><th scope="col">Vagyonadóra kiterjed?</th></tr></thead>
+        <tbody>
+          <tr><td>Ausztria</td><td>1976. évi 2. tvr.</td><td>jövedelem-, hozadéki és vagyonadók</td><td><strong>Igen</strong></td></tr>
+          <tr><td>Németország</td><td>2011. évi LXXXIV. tv.</td><td>jövedelem- és vagyonadók</td><td><strong>Igen</strong></td></tr>
+          <tr><td>Svájc</td><td>2013. évi CLXIII. tv.</td><td>jövedelem- és vagyonadók</td><td><strong>Igen</strong></td></tr>
+          <tr><td>Spanyolország</td><td>12/1988. (III. 10.) MT rendelet</td><td>jövedelem- és vagyonadók</td><td><strong>Igen</strong></td></tr>
+          <tr><td>Egyesült Királyság</td><td>2011. évi CXLIV. tv.</td><td>jövedelem- és tőkenyereség-adók</td><td><strong>Nem</strong></td></tr>
+          <tr><td>Amerikai Egyesült Államok</td><td>49/1979. (XII. 6.) MT rendelet – az USA felmondta, 2024. január 1-jétől nem alkalmazható</td><td>–</td><td><strong>Nincs hatályos egyezmény</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Ahol az egyezmény nem terjed ki a vagyonadóra (vagy nincs egyezmény), a belföldi illetőségű adóalany külföldi vagyona teljes egészében a magyar adóalapba tartozik, és a külföldön fizetett vagyonadó nem számítható be.</p>
+    <h4>Elszámolhatóság, átvállalás</h4>
+    <ul>
+      <li>A vagyonadó a magánszemély személyes közterhe: a személyi jövedelemadóban nem elszámolható költség, egyéni vállalkozónál sem a vállalkozási tevékenység érdekében felmerült kiadás.</li>
+      <li>Ha a magánszemély adóját társaság (például a saját cége) fizeti meg vagy téríti meg, az a magánszemélynél bevétel, amely a jogviszony szerint (tagi, munkaviszonyból származó vagy egyéb jövedelemként) szja- és szociálishozzájárulásiadó-köteles. <span class="ref">Szja tv. 4. § (2)</span> A társaságnál a juttatás a rá eső közterhekkel együtt személyi jellegű ráfordítás.</li>
+      <li>A vagyonkezelési adóalany adóját a kezelt vagyonból kell megfizetni; ez a kedvezményezettnél nem minősül vagyonkiadásnak. <span class="ref">29. § (12)</span> Az álláspont a tervezet és a hatályos Szja tv. együttes olvasatán alapul; végleges szabály hiányában egyedi vizsgálatot igényel.</li>
+    </ul>
 
     <h3>10. Eljárás és ellenőrzés</h3>
     <ul>
@@ -541,6 +587,28 @@
       <li>Iratmegőrzés az elévülésig, az indexálási számításokkal együtt. <span class="ref">15. § (6), 25. § (8)</span></li>
       <li>Adatellentmondás esetén 15 napos tisztázó felhívás; ellenőrzés indul, ha nem válaszolnak, vagy ha az eltérés 500 millió Ft-os adóalap-csökkenést ér el. <span class="ref">28. §</span></li>
       <li>Haláleset a fordulónap után: az adót a NAV állapítja meg a hagyatékátadást követő 90 napon belül. Az örökölt, de még át nem adott vagyonelemekre külön önellenőrzési szabály vonatkozik. <span class="ref">25. § (2)–(4)</span></li>
+    </ul>
+
+    <h3>10/A. Szankciók, elévülés – az Art. általános szabályai</h3>
+    <p>A tervezet külön szankciót nem tartalmaz; a vagyonadóra az adózás rendjéről szóló 2017. évi CL. törvény (Art.) általános szabályai vonatkoznak. Egyetlen kivétel a szakértői értékhez kapcsolódó bírságvédelem. <span class="ref">27. § (2)</span></p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Jogkövetkezmény</th><th scope="col">Mérték (hatályos Art.)</th><th scope="col">Mikor</th></tr></thead>
+        <tbody>
+          <tr><td>Késedelmi pótlék</td><td>a jegybanki alapkamat + 5 százalékpont, naptári naponként <span class="ref">Art. 209. §</span></td><td>a 2027. augusztus 31-i esedékességet követő késedelmes fizetésnél</td></tr>
+          <tr><td>Adóbírság</td><td>az adóhiány 50%-a; a bevétel eltitkolása, hamis bizonylat vagy nyilvántartás esetén 200% <span class="ref">Art. 215. §</span></td><td>ellenőrzés során megállapított adóhiány (pl. alulértékelt vagyonelem) után</td></tr>
+          <tr><td>Mulasztási bírság</td><td>magánszemélynél 200 ezer, más adózónál 500 ezer forintig <span class="ref">Art. 220. §</span></td><td>bevallás, bejelentés (pl. a vagyonkezelési adóalany 30 napos bejelentése) elmulasztása, késedelme</td></tr>
+          <tr><td>Elévülés</td><td>5 év annak a naptári évnek az utolsó napjától, amelyben a bevallást be kellett nyújtani <span class="ref">Art. 202. §</span></td><td>a 2026. tárgyév 2032. december 31-ig ellenőrizhető; az iratokat eddig kell megőrizni <span class="ref">25. § (8)</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Szabályszerű, teljes körű tájékoztatáson alapuló szakértői érték esetén a NAV magasabb értékmegállapítása után adóbírság és késedelmi pótlék nem állapítható meg, az adókülönbözetet azonban meg kell fizetni. <span class="ref">27. § (2)–(3)</span></p>
+
+    <h3>10/B. Mire számítsunk 2027-től?</h3>
+    <ul>
+      <li><strong>Nincs adóelőleg.</strong> A tervezet évente egyszeri, a tárgyévet követő augusztus 31-i bevallást és fizetést ír elő; előlegfizetési kötelezettséget nem tartalmaz. <span class="ref">25. § (1)</span></li>
+      <li><strong>Nincs indexálás.</strong> Az 1 milliárd forintos mentes sáv, a 100 milliárdos sávhatár és az ingóságok 3, illetve 10 millió forintos értékhatára fix összeg; a tervezet valorizálást nem ír elő. Infláció és eszközár-emelkedés mellett ezért évről évre többen és nagyobb vagyonhányaddal kerülnek a hatály alá. <span class="ref">6. § (1), (3), 9. § (1)</span></li>
+      <li><strong>Minden év december 31. fordulónap</strong>, a tárgyévi vagyonállapot alapján; a tárgyév illetőség-változásnál és vagyonkezelési adóalany megszűnésénél rövidül. <span class="ref">5. §, 2. § 33. pont</span></li>
     </ul>
 
     <h3>11. Szövegszintű hiányosságok és értelmezési kockázatok</h3>
@@ -565,6 +633,17 @@
       <li><span class="when">2027. augusztus 31.</span>Bevallás és befizetés; házastársi és kapcsolt nyilatkozatok; szükség esetén fizetési könnyítési kérelem.</li>
     </ul>
 
+    <div class="contact-cta">
+      <div>
+        <div class="eyebrow">Kapcsolat</div>
+        <h3>Kérjen egyeztetést</h3>
+        <p>Vagyonleltár, illetőség, cégértékelés, házastársi megosztás vagy BVK-szerkezet – egy egyeztetésen átnézzük, mi vonatkozik Önre, és mit érdemes még 2026. december 31. előtt megtenni.</p>
+      </div>
+      <div class="contact-btns">
+        <a class="cta" href="mailto:office@bekespartners.com?subject=Vagyonad%C3%B3%20%E2%80%93%20egyeztet%C3%A9s%20k%C3%A9r%C3%A9se">Egyeztetés kérése e-mailben</a>
+        <a class="cta outline" href="tel:+3616464646">+36&nbsp;1&nbsp;646&nbsp;4646</a>
+      </div>
+    </div>
     <p class="disclaimer"><strong>A §-hivatkozások kattinthatók:</strong> a tervezet paragrafusai a kormany.hu-n közzétett törvénytervezetet (PDF), az Itv., a Ptk. és az Szja tv. hivatkozásai a Nemzeti Jogszabálytár (njt.hu) hatályos szövegét nyitják meg új lapon. A kihirdetés után a tervezet-hivatkozások is az njt.hu-ra lesznek átirányítva.</p>
     <p class="disclaimer">Ez az elemzés a kormany.hu-n közzétett tervezet szövegén alapul, és nem minősül egyedi adótanácsadásnak. A végleges törvényszöveg, a végrehajtási rendeletek és a NAV-iránymutatások eltérhetnek. Konkrét döntés előtt minősített adótanácsadóval és ügyvéddel kell egyeztetni. Forrás: <a href="https://kormany.hu/application/documents/d7cbe62a-f849-4056-824c-2186cfc74240/download" target="_blank" rel="noopener noreferrer">2026. évi … törvény a vagyonadóról (tervezet), kormany.hu</a></p>
   </div>
@@ -671,7 +750,7 @@
       <li>A tartozások levonása: belföldi BVK-nál minden okiratolt tartozás, külföldi illetőségűnél csak a magyar vagyonelemhez kapcsolódó.</li>
       <li>A mentes sáv alkalmazása, kapcsolt BVK-knál a megosztott összeggel.</li>
       <li>Az 1%-os és 1,5%-os kulcs, majd az adóból levonható helyi adók és értékelési díj. <span class="ref">9. §</span></li>
-      <li>Bevallás 2027. augusztus 31-ig; a vagyonelemek mellett fel kell tüntetni az irányadó jogot, az illetőség megállapításához szükséges adatokat és külföldi jogú BVK-nál a tényleges irányítás helyét. <span class="ref">25. § (7) g)</span></li>
+      <li>Bevallás 2027. augusztus 31-ig, ha fizetendő adó keletkezik; a vagyonelemek mellett fel kell tüntetni az irányadó jogot, az illetőség megállapításához szükséges adatokat és külföldi jogú BVK-nál a tényleges irányítás helyét. <span class="ref">25. § (7) g)</span></li>
       <li>Megfizetés a kezelt vagyonból; a vagyonkezelőnek kell gondoskodnia a szükséges pénzeszközről. Fizetési halasztás vagy részletfizetés kérhető. <span class="ref">26. §, 29. § (12)</span></li>
     </ol>
 
@@ -689,6 +768,14 @@
       </table>
     </div>
     <p>A bejelentésnek tartalmaznia kell az irányadó jogot, a külföldi azonosítókat, a tényleges irányítás helyét, a képviselő adatait, az iratőrzés helyét, valamennyi vagyonrendelő adatait, és ha valamelyik vagyonrendelő más BVK vagyonrendelőjével hozzátartozói vagy kapcsolt vállalkozási viszonyban áll, ennek a viszonynak a jogcímét. <span class="ref">29. § (7)</span> Több vagyonkezelőnél egy elsődleges képviselőt kell bejelenteni; ha egyiküknek sincs belföldi lakóhelye vagy székhelye, belföldi kézbesítési meghatalmazott kell. Adószám nélküli BVK a bejelentéssel egyidejűleg adószámot kap. <span class="ref">29. § (3), (6), (9)</span></p>
+
+    <h3>Magánalapítvány és vagyonkezelő alapítvány (KEVA)</h3>
+    <p>A tervezet a magánalapítványt a bizalmi vagyonkezeléssel azonos módon, önálló vagyonkezelési adóalanyként kezeli. Magánalapítvány a Ptk. szerint a magánszemély alapító, vagy az alapító, a csatlakozó, illetve ezek hozzátartozója mint kedvezményezett érdekében létrehozott alapítvány, továbbá a <strong>nem közhasznú vagyonkezelő alapítvány</strong> – az alapító, a csatlakozó és a kedvezményezett személyétől függetlenül. <span class="ref">2. § 26. és 41. pont</span> A közhasznú jogállású vagyonkezelő alapítvány (<span class="ref">2019. évi XIII. tv.</span>) tehát nem adóalany, a nem közhasznú igen.</p>
+    <ul>
+      <li>A magánalapítványra a BVK-nál leírt szabályok érvényesek: saját mentes sáv, kapcsoltság az azonos alapítótól vagy hozzátartozóktól származó alapítványokkal és BVK-kkal, bejelentés 30 napon, a már működőknél 2027. január 14-én belül. <span class="ref">24. §, 29. §, 35. § (4)</span></li>
+      <li>Az adózói kötelezettségeket az alapítvány képviselője (kuratórium) teljesíti, az adó az alapítványi vagyont terheli. <span class="ref">29. § (2)</span></li>
+      <li>Az alapítói és csatlakozói vagyonrendelés – a BVK-hoz hasonlóan – a köztudomásúvá válás utáni időszakban a rendeltetésszerű joggyakorlás vizsgálata alá eshet. <span class="ref">1. § (4)–(6)</span></li>
+    </ul>
 
     <h3>Különleges helyzetek</h3>
     <ul>
@@ -745,7 +832,10 @@
       <div class="eyebrow">Kalkulátor</div>
       <h3>Mennyit fizet a kezelt vagyon?</h3>
       <p>A kalkulátor a BVK-t önálló adóalanyként kezeli: a kezelt vagyon illetőségét, a kapcsolt BVK-k közös mentes sávját és a kezelt vagyonból fizetendő adót is kiszámolja.</p>
-      <button class="cta ghost" type="button" data-goto="teszt" data-kpreset="bvk">BVK-s helyzet kiszámítása</button>
+      <div class="band-btns">
+        <button class="cta ghost" type="button" data-goto="teszt" data-kpreset="bvk">BVK-s helyzet kiszámítása</button>
+        <a class="cta ghost" href="mailto:office@bekespartners.com?subject=Bizalmi%20vagyonkezel%C3%A9s%20%C3%A9s%20vagyonad%C3%B3%20%E2%80%93%20egyeztet%C3%A9s">Egyeztetés kérése</a>
+      </div>
     </div>
   </div>
 </section>
