@@ -76,6 +76,7 @@ linkRefs(document);
       t.tabIndex=on?0:-1;
       var p=$(t.dataset.target);if(p)p.hidden=!on;
     });
+    document.body.classList.toggle('on-bvk',id==='bvk');
     if(!init){try{history.replaceState(null,'','#'+id)}catch(e){}}
     if(scroll){var nav=document.querySelector('.tabbar'),bar=$('brandbar'),pn=$(id);if(nav&&pn){try{var top=pn.getBoundingClientRect().top+window.pageYOffset-nav.offsetHeight-(bar?bar.offsetHeight:0);window.scrollTo({top:Math.max(0,top),behavior:'auto'})}catch(e){}}}
   }
