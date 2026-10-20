@@ -29,7 +29,9 @@
   /* Hero (sötét fotós fejléc) – a bekespartners.com hero-fotójának tónusai; a kép: hero.jpg */
   --hero-a:#1F2A2B; --hero-b:#5B7E80; --plum-dark:#5A2830;
   /* SQN Trust skin a bizalmi vagyonkezelés fülön – sqntrust.com */
-  --sqn-blue:#007FB2; --sqn-ink:#221F20; --sqn-slate:#39485F; --sqn-soft:#E6F2F8;
+  --sqn-blue:#007FB2; --sqn-blue-text:#006B96; --sqn-ink:#221F20; --sqn-slate:#39485F; --sqn-soft:#E6F2F8;
+  /* Szövegváltozat a kék címkékhez – WCAG AA kontraszt a #F0F0F0 háttéren (a #0078C7 csak 4,08:1) */
+  --brand2-text:#0A66AD;
   --f-serif:"Playfair Display","Didot","Bodoni MT",Georgia,"Times New Roman",serif;
 
   /* Négyszegmensű gyakorlati színcsík (Tax · Legal · Trust · Foundation) – a data-stripe="4" kapcsolja */
@@ -112,7 +114,7 @@ a{color:var(--accent)}
 .brandright{display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:0;flex-shrink:0}
 .motto{font-family:var(--f-body);font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--band-ink);opacity:.9;white-space:nowrap}
 @media (max-width:420px){.motto{display:none}}
-.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand2-text)}
 .masthead h1{font-size:clamp(30px,5vw,46px);font-weight:700;margin-top:10px;letter-spacing:-.01em}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:26px}
 .facts div{background:var(--surface);padding:14px 16px;min-width:0}
@@ -128,7 +130,7 @@ a{color:var(--accent)}
 :root[data-hdr="hero"] .masthead{background:var(--hero-a) url("hero.jpg") center/cover no-repeat;position:relative;overflow:hidden;padding-block:56px 48px}
 :root[data-hdr="hero"] .masthead::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,30,32,.55) 0%,rgba(20,30,32,.25) 60%,rgba(20,30,32,.05) 100%);pointer-events:none}
 :root[data-hdr="hero"] .masthead > .wrap{position:relative}
-:root[data-hdr="hero"] .masthead .eyebrow{color:#ffffff;opacity:.75;letter-spacing:.14em}
+:root[data-hdr="hero"] .masthead .eyebrow{color:#ffffff;opacity:.85;letter-spacing:.14em}
 :root[data-hdr="hero"] .masthead h1{color:#ffffff;font-weight:600;font-size:clamp(30px,4.6vw,44px);letter-spacing:.01em}
 :root[data-hdr="hero"] .masthead .lead{color:#ffffff;font-weight:300;font-size:20px;line-height:1.5;margin-top:16px}
 :root[data-hdr="hero"] .masthead .facts{background:transparent;border:0;gap:28px;margin-top:40px;border-radius:0;overflow:visible}
@@ -235,7 +237,7 @@ td .ref{margin-top:2px;display:inline-block}
 .timeline{list-style:none;padding-left:0 !important;border-left:2px solid var(--line);margin-left:6px}
 .timeline li{position:relative;padding-left:22px}
 .timeline li::before{content:"";position:absolute;left:-7px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
-.timeline .when{font-family:var(--f-mono);font-size:13px;color:var(--accent);display:block}
+.timeline .when{font-family:var(--f-mono);font-size:13px;color:var(--accent);display:block;text-align:left}
 .issues{counter-reset:i;list-style:none;padding-left:0 !important}
 .issues li{counter-increment:i;position:relative;padding-left:34px}
 .issues li::before{content:counter(i);position:absolute;left:0;top:1px;font-family:var(--f-mono);font-size:12px;width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--crit);color:var(--crit);border-radius:50%}
@@ -304,6 +306,8 @@ legend{font-family:var(--f-display);font-weight:600;font-size:18px;padding:0 6px
 .btn{font:inherit;font-size:14px;font-weight:500;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:7px 12px;cursor:pointer}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.small{font-size:13px;padding:4px 10px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media (max-width:720px){.btn,.btn.small,.sel.small,.sel,.ktab,.tab{min-height:42px}.chk,.choice label{min-height:40px;align-items:center}.chk input,.choice input{margin-top:0;width:18px;height:18px}}
 .btn.danger:hover{border-color:var(--crit);color:var(--crit)}
 label.btn{display:inline-block;cursor:pointer}
 .bar-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -326,7 +330,7 @@ label.btn{display:inline-block;cursor:pointer}
 .r-row .tpn small{font-size:12px;color:var(--muted)}
 .r-sec{padding:14px 18px;border-bottom:1px solid var(--line)}
 .r-sec:last-child{border-bottom:0}
-.r-sec h4{font-family:var(--f-body);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+.r-sec h3{font-family:var(--f-body);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
 .mix{display:flex;flex-direction:column;gap:9px}
 .mix-row{font-size:13.5px}
 .mix-top{display:flex;justify-content:space-between;gap:8px}
@@ -503,8 +507,8 @@ body.js .reveal.in{opacity:1;transform:none}
 :root[data-stripe="4"][data-hdr="hero"] .masthead{background-image:url("hero.jpg");background-size:cover;background-position:center}
 @media (max-width:760px){.practice-rule{grid-template-columns:repeat(2,minmax(0,1fr))}.practice-rule a{padding:10px 14px}.practice-rule a span{display:none}}
 .postmeta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-top:6px}
-.postmeta .tags{color:var(--brand2);font-weight:500;text-align:left}
-.sqn .postmeta .tags{color:var(--sqn-blue)}
+.postmeta .tags{color:var(--brand2-text);font-weight:500;text-align:left}
+.sqn .postmeta .tags{color:var(--sqn-blue-text)}
 .prose h2{position:relative;padding-bottom:12px}
 .prose h2::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:3px;background:var(--seg1)}
 #teszt .prose h2::after{background:var(--accent)}
@@ -524,7 +528,7 @@ body.js .reveal.in{opacity:1;transform:none}
 .ic-body{display:flex;flex-direction:column;gap:8px;padding:22px 18px 18px}
 .ic-title{font-size:18px;font-weight:600;color:var(--accent);line-height:1.3;text-align:left}
 .ic-ex{font-size:14px;font-weight:300;line-height:1.55;color:var(--ink)}
-.ic-more{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand2);margin-top:4px}
+.ic-more{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand2-text);margin-top:4px}
 .ic-tags{font-size:12px;color:var(--muted)}
 .ft-brand .ft-logo{width:min(100%,470px);height:auto;background:#ffffff;padding:10px 14px;border-radius:2px}
 /* SQN szolgáltatás-kártya (BVK Audit) – Process · 4 Steps */
@@ -537,7 +541,7 @@ body.js .reveal.in{opacity:1;transform:none}
 .sqn-steps b{font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:var(--sqn-ink)}
 .sqn-steps span{font-size:13.5px;line-height:1.5;color:var(--ink);text-align:left;font-weight:300}
 .sqn-areas{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.6;color:var(--ink);font-weight:300}
-.sqn-areas span{font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--sqn-blue);margin-right:6px}
+.sqn-areas span{font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--sqn-blue-text);margin-right:6px}
 .sqn-service .cta{margin-top:22px;text-decoration:none}
 @media (max-width:760px){.sqn-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.sqn-service{padding:22px 18px}}
 @media (max-width:460px){.sqn-steps{grid-template-columns:minmax(0,1fr)}}
@@ -560,7 +564,7 @@ body.js .hero-rings{animation:floaty 9s ease-in-out infinite}
 @media (max-width:600px){.band-in{padding:28px 20px}.band h3{font-size:22px}}
 
 /* SQN Trust skin – bizalmi vagyonkezelés fül (sqntrust.com): serif címek, ritkított nagybetűs feliratok, vékony vonalak, SQN-kék */
-.sqn{--accent:var(--sqn-blue);--accent2:var(--sqn-slate);--accent-soft:var(--sqn-soft);--ink:var(--sqn-ink);--r:0px}
+.sqn{--accent:var(--sqn-blue-text);--accent2:var(--sqn-slate);--accent-soft:var(--sqn-soft);--ink:var(--sqn-ink);--r:0px}
 .sqn-head{display:flex;align-items:center;gap:32px;padding:8px 0 28px;margin-bottom:28px;border-bottom:1px solid var(--sqn-ink)}
 .sqn-logolink{display:block;line-height:0;flex-shrink:0}
 .sqn-logo{display:block;height:112px;width:auto}
@@ -581,10 +585,10 @@ body.js .hero-rings{animation:floaty 9s ease-in-out infinite}
 .sqn .prose h2,.sqn .prose h3{font-family:var(--f-serif);text-transform:none;letter-spacing:0;color:var(--sqn-ink);font-weight:600}
 .sqn .prose h2{font-size:34px}
 .sqn .prose h3{font-size:24px;border-top:1px solid var(--sqn-ink);padding-top:20px}
-.sqn .prose h4{font-family:var(--f-body);letter-spacing:.28em;text-transform:uppercase;font-size:12px;font-weight:500;color:var(--sqn-blue)}
-.sqn .eyebrow{color:var(--sqn-blue);letter-spacing:.3em;font-weight:500}
+.sqn .prose h4{font-family:var(--f-body);letter-spacing:.28em;text-transform:uppercase;font-size:12px;font-weight:500;color:var(--sqn-blue-text)}
+.sqn .eyebrow{color:var(--sqn-blue-text);letter-spacing:.3em;font-weight:500}
 .sqn .intro{font-family:var(--f-serif);font-size:20px;line-height:1.55}
-.sqn .ref{color:var(--sqn-blue);background:var(--sqn-soft)}
+.sqn .ref{color:var(--sqn-blue-text);background:var(--sqn-soft)}
 .sqn th{background:var(--sqn-slate);color:#ffffff;letter-spacing:.12em}
 .sqn .tablewrap{border-color:var(--sqn-ink)}
 .sqn .note.info{border-color:var(--sqn-blue);background:var(--sqn-soft)}
