@@ -12,16 +12,18 @@ Statikus, egyoldalas kalauz a 2026. évi vagyonadó-törvénytervezethez: laikus
 | `tests.html` | Fejlesztői ellenőrzés: a számítási függvények tesztjei | Minden `app.js`-módosítás után nyisd meg |
 | `_headers` | HTTP biztonsági fejlécek Netlify / Cloudflare Pages esetén | Nem kell módosítani |
 | `logo.png` | A BékésPartners logó (átlátszó háttér) | Cseréhez ugyanezen a néven töltsd fel az újat |
-| `fonts/` | Montserrat woff2 fájlok + licenc | Nem kell módosítani |
+| `hero.jpg` | A fejléc háttérképe – jelenleg a bekespartners.com hero-fotójának tónusaiból generált háttér | **Cseréld le az eredeti hero-fotóra** ugyanezen a néven (ajánlott 1600×640 px, JPEG) |
+| `sqn-logo.png` | Az SQN Trust logója a IV. fülön | Cseréhez ugyanezen a néven |
+| `fonts/` | Montserrat és Playfair Display woff2 fájlok + licencek | Nem kell módosítani |
 
 ## Arculat beállítása
 
-A build a **BékésPartners arculattal** megy ki: `logo.png` a világos (#F0F0F0) fejlécben, Montserrat (önállóan hosztolva a `fonts/` mappából, SIL OFL), navy #13407B nagybetűs címek, a logó gyűrűszíneivel futó négyszegmensű csík, „Built on trust”. Az alábbi helyeken módosítható:
+A build a **bekespartners.com arculatát** követi (mintha a főoldal egy extra füle lenne): rögzített világos (#F0F0F0) márkasáv a logóval, sötét fotós hero (`hero.jpg`) fehér nagybetűs címmel és a négy kulcsadattal a gyakorlati színek vonalával, #323232 szöveg, navy #13407D nagybetűs címek, Montserrat (önállóan hosztolva), szilva (#5A2830) CTA-sáv. A **IV. Bizalmi vagyonkezelés fül az sqntrust.com arculatát** követi: SQN-logó (`sqn-logo.png`), Playfair Display serif címek, SQN-kék #007FB2, ritkított nagybetűs feliratok, vékony vonalak, pala (#39485F) táblázatfejlécek. Az alábbi helyeken módosítható:
 
 1. **Színek, betűk:** `styles.css`, az első `:root{…}` blokk. `--brand` az elsődleges szín (fejléc, gombok), `--brand2` a másodlagos (csík, kis feliratok), `--brand-ink` a fejlécen futó szöveg színe.
 2. **Iroda neve, logó, jelmondat:** `index.html`, a `<header class="masthead">` első sorai – a `LOGÓ`, `IRODA NEVE` és `MOTTÓ` megjegyzésnél. A logó: töltsd fel `logo.svg` néven, és vedd ki a megjegyzésjelet az `<img class="logo">` sor körül (navy háttéren a fehér logóváltozat kell).
 3. **Fejléc stílusa, sarkok, fülek stb.:** `index.html`, az `<html …>` elem `data-*` attribútumai; a lehetséges értékek a fájl tetején fel vannak sorolva.
-4. **Szövegállapot:** `index.html`, `<span class="stamp">` – frissítsd, ha a tervezet vagy a törvény szövege változik.
+4. **Szövegállapot-bélyeg:** jelenleg nincs a fejlécen; az `index.html` fejlécében megjegyzésként ott a minta, ha később kellene.
 
 ## Tartalom módosítása
 

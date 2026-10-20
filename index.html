@@ -7,7 +7,7 @@
     • Színek, betűk:        styles.css – legelső blokk (:root{--brand…})
     • Iroda neve, logó:     lent, a <header class="masthead"> elején (LOGÓ / IRODA NEVE megjegyzés)
     • Fejléc-stílus stb.:   az alábbi <html> elem data-* attribútumai:
-        data-hdr      band | gradient | light | dark      (fejléc háttere)
+        data-hdr      hero | band | gradient | light | dark   (hero = sötét fotós fejléc, hero.jpg – a bekespartners.com stílusa)
         data-radius   0 | 1 | 2                           (szögletes | enyhén kerek | kerek)
         data-density  s | m | l                           (kompakt | normál | tágas)
         data-tabs     line | pill | block                 (fülek stílusa)
@@ -26,7 +26,7 @@
       ha a RULES változik, ezeket is frissíteni kell.
     • Szövegállapot-bélyeg: jelenleg kikapcsolva (fejléc, MOTTÓ alatti megjegyzés).
 -->
-<html lang="hu" data-hdr="light" data-radius="0" data-density="m" data-tabs="line" data-upper="1" data-hcolor="accent" data-bg="tint" data-stripe="4" data-facts="1" data-logopos="left" data-theme="light">
+<html lang="hu" data-hdr="hero" data-radius="0" data-density="m" data-tabs="line" data-upper="1" data-hcolor="accent" data-bg="neutral" data-stripe="4" data-facts="1" data-logopos="left" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -46,7 +46,7 @@
     <div class="brandrow">
       <div class="brandid">
         <!-- LOGÓ: logo.png a repó gyökerében (átlátszó háttér). Mérete: styles.css --bar-logo-h -->
-        <a class="logolink" href="#teszt" aria-label="BékésPartners – Vagyonadó-kalauz, kezdőlap"><img class="logo" src="logo.png" alt="BékésPartners" width="386" height="54"></a>
+        <a class="logolink" href="#teszt" aria-label="BékésPartners – Vagyonadó-kalauz, kezdőlap"><img class="logo" src="logo.png" alt="BékésPartners" width="572" height="80"></a>
       </div>
       <div class="brandright">
         <!-- MOTTÓ: a BékésPartners "Built on trust" jelmondat – töröld a sort, ha nem kell -->
@@ -62,10 +62,10 @@
     <h1>Vagyonadó-kalauz</h1>
     <p class="lead">Számolja ki, mennyire érinti Önt a vagyonadó – majd olvassa el, mit jelent a kormany.hu-n közzétett törvénytervezet a vagyonos magánszemélyeknek, hogyan értékelné egy adótanácsadó, és mi a helyzet a bizalmi vagyonkezeléssel.</p>
     <dl class="facts">
-      <div><dt>Mentes sáv</dt><dd>1 Mrd Ft<small>nettó vagyon, adóalanyonként</small></dd></div>
-      <div><dt>Adókulcs</dt><dd>1% · 1,5%<small>100 Mrd Ft adóalap felett 1,5%</small></dd></div>
-      <div><dt>Első fordulónap</dt><dd>2026.12.31.<small>hatályba lép: 2026.12.15.</small></dd></div>
-      <div><dt>Első bevallás</dt><dd>2027.08.31.<small>önadózás, elektronikusan</small></dd></div>
+      <div class="f-tax"><dt>Mentes sáv</dt><dd>1 Mrd Ft<small>nettó vagyon, adóalanyonként</small></dd></div>
+      <div class="f-legal"><dt>Adókulcs</dt><dd>1% · 1,5%<small>100 Mrd Ft adóalap felett 1,5%</small></dd></div>
+      <div class="f-trust"><dt>Első fordulónap</dt><dd>2026.12.31.<small>hatályba lép: 2026.12.15.</small></dd></div>
+      <div class="f-found"><dt>Első bevallás</dt><dd>2027.08.31.<small>önadózás, elektronikusan</small></dd></div>
     </dl>
   </div>
 </header>
@@ -339,7 +339,14 @@
       <li>Likviditási terv 2027. augusztus 31-re.</li>
     </ul>
 
-    <button class="cta" type="button" data-goto="teszt">Mennyire érint engem? Kiszámolom a kalkulátorral</button>
+  </div>
+  <div class="band plum">
+    <div class="band-in">
+      <div class="eyebrow">Vagyonadó-kalkulátor</div>
+      <h3>Mennyire érint engem?</h3>
+      <p>Vegye fel vagyonelemeit, és a kalkulátor a tervezet értékelési szabályai szerint kiszámolja az adóalapot és a fizetendő adót – adóalanyonként, bizalmi vagyonkezeléssel együtt.</p>
+      <button class="cta ghost" type="button" data-goto="teszt">Tovább a kalkulátorhoz</button>
+    </div>
   </div>
 </section>
 
@@ -497,7 +504,15 @@
 </section>
 
 <!-- ============ IV. BIZALMI VAGYONKEZELÉS ============ -->
-<section class="panel" id="bvk" role="tabpanel" aria-labelledby="t-bvk" hidden>
+<section class="panel sqn" id="bvk" role="tabpanel" aria-labelledby="t-bvk" hidden>
+  <div class="sqn-head">
+    <!-- SQN TRUST: a bizalmi vagyonkezelési fül az sqntrust.com arculatát követi; a logó sqn-logo.png -->
+    <a class="sqn-logolink" href="https://sqntrust.com/" target="_blank" rel="noopener noreferrer"><img class="sqn-logo" src="sqn-logo.png" alt="SQN Trust – Sine qua non" width="272" height="252"></a>
+    <div class="sqn-headtxt">
+      <div class="sqn-label">Bizalmi vagyonkezelés</div>
+      <p>Az SQN Trust Zrt. – MNB-engedélyes bizalmi vagyonkezelő – szakmai közreműködésével.</p>
+    </div>
+  </div>
   <div class="prose">
     <div class="eyebrow">Ptk. 6:310. § és köv. · bizalmi vagyonkezelési szerződés</div>
     <h2>Bizalmi vagyonkezelés a vagyonadó-tervezetben</h2>

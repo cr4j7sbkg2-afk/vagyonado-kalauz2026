@@ -7,7 +7,7 @@
 :root{
   /* Elsődleges szín: fejléc, gombok, fülek, grafikon. Legyen elég sötét,
      hogy fehér szöveg olvasható legyen rajta (kontraszt ≥ 4,5:1). */
-  --brand:#13407B;            /* BékésPartners navy (a rögzített arculat szerint) */
+  --brand:#13407D;            /* BékésPartners navy – bekespartners.com */
   /* Másodlagos szín: kis feliratok (section label), segédvonalak, grafikon-segédvonal. */
   --brand2:#0078C7;           /* BékésPartners blue */
   /* Szöveg színe az elsődleges színen (fehér sötét márkaszínhez, #111111 világoshoz). */
@@ -24,14 +24,25 @@
   /* Világos fejléc háttere (data-hdr="light") – a logó eredeti háttérszíne */
   --hdr-light:#F0F0F0;
 
-  /* Szöveg és háttér (BékésPartners ink / mist) */
-  --ink:#1F2B3D; --bg:#F3F5F8; --surface:#ffffff; --sunk:#E9EDF2; --muted:#56637A; --line:#D5DBE4;
+  /* Szöveg és háttér – bekespartners.com: #323232 szöveg, #F0F0F0 háttér */
+  --ink:#323232; --bg:#F0F0F0; --surface:#ffffff; --sunk:#E9E9E9; --muted:#5F6368; --line:#D9D9D9;
+  /* Hero (sötét fotós fejléc) – a bekespartners.com hero-fotójának tónusai; a kép: hero.jpg */
+  --hero-a:#1F2A2B; --hero-b:#5B7E80; --plum-dark:#5A2830;
+  /* SQN Trust skin a bizalmi vagyonkezelés fülön – sqntrust.com */
+  --sqn-blue:#007FB2; --sqn-ink:#221F20; --sqn-slate:#39485F; --sqn-soft:#E6F2F8;
+  --f-serif:"Playfair Display","Didot","Bodoni MT",Georgia,"Times New Roman",serif;
 
   /* Négyszegmensű gyakorlati színcsík (Tax · Legal · Trust · Foundation) – a data-stripe="4" kapcsolja */
   --seg1:#EBA720; --seg2:#50C088; --seg3:#864460; --seg4:#6393A1;
 }
 /* Montserrat – önállóan hosztolva a /fonts mappából (SIL Open Font License, fonts/LICENSE-Montserrat.txt).
    Nincs külső betöltés: adatvédelem és CSP (font-src 'self'). */
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/playfair-display-latin-400-normal.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/playfair-display-latin-600-normal.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/playfair-display-latin-700-normal.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/playfair-display-latin-ext-400-normal.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/playfair-display-latin-ext-600-normal.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/playfair-display-latin-ext-700-normal.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:"Montserrat";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/montserrat-latin-400-normal.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Montserrat";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/montserrat-latin-500-normal.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Montserrat";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/montserrat-latin-600-normal.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -111,6 +122,25 @@ a{color:var(--accent)}
 @media (max-width:720px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* Arculati változatok – az index.html <html> elemének data-* attribútumai állítják */
+:root[data-hdr="hero"]{--hdr-bg:var(--hero-a); --band-ink:#ffffff}
+:root[data-hdr="hero"] .brandbar{background:var(--hdr-light);color:var(--ink)}
+:root[data-hdr="hero"] .brandbar .motto{color:var(--accent)}
+:root[data-hdr="hero"] .masthead{background:var(--hero-a) url("hero.jpg") center/cover no-repeat;position:relative;padding-block:56px 48px}
+:root[data-hdr="hero"] .masthead::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,30,32,.55) 0%,rgba(20,30,32,.25) 60%,rgba(20,30,32,.05) 100%);pointer-events:none}
+:root[data-hdr="hero"] .masthead > .wrap{position:relative}
+:root[data-hdr="hero"] .masthead .eyebrow{color:#ffffff;opacity:.75;letter-spacing:.14em}
+:root[data-hdr="hero"] .masthead h1{color:#ffffff;font-weight:600;font-size:clamp(30px,4.6vw,44px);letter-spacing:.01em}
+:root[data-hdr="hero"] .masthead .lead{color:#ffffff;font-weight:300;font-size:20px;line-height:1.5;margin-top:16px;max-width:60ch;text-align:left}
+:root[data-hdr="hero"] .masthead .facts{background:transparent;border:0;gap:28px;margin-top:40px;border-radius:0;overflow:visible}
+:root[data-hdr="hero"] .masthead .facts div{background:transparent;padding:14px 0 0;border-top:3px solid #ffffff}
+:root[data-hdr="hero"] .masthead .facts .f-tax{border-top-color:var(--seg1)}
+:root[data-hdr="hero"] .masthead .facts .f-legal{border-top-color:var(--seg2)}
+:root[data-hdr="hero"] .masthead .facts .f-trust{border-top-color:var(--seg3)}
+:root[data-hdr="hero"] .masthead .facts .f-found{border-top-color:var(--seg4)}
+:root[data-hdr="hero"] .masthead .facts dt{color:#ffffff;opacity:.8;font-weight:600;letter-spacing:.12em;font-size:11px}
+:root[data-hdr="hero"] .masthead .facts dd{color:#ffffff;font-family:var(--f-body);font-weight:600;font-size:26px}
+:root[data-hdr="hero"] .masthead .facts dd small{color:#ffffff;opacity:.75;font-weight:300}
+@media (max-width:720px){:root[data-hdr="hero"] .masthead{padding-block:36px 32px}:root[data-hdr="hero"] .masthead .facts{gap:18px 20px;margin-top:28px}}
 :root[data-hdr="light"]{--hdr-bg:var(--hdr-light); --band-ink:var(--ink)}
 :root[data-hdr="light"] .masthead h1{color:var(--accent)}
 :root[data-hdr="light"] .masthead .eyebrow,:root[data-hdr="light"] .motto{color:var(--accent2);opacity:1}
@@ -144,6 +174,7 @@ a{color:var(--accent)}
 :root[data-hcolor="brand2"] .prose h2,:root[data-hcolor="brand2"] .prose h3,:root[data-hcolor="brand2"] legend{color:var(--accent2)}
 :root[data-stripe="0"] .masthead{border-bottom:0}
 :root[data-stripe="4"] .masthead{border-bottom:0;background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%);background-size:100% 6px;background-repeat:no-repeat;background-position:left bottom}
+:root[data-stripe="4"][data-hdr="hero"] .masthead{background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%),url("hero.jpg");background-size:100% 6px,cover;background-repeat:no-repeat,no-repeat;background-position:left bottom,center}
 :root[data-stripe="4"][data-hdr="gradient"] .masthead{background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%),linear-gradient(120deg, var(--brand) 0%, color-mix(in srgb, var(--brand) 55%, var(--brand2)) 100%);background-size:100% 6px,100% 100%;background-repeat:no-repeat;background-position:left bottom,center}
 :root[data-facts="0"] .masthead .facts{display:none}
 :root[data-logopos="center"] .brandrow{justify-content:center}
@@ -152,7 +183,7 @@ a{color:var(--accent)}
 .tabbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--bar-h));z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
 .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:0 0 auto;font:inherit;font-size:15px;font-weight:500;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:14px 14px 11px;cursor:pointer;white-space:nowrap}
+.tab{flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:14px 14px 11px;cursor:pointer;white-space:nowrap}
 .tab .n{font-family:var(--f-mono);font-size:12px;margin-right:6px;color:var(--muted)}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
 .tab[aria-selected="true"] .n{color:var(--accent)}
@@ -209,7 +240,10 @@ td .ref{margin-top:2px;display:inline-block}
 .issues li::before{content:counter(i);position:absolute;left:0;top:1px;font-family:var(--f-mono);font-size:12px;width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--crit);color:var(--crit);border-radius:50%}
 .linkbtn{font:inherit;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
 .linkbtn.k-more{margin-top:12px;font-size:14px}
-.cta{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:var(--r);padding:11px 18px;cursor:pointer;margin-top:26px}
+.cta{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:var(--accent-ink);border:1px solid var(--accent);border-radius:0;padding:12px 22px;cursor:pointer;margin-top:26px;transition:background .15s,color .15s}
+.cta:hover{background:color-mix(in srgb,var(--accent) 85%,#000)}
+.cta.ghost{background:transparent;color:#ffffff;border-color:#ffffff}
+.cta.ghost:hover{background:#ffffff;color:var(--plum-dark)}
 .disclaimer{font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;margin-top:40px}
 
 /* Görbe */
@@ -382,6 +416,39 @@ label.btn{display:inline-block;cursor:pointer}
 .kvl{fill:var(--ink);font-family:var(--f-mono);font-size:11px;font-weight:600}
 .kt .ref{white-space:normal}
 .kreport{display:none}
+
+/* Színes sáv (bekespartners.com "service banner" – szilva) */
+.band{margin-top:48px;color:#ffffff}
+.band.plum{background:var(--plum-dark)}
+.band-in{padding:40px 36px}
+.band .eyebrow{color:#ffffff;opacity:.7}
+.band h3{color:#ffffff;font-family:var(--f-body);font-weight:600;font-size:28px;margin-top:8px;text-transform:uppercase;letter-spacing:.02em}
+.band p{color:#ffffff;font-weight:300;font-size:17px;margin-top:12px;max-width:70ch}
+@media (max-width:600px){.band-in{padding:28px 20px}.band h3{font-size:22px}}
+
+/* SQN Trust skin – bizalmi vagyonkezelés fül (sqntrust.com): serif címek, ritkított nagybetűs feliratok, vékony vonalak, SQN-kék */
+.sqn{--accent:var(--sqn-blue);--accent2:var(--sqn-slate);--accent-soft:var(--sqn-soft);--ink:var(--sqn-ink);--r:0px}
+.sqn-head{display:flex;align-items:center;gap:32px;padding:8px 0 28px;margin-bottom:28px;border-bottom:1px solid var(--sqn-ink)}
+.sqn-logolink{display:block;line-height:0;flex-shrink:0}
+.sqn-logo{display:block;height:112px;width:auto}
+.sqn-label{font-family:var(--f-body);font-size:12px;font-weight:500;letter-spacing:.42em;text-transform:uppercase;color:var(--sqn-ink)}
+.sqn-headtxt p{font-family:var(--f-serif);font-size:19px;line-height:1.5;color:var(--sqn-ink);margin-top:10px;max-width:46ch}
+@media (max-width:640px){.sqn-head{flex-direction:column;align-items:flex-start;gap:18px}.sqn-logo{height:84px}}
+.sqn .prose h2,.sqn .prose h3{font-family:var(--f-serif);text-transform:none;letter-spacing:0;color:var(--sqn-ink);font-weight:600}
+.sqn .prose h2{font-size:34px}
+.sqn .prose h3{font-size:24px;border-top:1px solid var(--sqn-ink);padding-top:20px}
+.sqn .prose h4{font-family:var(--f-body);letter-spacing:.28em;text-transform:uppercase;font-size:12px;font-weight:500;color:var(--sqn-blue)}
+.sqn .eyebrow{color:var(--sqn-blue);letter-spacing:.3em;font-weight:500}
+.sqn .intro{font-family:var(--f-serif);font-size:20px;line-height:1.55}
+.sqn .ref{color:var(--sqn-blue);background:var(--sqn-soft)}
+.sqn th{background:var(--sqn-slate);color:#ffffff;letter-spacing:.12em}
+.sqn .tablewrap{border-color:var(--sqn-ink)}
+.sqn .note.info{border-color:var(--sqn-blue);background:var(--sqn-soft)}
+.sqn .checklist li::before,.sqn .timeline li::before{border-color:var(--sqn-blue)}
+.sqn .issues li::before{border-color:var(--sqn-ink);color:var(--sqn-ink)}
+.sqn .cta{background:var(--sqn-blue);border-color:var(--sqn-blue);letter-spacing:.22em;font-weight:500}
+.sqn .disclaimer{border-top-color:var(--sqn-ink)}
+:root[data-upper="1"] .sqn .prose h2,:root[data-upper="1"] .sqn .prose h3{text-transform:none;letter-spacing:0}
 
 /* Nyomtatás: csak a jelentés */
 @media print{
