@@ -209,7 +209,7 @@ strong{font-weight:600}
 .prose p,.prose li,.masthead .lead,.fhint,.disclaimer,.kpane p.kn,.kcard p,.note,.flag,.ka-flags div{hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:8 4 4}
 @media (min-width:600px){
   .prose p,.prose li,.masthead .lead,.disclaimer,.kpane p.kn,.note{text-align:justify;text-justify:inter-word}
-  .prose .intro,.prose h2,.prose h3,.prose h4,.checklist li,.timeline li,.issues li,.formula{text-align:left}
+  .prose h2,.prose h3,.prose h4,.checklist li,.timeline li,.issues li,.formula{text-align:left}
 }
 
 .note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 16px;border-radius:0 var(--r) var(--r) 0}
