@@ -30,6 +30,10 @@ A build a **bekespartners.com arculatát** követi (mintha a főoldal egy extra 
 - A II–IV. fül szövege az `index.html` megfelelő `<section>` elemében van; a `§`-hivatkozások `<span class="ref">…</span>` jelöléssel.
 - A jogszabályi számok (mentes sáv, kulcsok, 100 Mrd-os határ, tárgyév, értékhatárok) az `app.js` elején, a `RULES` objektumban vannak. **Ha ezek változnak, kézzel frissíteni kell** az `index.html` II. fülének („Kit és mit érint”) „Mennyit kell fizetni?” táblázatát és a fejléc kulcsadatait is, majd a `tests.html` várt értékeit.
 
+## Jogszabályi hivatkozások (kattintható §-ok)
+
+Minden `<span class="ref">…</span>` hivatkozás automatikusan linkké válik (`app.js`, `LAWS` objektum): a tervezet §-ai a kormany.hu-n közzétett PDF-re, az `Itv.`, `Ptk.`, `Szja tv.` előtagú hivatkozások az njt.hu megfelelő törvényére mutatnak (`#SZ<szám>` horgonnyal). **Kihirdetés után** az `app.js` elején a `LAWS.draft.url`-t az njt.hu-s címre kell cserélni és `anchor:true`-ra állítani – ezzel minden tervezet-hivatkozás egyszerre átáll az élő törvényszövegre.
+
 ## Biztonsági és adatvédelmi tulajdonságok
 
 - Content-Security-Policy: csak saját fájlok töltődnek, inline script és style tiltva.

@@ -30,6 +30,39 @@ var RULES=Object.freeze({
   CAP_RATE:0.15       /* tőkésítési ráta a cégképletben (1. mell. I.) */
 });
 
+/* ---------- Jogszabályi hivatkozások → élő források ----------
+   A .ref elemek kattinthatóvá válnak. Tervezet-§ → kormany.hu PDF; Itv./Ptk./Szja → njt.hu.
+   KIHIRDETÉS UTÁN: a LAWS.draft.url-t az njt.hu-s címre kell cserélni (pl. https://njt.hu/jogszabaly/2026-XX-00-00),
+   és anchor:true-ra állítani, hogy a §-horgonyok is működjenek. */
+var LAWS={
+  draft:{url:'https://kormany.hu/application/documents/d7cbe62a-f849-4056-824c-2186cfc74240/download',name:'a vagyonadóról szóló törvény tervezete (kormany.hu, PDF)',anchor:false},
+  itv:{re:/^Itv\.?\s*/i,url:'https://njt.hu/jogszabaly/1990-93-00-00',name:'1990. évi XCIII. törvény az illetékekről (njt.hu)',anchor:true},
+  ptk:{re:/^Ptk\.?\s*/i,url:'https://njt.hu/jogszabaly/2013-5-00-00',name:'2013. évi V. törvény a Polgári Törvénykönyvről (njt.hu)',anchor:true},
+  szja:{re:/^Szja\s*tv\.?\s*/i,url:'https://njt.hu/jogszabaly/1995-117-00-00',name:'1995. évi CXVII. törvény a személyi jövedelemadóról (njt.hu)',anchor:true}
+};
+function refUrl(part){
+  var law=LAWS.draft,rest=part;
+  ['itv','ptk','szja'].forEach(function(k){if(LAWS[k].re.test(part)){law=LAWS[k];rest=part.replace(LAWS[k].re,'')}});
+  var u=law.url;
+  if(law.anchor){var m=/^(\d+(?::\d+)?)\.?\s*§/.exec(rest);if(m)u+='#SZ'+m[1].replace(':','_')}
+  return {url:u,name:law.name};
+}
+function escA(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function refHTML(text){
+  /* több hivatkozás vesszővel: részenként külön link */
+  return String(text).split(/,\s+/).map(function(part,i,arr){
+    var r=refUrl(part.trim());
+    return '<a class="reflink" href="'+escA(r.url)+'" target="_blank" rel="noopener noreferrer" title="'+escA(r.name)+' – megnyitás új lapon">'+escA(part.trim())+'</a>'+(i<arr.length-1?', ':'');
+  }).join('');
+}
+function linkRefs(root){
+  (root||document).querySelectorAll('span.ref').forEach(function(el){
+    if(el.dataset.linked||el.closest('a'))return;
+    el.innerHTML=refHTML(el.textContent);el.dataset.linked='1';
+  });
+}
+linkRefs(document);
+
 /* ---------- Fülek ---------- */
 (function(){
   var tabs=[].slice.call(document.querySelectorAll('.tabs [role="tab"]'));
@@ -471,7 +504,7 @@ var RULES=Object.freeze({
       var sens=[-0.2,-0.1,0,0.1,0.2].map(function(d){return {d:d,tax:compute({choice:opt.choice,scale:function(){return 1+d}}).total}});
       var gf=globalFlags(r,opt,diff);
       LAST={r:r,opt:opt,lo:lo,hi:hi,diff:diff,proj:proj,sens:sens,gf:gf};
-      paintItems(r,opt);paintSummary();paintDetail();save();
+      paintItems(r,opt);paintSummary();paintDetail();linkRefs($('teszt'));save();
       $('kBar').classList.remove('err');
     }catch(e){
       if(window.console)console.error(e);
