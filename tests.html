@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<title>Vagyonadó-kalauz – számítási tesztek</title>
+<link rel="icon" href="data:,">
+<style>body{font-family:system-ui,sans-serif;max-width:720px;margin:32px auto;padding:0 16px}li{margin:4px 0}.ok{color:#2c6a45}.fail{color:#a0322a;font-weight:700}</style>
+</head>
+<body>
+<h1>Számítási tesztek</h1>
+<p>Fejlesztői oldal – nem része a publikus kalauznak. Minden sor a RULES és a tiszta függvények egy-egy ellenőrzése. Ha a kihirdetett törvény eltér, előbb a várt értékeket kell frissíteni.</p>
+<ul id="out"></ul>
+<!-- Minimális DOM, hogy az app.js kalkulátor-része elinduljon -->
+<div hidden>
+  <form id="kf"></form>
+  <div id="kAssets"></div><div id="kDebts"></div><div id="kBvks"></div><div id="kFees"></div><div id="kFx"></div><div id="kProj"></div>
+  <select id="kAddType"></select><select id="kPreset"></select>
+  <button id="kAdd"></button><button id="kAddDebt"></button><button id="kAddBvk"></button><button id="kLoadPreset"></button><button id="kClear"></button><button id="kWipe"></button><button id="kSave"></button><button id="kReportDl"></button><button id="kPrint"></button><button id="kToDetail"></button>
+  <input id="kRemember" type="checkbox"><input id="kFile" type="file"><span id="kMsg"></span>
+  <div id="kBar"><span id="kStatus"></span></div>
+  <span id="kBadge"></span><div id="kTax"></div><div id="kTaxLbl"></div><div id="kBase"></div><div id="kRange"></div>
+  <div id="kgFree"></div><div id="kgTax"></div><div id="kgMark"></div><span id="kg0"></span><span id="kgThr"></span><span id="kgMax"></span><p id="kgNote"></p>
+  <div id="kTps"></div><div id="kMix"></div><div id="kTop"></div><div id="kDetail"></div>
+  <div id="kp-lev"></div><div id="kp-naplo"></div><div id="kp-elo"></div><div id="kp-erz"></div><div id="kp-tenni"></div><div id="kReport"></div>
+  <div id="kq-ab"></div><div id="kq-fst"></div><div id="kq-cust"></div>
+</div>
+<script src="app.js"></script>
+<script>
+(function(){
+  var out=document.getElementById('out'),fails=0;
+  function t(name,got,exp){var ok=Math.abs(got-exp)<1e-6;if(!ok)fails++;var li=document.createElement('li');li.className=ok?'ok':'fail';li.textContent=(ok?'✓ ':'✗ ')+name+' – kapott: '+got+(ok?'':', várt: '+exp);out.appendChild(li)}
+  var V=window.VagyonadoSzabalyok;
+  if(!V){var li=document.createElement('li');li.className='fail';li.textContent='✗ Az app.js nem exportálta a számítási függvényeket.';out.appendChild(li);return}
+  // tax(adóalap M Ft) → adó M Ft
+  t('Mentes sáv alatt 0',V.tax(0),0);
+  t('500 M adóalap → 5 M',V.tax(500),5);
+  t('2 Mrd adóalap → 20 M',V.tax(2000),20);
+  t('9 Mrd adóalap → 90 M',V.tax(9000),90);
+  t('100 Mrd adóalap → 1 000 M (még 1%)',V.tax(100000),1000);
+  t('149 Mrd adóalap → 1 735 M (1,5% a 100 Mrd felett)',V.tax(149000),1735);
+  t('Negatív adóalap → 0',V.tax(-10),0);
+  t('Végtelen adóalap → 0 (védett)',V.tax(Infinity),0);
+  // Itv. 72. §: évi érték = 1/20; életkor-szorzók 10/8/6/4, határozott idő max 20 év
+  t('Haszonélvezet, 30 éves, 200 M → 80 M',V.itv72(200,'life',30).v,80);
+  t('Haszonélvezet, 24 éves, 200 M → 100 M',V.itv72(200,'life',24).v,100);
+  t('Haszonélvezet, 51 éves, 200 M → 60 M',V.itv72(200,'life',51).v,60);
+  t('Haszonélvezet, 70 éves, 200 M → 40 M',V.itv72(200,'life',70).v,40);
+  t('Használat 5 évre, 200 M → 50 M',V.itv72(200,'term',0,5).v,50);
+  t('Használat 30 évre, 200 M → 200 M (20 éves plafon)',V.itv72(200,'term',0,30).v,200);
+  // Cégképlet: V = (ST + 2·H)/3, H = átlag AE / 0,15 (a II. fül táblázata)
+  t('Tanácsadó kft. (ST 150, AE 120) → 583,3 M',V.cegertek(150,120,false),(150+2*120/0.15)/3);
+  t('Ingatlanos kft. (ST 480, AE 10) → 204,4 M',V.cegertek(480,10,false),(480+2*10/0.15)/3);
+  t('Gyártó zrt. (ST 2000, AE 300) → 2 000 M',V.cegertek(2000,300,false),2000);
+  t('Veszteséges (ST 900, AE −50) → 300 M',V.cegertek(900,-50,false),300);
+  t('Holding (ST 1000) → 1 000 M',V.cegertek(1000,500,true),1000);
+  // RULES
+  t('Mentes sáv 1 000 M',V.RULES.LIMIT,1000);
+  t('Felső sáv 100 000 M',V.RULES.TOP,100000);
+  var h=document.createElement('p');h.className=fails?'fail':'ok';h.textContent=fails?fails+' teszt hibás.':'Minden teszt sikeres.';document.body.appendChild(h);
+})();
+</script>
+</body>
+</html>
