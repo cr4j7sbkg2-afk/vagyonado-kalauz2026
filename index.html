@@ -59,6 +59,13 @@
         <a class="logolink" href="#teszt" aria-label="BékésPartners – Vagyonadó-kalauz, kezdőlap"><img class="logo" src="logo.png" alt="BékésPartners" width="572" height="80"></a>
       </div>
       <div class="brandright">
+        <!-- FŐOLDALI NAVIGÁCIÓ tükre (bekespartners.com) – a linkek a főoldalra mutatnak; aloldal-címekre cserélhetők -->
+        <nav class="sitenav" aria-label="BékésPartners főoldal">
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Rólunk</a>
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Szolgáltatásaink</a>
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Insights</a>
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Kapcsolat</a>
+        </nav>
         <!-- MOTTÓ: a BékésPartners "Built on trust" jelmondat – töröld a sort, ha nem kell -->
         <span class="motto">Built on trust</span>
         <!-- SZÖVEGÁLLAPOT (kikapcsolva) – ha később kell, ide: <span class="stamp">Szövegállapot: …</span> -->
@@ -74,6 +81,7 @@
     <circle cx="350" cy="50" r="40" fill="none" stroke="#62919D" stroke-width="12"/>
   </svg>
   <div class="wrap">
+    <div class="practice-chip"><span class="pc-dot"></span>Adó<span class="pc-sep">·</span><span class="pc-tag">Az adótervezés tudománya</span></div>
     <div class="eyebrow">2026. évi … törvény a vagyonadóról · tervezet</div>
     <h1>Vagyonadó-kalauz</h1>
     <p class="lead">Számolja ki, mennyire érinti Önt a vagyonadó – majd olvassa el, mit jelent a kormany.hu-n közzétett törvénytervezet a vagyonos magánszemélyeknek, hogyan értékelné egy adótanácsadó, és mi a helyzet a bizalmi vagyonkezeléssel.</p>
@@ -85,6 +93,13 @@
     </dl>
   </div>
 </header>
+<!-- Szakterületi színsáv feliratokkal (a weboldal és a sablon négyszegmensű vonala) -->
+<nav class="practice-rule" aria-label="BékésPartners szakterületek">
+  <a class="pr-tax" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer"><b>Adó</b><span>Az adótervezés tudománya</span></a>
+  <a class="pr-legal" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer"><b>Jog</b><span>360° jogi szolgáltatások</span></a>
+  <a class="pr-trust" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer"><b>Bizalmi vagyonkezelés</b><span>A bizalomról szól</span></a>
+  <a class="pr-found" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer"><b>Alapítvány</b><span>A jövőért</span></a>
+</nav>
 
 <nav class="tabbar" aria-label="Blokkok">
   <div class="wrap">
@@ -241,6 +256,23 @@
     <div class="kpane" id="kp-tenni" hidden></div>
   </div>
 
+  <div class="insights">
+    <div class="ins-head"><h3>Olvasson tovább</h3><span class="ins-sub">A kalauz három olvasata</span></div>
+    <div class="ins-grid">
+      <button type="button" class="ins-card ic-tax" data-goto="osszefoglalo">
+        <span class="ic-top"><span class="ic-label">Kit és mit érint</span></span>
+        <span class="ic-body"><span class="ic-title">Mit jelent a vagyonadó Önnek?</span><span class="ic-ex">Kit érint, mi számít bele a vagyonba, mi vonható le, és mire figyeljen 2026. december 31. előtt – közérthetően.</span><span class="ic-more">Tovább →</span><span class="ic-tags">#vagyonadó #magánvagyon</span></span>
+      </button>
+      <button type="button" class="ins-card ic-navy" data-goto="szakmai">
+        <span class="ic-top"><span class="ic-label">Adótanácsadói elemzés</span></span>
+        <span class="ic-body"><span class="ic-title">A tervezet szakmai elemzése</span><span class="ic-ex">Hatály, illetőség, értékelési szabályok, cégérték-képlet, nemzetközi vonatkozások és a tervezet értelmezési kockázatai.</span><span class="ic-more">Tovább →</span><span class="ic-tags">#adótanácsadás #cégértékelés</span></span>
+      </button>
+      <button type="button" class="ins-card ic-trust" data-goto="bvk">
+        <span class="ic-top"><span class="ic-label">Bizalmi vagyonkezelés</span></span>
+        <span class="ic-body"><span class="ic-title">A kezelt vagyon mint önálló adóalany</span><span class="ic-ex">Illetőség, kapcsolt BVK-k közös mentes sávja, bejelentési határidők és a külföldi vagyonrendelők csapdája.</span><span class="ic-more">Tovább →</span><span class="ic-tags">#BVK #trust</span></span>
+      </button>
+    </div>
+  </div>
   <p class="disclaimer">A kalkulátor a kormany.hu-n közzétett 2026. évi vagyonadó-törvénytervezet szövegén alapuló becslés. A végleges törvény, a végrehajtási rendeletek, a NAV indexáló kalkulátora és tömeges ingatlanértékelési modellje, valamint a nemzetközi egyezmények eltérő eredményre vezethetnek. Nem minősül adótanácsadásnak; konkrét döntés előtt minősített adótanácsadóval kell egyeztetni.</p>
   <div class="kreport" id="kReport"></div>
 </section>
@@ -249,6 +281,7 @@
 <section class="panel" id="osszefoglalo" role="tabpanel" aria-labelledby="t-osszefoglalo" hidden>
   <div class="prose">
     <h2>Mit jelent a vagyonadó Önnek?</h2>
+    <div class="postmeta"><span>2026. október</span><span class="tags">#vagyonadó #adótervezés #magánvagyon</span></div>
     <p class="intro">Akinek a teljes vagyona, a hitelei levonása után, december 31-én meghaladja az 1 milliárd forintot, annak évente a milliárd feletti rész 1 százalékát kell befizetnie. A tervezet szerint ez már 2026. december 31-ére vonatkozik, az első befizetés 2027. augusztus 31.</p>
     <div class="statband" role="group" aria-label="A tervezet hatásvizsgálatának kulcsszámai">
       <div class="stat s-tax"><div class="stat-n">≈ 15 000</div><div class="stat-l">érintett vagyonos magánszemély</div></div>
@@ -377,6 +410,7 @@
   <div class="prose">
     <div class="eyebrow">Adótanácsadói memorandum · a tervezet szövege alapján</div>
     <h2>A vagyonadó-tervezet szakmai elemzése</h2>
+    <div class="postmeta"><span>2026. október</span><span class="tags">#vagyonadó #adótanácsadás #cégértékelés #nemzetköziadózás</span></div>
     <p class="intro">A tervezet a teljes nettó vagyonra kivetett, illetőségi és állampolgársági alapon is kapcsolódó, éves, önadózással teljesítendő közteher. Szerkezete a svájci és spanyol modellhez áll közel, de értékelési rendszere sajátosan magyar: az illetékeljárási adatokra, a NAV tömeges értékelési modelljére és egy tőkésített nyereségen alapuló cégérték-képletre épül.</p>
 
     <h3>1. Hatály és időbeli alkalmazás</h3>
@@ -543,6 +577,7 @@
   <div class="prose">
     <div class="eyebrow"><span class="ref">Ptk. 6:310. §</span> és köv. · bizalmi vagyonkezelési szerződés</div>
     <h2>Bizalmi vagyonkezelés a vagyonadó-tervezetben</h2>
+    <div class="postmeta"><span>2026. október</span><span class="tags">#bizalmivagyonkezelés #BVK #trust #vagyonadó</span></div>
     <p class="intro">A tervezet a bizalmi vagyonkezelésben (BVK) kezelt vagyont önálló adóalanynak tekinti. Utána nem a vagyonrendelő, nem a kedvezményezett és nem a vagyonkezelő adózik, hanem maga a kezelt vagyon: saját mentes sávval, saját bevallással, és az adót is a kezelt vagyonból kell megfizetni. Ez a fül kizárólag a Ptk. szerinti bizalmi vagyonkezeléssel és a külföldi jog szerinti megfelelőivel foglalkozik.</p>
 
     <h3>Röviden</h3>
@@ -665,6 +700,22 @@
       <li><strong>Ingóság-mentesség</strong> BVK-ban tartott, magánhasználatú tárgyaknál, lásd fent.</li>
     </ol>
 
+    <div class="sqn-service">
+      <div class="sqn-service-head">
+        <div class="sqn-label">Szolgáltatás · BVK Audit</div>
+        <h3 class="sqn-service-title">Készen a NAV felülvizsgálatára</h3>
+        <p>A jogszabály-módosítások nyomán a NAV minden bizalmi vagyonkezelést felülvizsgál, elsőként a 2023. szeptember 12. előtt létrehozottakat. A BVK Audit a felülvizsgálat szempontjai mentén méri fel a szerkezet felkészültségét, és 0–10-es készültségi pontszámot ad.</p>
+      </div>
+      <ol class="sqn-steps">
+        <li><b>Kérdőív</b><span>Tényszerű kérdések a vagyonkezelésről, a szereplőkről, a vagyonról és a működésről.</span></li>
+        <li><b>Konzultáció</b><span>A válaszok személyes átbeszélése – az is, amit nehéz írásban megfogalmazni.</span></li>
+        <li><b>Értékelés</b><span>Hat területen, a törvényben rögzített felülvizsgálati szempontok szerint.</span></li>
+        <li><b>Audit-jelentés</b><span>Kulcstények, területenkénti minősítés és összesített készültségi pontszám.</span></li>
+      </ol>
+      <div class="sqn-areas"><span>Hat vizsgált terület:</span> a szerkezet létrehozása · a vagyonkezelő függetlensége · cél és kiadási szabályok · a vagyon összetétele és értékelése · napi működés és dokumentáció · számvitel és adóadminisztráció</div>
+      <a class="cta" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Részletek a bekespartners.com-on</a>
+    </div>
+
     <h3>Teendők a vagyonkezelő és a vagyonrendelő számára</h3>
     <ul class="checklist">
       <li>Minden érintett BVK illetőségének és kapcsoltságának felmérése, a hozzátartozói kapcsolatokat is beleértve.</li>
@@ -696,8 +747,11 @@
   <div class="wrap">
     <div class="ft-grid">
       <div class="ft-brand">
-        <img src="logo.png" alt="BékésPartners" width="572" height="80">
-        <p>Független ügyvédek és közgazdászok: adó, jog, bizalmi vagyonkezelés és alapítvány – hazai és nemzetközi ügyfeleknek.</p>
+        <picture>
+          <source srcset="logo.png" media="(prefers-reduced-motion: reduce)">
+          <img class="ft-logo" src="logo-kibomlas.gif" alt="BékésPartners – Tax · Legal · Trust · Foundation" width="940" height="144" loading="lazy">
+        </picture>
+        <p>Független ügyvédek és közgazdászok: adó, jog, bizalmi vagyonkezelés és alapítvány – hazai és nemzetközi ügyfeleknek. A PrimeGlobal tagja.</p>
       </div>
       <div class="ft-prac">
         <div class="ft-h">Szakterületeink</div>

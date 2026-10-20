@@ -14,6 +14,7 @@ Statikus, egyoldalas kalauz a 2026. évi vagyonadó-törvénytervezethez: laikus
 | `logo.png` | A BékésPartners logó (átlátszó háttér) | Cseréhez ugyanezen a néven töltsd fel az újat |
 | `hero.jpg` | A fejléc háttérképe – jelenleg a bekespartners.com hero-fotójának tónusaiból generált háttér | **Cseréld le az eredeti hero-fotóra** ugyanezen a néven (ajánlott 1600×640 px, JPEG) |
 | `sqn-logo.png` | Az SQN Trust logója a IV. fülön | Cseréhez ugyanezen a néven |
+| `logo-kibomlas.gif` | A „kibomlás” animált logó a láblécben (egyszer játszódik le; csökkentett mozgásnál a statikus logó jelenik meg) | Cseréhez ugyanezen a néven |
 | `fonts/` | Montserrat és Playfair Display woff2 fájlok + licencek | Nem kell módosítani |
 
 ## Arculat beállítása

@@ -174,7 +174,6 @@ a{color:var(--accent)}
 :root[data-hcolor="brand2"] .prose h2,:root[data-hcolor="brand2"] .prose h3,:root[data-hcolor="brand2"] legend{color:var(--accent2)}
 :root[data-stripe="0"] .masthead{border-bottom:0}
 :root[data-stripe="4"] .masthead{border-bottom:0;background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%);background-size:100% 6px;background-repeat:no-repeat;background-position:left bottom}
-:root[data-stripe="4"][data-hdr="hero"] .masthead{background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%),url("hero.jpg");background-size:100% 6px,cover;background-repeat:no-repeat,no-repeat;background-position:left bottom,center}
 :root[data-stripe="4"][data-hdr="gradient"] .masthead{background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%),linear-gradient(120deg, var(--brand) 0%, color-mix(in srgb, var(--brand) 55%, var(--brand2)) 100%);background-size:100% 6px,100% 100%;background-repeat:no-repeat;background-position:left bottom,center}
 :root[data-facts="0"] .masthead .facts{display:none}
 :root[data-logopos="center"] .brandrow{justify-content:center}
@@ -210,7 +209,7 @@ strong{font-weight:600}
 /* Sorkizárt folyószöveg automatikus elválasztással (lang="hu"); keskeny képernyőn balra zárt,
    mert ott a sorkizárás egyenetlen szóközöket hagy. */
 /* Sorkizárás mindenhol, ahol folyószöveg van (bekezdés, felsorolás, táblázatcella, megjegyzés, kártya, figyelmeztetés) */
-.prose p,.prose li,.masthead .lead,.fhint,.disclaimer,.kpane p.kn,.kcard p,.note,.flag,.ka-flags div,td,.sqn-headtxt p,.band p,.ft-brand p{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:8 4 4}
+.prose p,.prose li,.masthead .lead,.fhint,.disclaimer,.kpane p.kn,.kcard p,.note,.flag,.ka-flags div,td,.sqn-headtxt p,.band p{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:8 4 4}
 h1,h2,h3,h4,h5,th,td.num,.formula,.ref,.eyebrow,.motto,.sqn-label,.tab,.btn,.cta,.ktab,.kbig,.r-tax,.ka-val,.ka-steps,.inp,.sel,label.btn,.chart .cap b,.timeline .when{text-align:left;hyphens:manual}
 td.num,th.num{text-align:right}
 
@@ -468,8 +467,8 @@ body.js .reveal.in{opacity:1;transform:none}
 /* Lábléc (Closing · Navy) */
 .site-footer{margin-top:40px;background:var(--brand);color:#ffffff;border-top:6px solid transparent;background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%);background-size:100% 6px;background-repeat:no-repeat;background-position:top;position:relative;z-index:1}
 .ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding:44px 0 28px}
-.ft-brand img{height:44px;width:auto;background:#ffffff;padding:8px 12px;border-radius:2px}
-.ft-brand p{margin-top:16px;font-weight:300;font-size:14.5px;line-height:1.6;color:#ffffff;opacity:.9}
+.ft-brand img:not(.ft-logo){height:44px;width:auto;background:#ffffff;padding:8px 12px;border-radius:2px}
+.ft-brand p{margin-top:16px;font-weight:300;font-size:14.5px;line-height:1.6;color:#ffffff;opacity:.9;text-align:left}
 .ft-h{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin-bottom:12px}
 .ft-prac a{display:block;color:#ffffff;text-decoration:none;font-weight:500;font-size:15px;padding:5px 0 5px 14px;border-left:3px solid #ffffff;margin-bottom:6px}
 .ft-prac a:hover{opacity:.85}
@@ -480,6 +479,71 @@ body.js .reveal.in{opacity:1;transform:none}
 .ft-bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 0 22px;border-top:1px solid rgba(255,255,255,.18);font-size:12.5px;opacity:.85}
 .ft-motto{font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
 @media (max-width:760px){.ft-grid{grid-template-columns:minmax(0,1fr);gap:26px;padding:32px 0 20px}}
+
+/* Weboldal-elemek: főoldali navigáció a márkasávban, szakterületi chip, színsáv feliratokkal, insight-kártyák, poszt-meta */
+.brandright{flex-direction:row;align-items:center;gap:22px}
+.sitenav{display:flex;gap:18px}
+.sitenav a{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-decoration:none;padding:4px 0;border-bottom:2px solid transparent;transition:border-color .15s,color .15s}
+.sitenav a:hover{color:var(--accent);border-bottom-color:var(--seg1)}
+.sitenav a:nth-child(2):hover{border-bottom-color:var(--seg2)}.sitenav a:nth-child(3):hover{border-bottom-color:var(--seg3)}.sitenav a:nth-child(4):hover{border-bottom-color:var(--seg4)}
+@media (max-width:980px){.sitenav{display:none}}
+.practice-chip{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#ffffff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);padding:7px 14px 7px 10px;margin-bottom:18px;backdrop-filter:blur(2px)}
+.pc-dot{width:10px;height:10px;background:var(--seg1);display:inline-block}
+.pc-sep{opacity:.5}.pc-tag{font-weight:500;letter-spacing:.12em;opacity:.9}
+.practice-rule{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--surface);border-bottom:1px solid var(--line);position:relative;z-index:1}
+.practice-rule a{display:flex;flex-direction:column;gap:2px;padding:12px 20px 12px;text-decoration:none;color:var(--ink);border-top:6px solid var(--line);transition:background .15s}
+.practice-rule a b{font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.practice-rule a span{font-size:12px;font-weight:300;color:var(--muted);letter-spacing:.02em}
+.practice-rule a:hover{background:var(--bg)}
+.practice-rule .pr-tax{border-top-color:var(--seg1)}.practice-rule .pr-tax b{color:#9A6200}
+.practice-rule .pr-legal{border-top-color:var(--seg2)}.practice-rule .pr-legal b{color:#237A50}
+.practice-rule .pr-trust{border-top-color:var(--seg3)}.practice-rule .pr-trust b{color:var(--seg3)}
+.practice-rule .pr-found{border-top-color:var(--seg4)}.practice-rule .pr-found b{color:#456F7C}
+:root[data-stripe="4"][data-hdr="hero"] .masthead{background-image:url("hero.jpg");background-size:cover;background-position:center}
+@media (max-width:760px){.practice-rule{grid-template-columns:repeat(2,minmax(0,1fr))}.practice-rule a{padding:10px 14px}.practice-rule a span{display:none}}
+.postmeta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-top:6px}
+.postmeta .tags{color:var(--brand2);font-weight:500;text-align:left}
+.sqn .postmeta .tags{color:var(--sqn-blue)}
+.prose h2{position:relative;padding-bottom:12px}
+.prose h2::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:3px;background:var(--seg1)}
+#teszt .prose h2::after{background:var(--accent)}
+.sqn .prose h2::after{background:var(--sqn-blue);width:40px;height:2px}
+.insights{margin-top:44px}
+.ins-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.ins-head h3{font-size:22px;font-weight:600;text-transform:uppercase;letter-spacing:.02em;color:var(--accent)}
+.ins-sub{font-size:13px;color:var(--muted)}
+.ins-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:860px){.ins-grid{grid-template-columns:minmax(0,1fr)}}
+.ins-card{display:flex;flex-direction:column;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:0;padding:0;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.ins-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(19,64,125,.12)}
+.ic-top{display:block;height:92px;background:var(--accent);position:relative}
+.ic-top::after{content:"";position:absolute;right:16px;bottom:-14px;width:28px;height:28px;border-radius:50%;border:5px solid #ffffff;background:transparent;opacity:.9}
+.ic-tax .ic-top{background:linear-gradient(135deg,var(--seg1),#C98A12)}.ic-navy .ic-top{background:linear-gradient(135deg,var(--brand),#0F2F5C)}.ic-trust .ic-top{background:linear-gradient(135deg,var(--seg3),#5E2C43)}
+.ic-label{position:absolute;left:18px;bottom:14px;color:#ffffff;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.ic-body{display:flex;flex-direction:column;gap:8px;padding:22px 18px 18px}
+.ic-title{font-size:18px;font-weight:600;color:var(--accent);line-height:1.3;text-align:left}
+.ic-ex{font-size:14px;font-weight:300;line-height:1.55;color:var(--ink)}
+.ic-more{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand2);margin-top:4px}
+.ic-tags{font-size:12px;color:var(--muted)}
+.ft-brand .ft-logo{width:min(100%,470px);height:auto;background:#ffffff;padding:10px 14px;border-radius:2px}
+/* SQN szolgáltatás-kártya (BVK Audit) – Process · 4 Steps */
+.sqn-service{margin-top:40px;border:1px solid var(--sqn-ink);background:var(--surface);padding:30px 32px 30px}
+.sqn .prose .sqn-service-title{font-family:var(--f-serif);font-size:28px;font-weight:600;color:var(--sqn-ink);margin:8px 0 10px;border:0;padding:0;text-transform:none;letter-spacing:0}
+.sqn-service-head p{font-size:15px;line-height:1.6}
+.sqn-steps{counter-reset:st;list-style:none;padding:0;margin:24px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.sqn-steps li{counter-increment:st;position:relative;padding-top:14px;border-top:2px solid var(--sqn-blue);display:flex;flex-direction:column;gap:6px}
+.sqn-steps li::before{content:"0" counter(st);font-family:var(--f-serif);font-size:30px;line-height:1;color:var(--sqn-blue)}
+.sqn-steps b{font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:var(--sqn-ink)}
+.sqn-steps span{font-size:13.5px;line-height:1.5;color:var(--ink);text-align:left;font-weight:300}
+.sqn-areas{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.6;color:var(--ink);font-weight:300}
+.sqn-areas span{font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--sqn-blue);margin-right:6px}
+.sqn-service .cta{margin-top:22px;text-decoration:none}
+@media (max-width:760px){.sqn-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.sqn-service{padding:22px 18px}}
+@media (max-width:460px){.sqn-steps{grid-template-columns:minmax(0,1fr)}}
+/* Hero-gyűrűk lassú lebegése */
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+body.js .hero-rings{animation:floaty 9s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){body.js .hero-rings{animation:none}}
 
 /* Színes sáv (bekespartners.com "service banner" – szilva) */
 .band{margin-top:48px;color:#ffffff}
@@ -531,7 +595,7 @@ body.js .reveal.in{opacity:1;transform:none}
 
 /* Nyomtatás: csak a jelentés */
 @media print{
-  body.kprint .wm,body.kprint .brandbar,body.kprint .masthead,body.kprint .tabbar,body.kprint .panel:not(#teszt),body.kprint #teszt > *:not(#kReport){display:none !important}
+  body.kprint .wm,body.kprint .brandbar,body.kprint .masthead,body.kprint .practice-rule,body.kprint .site-footer,body.kprint .tabbar,body.kprint .panel:not(#teszt),body.kprint #teszt > *:not(#kReport){display:none !important}
   body.kprint #kReport{display:block !important;color:#000;font-size:11pt}
   body.kprint{background:#fff}
   #kReport h2{font-size:18pt;margin:0 0 4pt}
