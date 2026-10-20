@@ -67,6 +67,12 @@
   </div>
 </div>
 <header class="masthead">
+  <svg class="hero-rings" viewBox="0 0 400 100" aria-hidden="true">
+    <circle cx="50" cy="50" r="40" fill="none" stroke="#ECA520" stroke-width="12"/>
+    <circle cx="150" cy="50" r="40" fill="none" stroke="#52BC86" stroke-width="12"/>
+    <circle cx="250" cy="50" r="40" fill="none" stroke="#84425D" stroke-width="12"/>
+    <circle cx="350" cy="50" r="40" fill="none" stroke="#62919D" stroke-width="12"/>
+  </svg>
   <div class="wrap">
     <div class="eyebrow">2026. évi … törvény a vagyonadóról · tervezet</div>
     <h1>Vagyonadó-kalauz</h1>
@@ -244,6 +250,12 @@
   <div class="prose">
     <h2>Mit jelent a vagyonadó Önnek?</h2>
     <p class="intro">Akinek a teljes vagyona, a hitelei levonása után, december 31-én meghaladja az 1 milliárd forintot, annak évente a milliárd feletti rész 1 százalékát kell befizetnie. A tervezet szerint ez már 2026. december 31-ére vonatkozik, az első befizetés 2027. augusztus 31.</p>
+    <div class="statband" role="group" aria-label="A tervezet hatásvizsgálatának kulcsszámai">
+      <div class="stat s-tax"><div class="stat-n">≈ 15 000</div><div class="stat-l">érintett vagyonos magánszemély</div></div>
+      <div class="stat s-trust"><div class="stat-n">≈ 2 000</div><div class="stat-l">bizalmi vagyonkezelés és hasonló struktúra</div></div>
+      <div class="stat s-navy"><div class="stat-n">800 Mrd Ft</div><div class="stat-l">várt költségvetési bevétel négy év alatt</div></div>
+      <div class="stat-src">Forrás: a törvénytervezethez csatolt hatásvizsgálat (2026. szeptember 28.), kormany.hu</div>
+    </div>
 
     <h3>Kit érint?</h3>
     <ul>
@@ -524,6 +536,10 @@
       <p>Az SQN Trust Zrt. – MNB-engedélyes bizalmi vagyonkezelő – szakmai közreműködésével.</p>
     </div>
   </div>
+  <div class="sqn-statement">
+    <p>A tervezet szerint a bizalmi vagyonkezelésben kezelt vagyon önálló adóalany: saját mentes sávval, saját bevallással – és az adót a kezelt vagyonból kell megfizetni.</p>
+    <span class="sqn-statement-src">A vagyonadó-törvény tervezete, 3. § és 24. §</span>
+  </div>
   <div class="prose">
     <div class="eyebrow"><span class="ref">Ptk. 6:310. §</span> és köv. · bizalmi vagyonkezelési szerződés</div>
     <h2>Bizalmi vagyonkezelés a vagyonadó-tervezetben</h2>
@@ -576,6 +592,10 @@
 
     <h4>Számpélda: külföldi állampolgár magyar BVK-val</h4>
     <p>Külföldi állampolgár, nem él Magyarországon. Saját nevén egy 300 millió forintos budapesti lakás van. Magyar jogú BVK-jában 800 millió forint magyar ingatlan és magyar kft.-részesedés, valamint 1 500 millió forint külföldi értékpapír és pénz van, és a BVK-nak 100 millió forint, a magyar ingatlanhoz kapcsolódó hitele van.</p>
+    <div class="sqn-compare" role="group" aria-label="Éves vagyonadó a két szerkezetben">
+      <div><span class="sqn-big">0 Ft</span><span class="sqn-cap">közvetlen tulajdonban</span></div>
+      <div><span class="sqn-big">12 000 000 Ft</span><span class="sqn-cap">magyar BVK-n keresztül, évente</span></div>
+    </div>
     <div class="tablewrap">
       <table>
         <thead><tr><th scope="col"></th><th scope="col" class="num">Közvetlen tulajdonban</th><th scope="col" class="num">Magyar BVK-n keresztül</th></tr></thead>
@@ -657,13 +677,43 @@
       <li>Az évközi kiadások ütemezése a kétszeres figyelembevétel kockázata miatt.</li>
     </ul>
 
-    <button class="cta" type="button" data-goto="teszt" data-kpreset="bvk">BVK-s helyzet kiszámítása a kalkulátorban</button>
     <p class="disclaimer">A tervezet szövegén alapul; a végleges törvény és a NAV gyakorlata eltérhet. Nem minősül egyedi adótanácsadásnak.</p>
+  </div>
+  <div class="band slate">
+    <div class="band-in">
+      <div class="eyebrow">Kalkulátor</div>
+      <h3>Mennyit fizet a kezelt vagyon?</h3>
+      <p>A kalkulátor a BVK-t önálló adóalanyként kezeli: a kezelt vagyon illetőségét, a kapcsolt BVK-k közös mentes sávját és a kezelt vagyonból fizetendő adót is kiszámolja.</p>
+      <button class="cta ghost" type="button" data-goto="teszt" data-kpreset="bvk">BVK-s helyzet kiszámítása</button>
+    </div>
   </div>
 </section>
 
 
 </main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <img src="logo.png" alt="BékésPartners" width="572" height="80">
+        <p>Független ügyvédek és közgazdászok: adó, jog, bizalmi vagyonkezelés és alapítvány – hazai és nemzetközi ügyfeleknek.</p>
+      </div>
+      <div class="ft-prac">
+        <div class="ft-h">Szakterületeink</div>
+        <a class="p-tax" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Adó</a>
+        <a class="p-legal" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Jog</a>
+        <a class="p-trust" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Bizalmi vagyonkezelés</a>
+        <a class="p-found" href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Alapítvány</a>
+      </div>
+      <div class="ft-contact">
+        <div class="ft-h">Kapcsolat</div>
+        <p>BAH Center, 1124 Budapest, Fürj u. 2.<br><a href="tel:+3616464646">+36<a href="tel:+3616464646">+36 1 646 4646</a>nbsp;1<a href="tel:+3616464646">+36 1 646 4646</a>nbsp;646<a href="tel:+3616464646">+36 1 646 4646</a>nbsp;4646</a><br><a href="mailto:office@bekespartners.com">office@bekespartners.com</a><br><a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">bekespartners.com</a></p>
+      </div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 BékésPartners · Minden jog fenntartva</span><span class="ft-motto">Built on trust</span></div>
+  </div>
+</footer>
 
 <script src="app.js" defer></script>
 </body>

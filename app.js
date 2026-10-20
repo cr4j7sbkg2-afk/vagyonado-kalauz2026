@@ -63,6 +63,18 @@ function linkRefs(root){
 }
 linkRefs(document);
 
+/* ---------- Megjelenési animáció ---------- */
+document.body.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window))return;
+  var els=document.querySelectorAll('.prose > *, .statband, .band, .sqn-head, .sqn-statement, fieldset, .result, .kdetail, .kbar, .k-intro > *');
+  els.forEach(function(e){e.classList.add('reveal')});
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -6% 0px',threshold:0.05});
+  els.forEach(function(e){io.observe(e)});
+  /* ami fül-váltáskor már a képernyőn van, azonnal jelenjen meg */
+  document.querySelectorAll('.tabs [role="tab"]').forEach(function(t){t.addEventListener('click',function(){setTimeout(function(){document.querySelectorAll('.reveal:not(.in)').forEach(function(e){var r=e.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0)e.classList.add('in')})},30)})});
+})();
+
 /* ---------- Fülek ---------- */
 (function(){
   var tabs=[].slice.call(document.querySelectorAll('.tabs [role="tab"]'));

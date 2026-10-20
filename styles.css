@@ -125,7 +125,7 @@ a{color:var(--accent)}
 :root[data-hdr="hero"]{--hdr-bg:var(--hero-a); --band-ink:#ffffff}
 :root[data-hdr="hero"] .brandbar{background:var(--hdr-light);color:var(--ink)}
 :root[data-hdr="hero"] .brandbar .motto{color:var(--accent)}
-:root[data-hdr="hero"] .masthead{background:var(--hero-a) url("hero.jpg") center/cover no-repeat;position:relative;padding-block:56px 48px}
+:root[data-hdr="hero"] .masthead{background:var(--hero-a) url("hero.jpg") center/cover no-repeat;position:relative;overflow:hidden;padding-block:56px 48px}
 :root[data-hdr="hero"] .masthead::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,30,32,.55) 0%,rgba(20,30,32,.25) 60%,rgba(20,30,32,.05) 100%);pointer-events:none}
 :root[data-hdr="hero"] .masthead > .wrap{position:relative}
 :root[data-hdr="hero"] .masthead .eyebrow{color:#ffffff;opacity:.75;letter-spacing:.14em}
@@ -210,7 +210,7 @@ strong{font-weight:600}
 /* Sorkizárt folyószöveg automatikus elválasztással (lang="hu"); keskeny képernyőn balra zárt,
    mert ott a sorkizárás egyenetlen szóközöket hagy. */
 /* Sorkizárás mindenhol, ahol folyószöveg van (bekezdés, felsorolás, táblázatcella, megjegyzés, kártya, figyelmeztetés) */
-.prose p,.prose li,.masthead .lead,.fhint,.disclaimer,.kpane p.kn,.kcard p,.note,.flag,.ka-flags div,td,.sqn-headtxt p,.band p,.g-note,.krange,.ksub,.fld .sub,.chk,.choice label,.kbar,.empty,.r-row .tpn small,.facts dd small{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:8 4 4}
+.prose p,.prose li,.masthead .lead,.fhint,.disclaimer,.kpane p.kn,.kcard p,.note,.flag,.ka-flags div,td,.sqn-headtxt p,.band p,.ft-brand p{text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:8 4 4}
 h1,h2,h3,h4,h5,th,td.num,.formula,.ref,.eyebrow,.motto,.sqn-label,.tab,.btn,.cta,.ktab,.kbig,.r-tax,.ka-val,.ka-steps,.inp,.sel,label.btn,.chart .cap b,.timeline .when{text-align:left;hyphens:manual}
 td.num,th.num{text-align:right}
 
@@ -429,9 +429,65 @@ body.on-bvk .wm-rings{opacity:0}
 body.on-bvk .wm-sqn{opacity:.07}
 @media (max-width:720px){.wm-rings{width:300px;height:75px;right:12px;bottom:20px;opacity:.08}.wm-sqn{width:200px}}
 
+/* Sablon-eszközök: címke narancs négyzettel, gyűrűs idővonal, navy táblázatfejléc, számsáv */
+.eyebrow::before{content:"";display:inline-block;width:8px;height:8px;background:var(--seg1);margin-right:10px;vertical-align:1px}
+.sqn .eyebrow::before{background:var(--sqn-blue)}
+.band .eyebrow::before{background:#ffffff;opacity:.8}
+.hero-rings{position:absolute;right:4%;top:44px;width:min(38vw,500px);height:auto;opacity:.38;pointer-events:none;z-index:0}
+@media (max-width:900px){.hero-rings{opacity:.14;width:66vw;right:-10vw;top:16px}}
+:root[data-hdr="hero"] .masthead > .wrap{z-index:1}
+th{background:var(--accent);color:#ffffff;letter-spacing:.1em}
+.sqn th{background:var(--sqn-slate)}
+.timeline{border-left-color:var(--line)}
+.timeline li::before{width:14px;height:14px;left:-9px;top:5px;border-width:3px;background:var(--surface)}
+.timeline li:nth-child(4n+1)::before{border-color:var(--seg1)}
+.timeline li:nth-child(4n+2)::before{border-color:var(--seg2)}
+.timeline li:nth-child(4n+3)::before{border-color:var(--seg3)}
+.timeline li:nth-child(4n+4)::before{border-color:var(--seg4)}
+.sqn .timeline li::before{border-color:var(--sqn-blue)}
+.issues li::before{background:var(--accent);color:#ffffff;border-color:var(--accent);font-weight:600}
+.sqn .issues li::before{background:var(--sqn-ink);border-color:var(--sqn-ink)}
+.checklist li::before{border-width:2px;border-color:var(--accent)}
+.statband{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:22px}
+.stat{background:var(--surface);padding:22px 20px 18px;border-top:4px solid var(--accent)}
+.stat.s-tax{border-top-color:var(--seg1)}.stat.s-trust{border-top-color:var(--seg3)}.stat.s-navy{border-top-color:var(--accent)}
+.stat-n{font-size:34px;font-weight:600;color:var(--accent);line-height:1.1;font-variant-numeric:tabular-nums;text-align:left}
+.stat-l{font-size:13.5px;color:var(--muted);margin-top:6px;text-align:left}
+.stat-src{grid-column:1/-1;background:var(--surface);font-size:12px;color:var(--muted);padding:8px 20px;text-align:left}
+@media (max-width:640px){.statband{grid-template-columns:minmax(0,1fr)}}
+
+/* Megjelenési animáció (visszafogott; csökkentett mozgás esetén kikapcsol) */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+body.js .masthead .eyebrow,body.js .masthead h1,body.js .masthead .lead,body.js .masthead .facts div{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+body.js .masthead h1{animation-delay:.08s}body.js .masthead .lead{animation-delay:.16s}
+body.js .masthead .facts div:nth-child(1){animation-delay:.26s}body.js .masthead .facts div:nth-child(2){animation-delay:.34s}body.js .masthead .facts div:nth-child(3){animation-delay:.42s}body.js .masthead .facts div:nth-child(4){animation-delay:.5s}
+body.js .reveal{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+body.js .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){body.js .reveal{opacity:1;transform:none;transition:none}body.js .masthead *{animation:none !important}}
+
+/* Lábléc (Closing · Navy) */
+.site-footer{margin-top:40px;background:var(--brand);color:#ffffff;border-top:6px solid transparent;background-image:linear-gradient(to right,var(--seg1) 0 25%,var(--seg2) 25% 50%,var(--seg3) 50% 75%,var(--seg4) 75% 100%);background-size:100% 6px;background-repeat:no-repeat;background-position:top;position:relative;z-index:1}
+.ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding:44px 0 28px}
+.ft-brand img{height:44px;width:auto;background:#ffffff;padding:8px 12px;border-radius:2px}
+.ft-brand p{margin-top:16px;font-weight:300;font-size:14.5px;line-height:1.6;color:#ffffff;opacity:.9}
+.ft-h{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin-bottom:12px}
+.ft-prac a{display:block;color:#ffffff;text-decoration:none;font-weight:500;font-size:15px;padding:5px 0 5px 14px;border-left:3px solid #ffffff;margin-bottom:6px}
+.ft-prac a:hover{opacity:.85}
+.ft-prac .p-tax{border-color:var(--seg1)}.ft-prac .p-legal{border-color:var(--seg2)}.ft-prac .p-trust{border-color:var(--seg3)}.ft-prac .p-found{border-color:var(--seg4)}
+.ft-contact p{font-size:14.5px;line-height:1.8;font-weight:300;text-align:left}
+.ft-contact a{color:#ffffff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+.ft-contact a:hover{border-bottom-color:#ffffff}
+.ft-bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 0 22px;border-top:1px solid rgba(255,255,255,.18);font-size:12.5px;opacity:.85}
+.ft-motto{font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+@media (max-width:760px){.ft-grid{grid-template-columns:minmax(0,1fr);gap:26px;padding:32px 0 20px}}
+
 /* Színes sáv (bekespartners.com "service banner" – szilva) */
 .band{margin-top:48px;color:#ffffff}
 .band.plum{background:var(--plum-dark)}
+.band.slate{background:var(--sqn-slate)}
+.band.slate h3{font-family:var(--f-serif);text-transform:none;letter-spacing:0;font-weight:600}
+.band.slate .cta.ghost{letter-spacing:.22em;font-weight:500}
+.band.slate .cta.ghost:hover{color:var(--sqn-slate)}
 .band-in{padding:40px 36px}
 .band .eyebrow{color:#ffffff;opacity:.7}
 .band h3{color:#ffffff;font-family:var(--f-body);font-weight:600;font-size:28px;margin-top:8px;text-transform:uppercase;letter-spacing:.02em}
@@ -446,6 +502,17 @@ body.on-bvk .wm-sqn{opacity:.07}
 .sqn-label{font-family:var(--f-body);font-size:12px;font-weight:500;letter-spacing:.42em;text-transform:uppercase;color:var(--sqn-ink)}
 .sqn-headtxt p{font-family:var(--f-serif);font-size:19px;line-height:1.5;color:var(--sqn-ink);margin-top:10px;max-width:46ch}
 @media (max-width:640px){.sqn-head{flex-direction:column;align-items:flex-start;gap:18px}.sqn-logo{height:84px}}
+.sqn-statement{position:relative;background:var(--sqn-slate);color:#ffffff;padding:40px 44px 34px 76px;margin:0 0 36px}
+.sqn-statement::before{content:"\201E";position:absolute;left:28px;top:-34px;font-family:var(--f-serif);font-size:96px;line-height:1;color:var(--sqn-blue);opacity:.9}
+.sqn-statement p{font-family:var(--f-serif);font-size:24px;line-height:1.45;color:#ffffff;text-align:left;hyphens:manual}
+.sqn-statement-src{display:block;margin-top:14px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;opacity:.7}
+@media (max-width:640px){.sqn-statement{padding:30px 22px 26px 50px}.sqn-statement::before{left:14px;font-size:70px}.sqn-statement p{font-size:19px}}
+.sqn-compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--sqn-ink);border:1px solid var(--sqn-ink);margin:18px 0 18px}
+.sqn-compare > div{background:var(--surface);padding:24px 22px;display:flex;flex-direction:column;gap:8px}
+.sqn-big{font-family:var(--f-serif);font-size:40px;line-height:1;color:var(--sqn-blue);font-variant-numeric:tabular-nums}
+.sqn-compare > div:first-child .sqn-big{color:var(--sqn-ink)}
+.sqn-cap{font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--sqn-ink);text-align:left}
+@media (max-width:560px){.sqn-compare{grid-template-columns:minmax(0,1fr)}.sqn-big{font-size:32px}}
 .sqn .prose h2,.sqn .prose h3{font-family:var(--f-serif);text-transform:none;letter-spacing:0;color:var(--sqn-ink);font-weight:600}
 .sqn .prose h2{font-size:34px}
 .sqn .prose h3{font-size:24px;border-top:1px solid var(--sqn-ink);padding-top:20px}
