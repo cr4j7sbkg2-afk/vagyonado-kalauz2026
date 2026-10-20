@@ -26,6 +26,7 @@
   <div id="kq-ab"></div><div id="kq-fst"></div><div id="kq-spres"></div><button id="kMini"><span id="kMiniTax"></span><span id="kMiniBadge"></span></button><div id="kSum"></div>
 </div>
 <script src="app.js"></script>
+<script src="cegertek.js"></script>
 <script>
 (function(){
   var out=document.getElementById('out'),fails=0;
@@ -54,6 +55,19 @@
   t('Gyártó zrt. (ST 2000, AE 300) → 2 000 M',V.cegertek(2000,300,false),2000);
   t('Veszteséges (ST 900, AE −50) → 300 M',V.cegertek(900,-50,false),300);
   t('Holding (ST 1000) → 1 000 M',V.cegertek(1000,500,true),1000);
+  // Cégérték-kalkulátor (cegertek.js) ↔ vagyonadó-kalkulátor magja – ugyanaz az eredmény
+  var C=window.Cegertek;
+  if(C){
+    t('cegertek.js tanácsadó kft. = kalauz képlete',C.value({st:150,ae:[120,120,120],sh:100,fy:2026,T:15}).v,V.cegertek(150,120,false));
+    t('cegertek.js veszteséges = kalauz',C.value({st:900,ae:[-50,-50,-50],sh:100,fy:2026,T:15}).v,V.cegertek(900,-50,false));
+    t('cegertek.js holding = ST',C.value({st:1000,ae:[500,500,500],sh:100,fy:2026,T:15,hold:true}).v,1000);
+    t('cegertek.js 40% hányad, 25% diszkont',C.value({st:150,ae:[120,120,120],sh:40,fy:2026,T:15,disc:true}).v,(150+2*120/0.15)/3*0.4*0.75);
+    t('cegertek.js 20% hányad, 30% diszkont',C.value({st:150,ae:[120,120,120],sh:20,fy:2026,T:15,disc:true}).v,(150+2*120/0.15)/3*0.2*0.70);
+    t('cegertek.js 40% + 20% közvetett → nincs diszkont',C.value({st:150,ae:[120,120,120],sh:40,ish:20,fy:2026,T:15,disc:true}).v,(150+2*120/0.15)/3*0.4);
+    t('cegertek.js rejtett tartalék 15%-os halasztott adó',C.value({st:600,ae:[0,0,0],rt:100,dtl:'',sh:100,fy:2026,T:15}).v,(600+85)/3);
+    t('cegertek.js induló cég H=0 (H ≤ ST 25%-a)',C.value({st:100,ae:[2,2,2],sh:100,fy:2026,fd:2025,T:15}).v,100/3);
+    t('cegertek.js induló cég, de H > ST 25%-a → I. pont',C.value({st:100,ae:[10,10,10],sh:100,fy:2026,fd:2025,T:15}).v,(100+2*10/0.15)/3);
+  } else t('cegertek.js betöltődött',0,1);
   // RULES
   t('Mentes sáv 1 000 M',V.RULES.LIMIT,1000);
   t('Felső sáv 100 000 M',V.RULES.TOP,100000);

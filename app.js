@@ -62,6 +62,7 @@ function linkRefs(root){
   });
 }
 linkRefs(document);
+try{window.VagyonadoLinkRefs=linkRefs}catch(e){}
 
 /* ---------- Megjelenési animáció ---------- */
 document.body.classList.add('js');
@@ -793,5 +794,45 @@ document.body.classList.add('js');
 
   renderAddType();
   if(!load()){S=blank();S.src='user'}renderAll();
+
+  /* ---------- Gyorsbecslő ---------- */
+  (function(){
+    var qf=$('qf');if(!qf)return;
+    var ids=['q_re','q_co','q_fin','q_oth','q_debt'];
+    function vals(){var o={};ids.forEach(function(k){o[k]=Math.max(0,n($(k).value))});o.mar=$('q_mar').checked;o.bel=$('q_bel').checked;return o}
+    function est(o,scale){
+      var gross=(o.q_re+o.q_co+o.q_fin+o.q_oth)*scale;
+      if(!o.bel){gross=(o.q_re+o.q_co)*scale}
+      var net=Math.max(0,gross-o.q_debt);
+      if(o.mar){var half=net/2;return {net:net,tax:2*tax(Math.max(0,half-LIMIT)),base:2*Math.max(0,half-LIMIT)}}
+      return {net:net,tax:tax(Math.max(0,net-LIMIT)),base:Math.max(0,net-LIMIT)};
+    }
+    function paint(){
+      var o=vals(),any=ids.some(function(k){return has($(k).value)});
+      var b=$('qBadge'),t=$('qTax'),r=$('qRange'),nt=$('qNote');
+      if(!any){b.className='badge b-info';b.textContent='Adja meg az adatokat';t.textContent='–';r.textContent='';return}
+      var m=est(o,1),lo=est(o,0.85),hi=est(o,1.15);
+      t.textContent=FT(m.tax);
+      r.textContent='sáv: '+FT(lo.tax)+' – '+FT(hi.tax);
+      var ratio=o.mar?(m.net/2)/LIMIT:m.net/LIMIT;
+      if(m.tax>0){b.className='badge b-crit';b.textContent='Érintett'}
+      else if(ratio>0.8){b.className='badge b-warn';b.textContent='Határközelben'}
+      else{b.className='badge b-ok';b.textContent='Valószínűleg nem érintett'}
+      nt.textContent=(o.mar?'Házastársaknál a közös vagyon fele-fele megosztásával, két mentes sávval számolva. ':'')+(!o.bel?'Külföldi illetőségűnél csak az ingatlant és a cégrészesedést vettük figyelembe (feltéve, hogy ezek magyarországiak). ':'')+'A becslés nem veszi figyelembe a haszonélvezetet, a kisebbségi diszkontot, az egyezményeket és a bizalmi vagyonkezelést; az értékek ±15%-os bizonytalanságával számol.';
+    }
+    qf.addEventListener('input',paint);qf.addEventListener('change',paint);
+    qf.addEventListener('submit',function(e){e.preventDefault()});
+    $('qGo').addEventListener('click',function(){
+      var o=vals();S=blank();S.src='user';S.p.mar=o.mar;if(!o.bel){S.p.cit='n';S.p.fst='no'}
+      var own=o.mar?'joint':'me';
+      if(o.q_re)S.assets.push(A('re_lak',{name:'Ingatlanok (gyorsbecslő)',own:own,m:'model',mv:o.q_re,col:false}));
+      if(o.q_co)S.assets.push(A('other',{name:'Cégrészesedések – becsült képlet szerinti érték',own:own,am:o.q_co}));
+      if(o.q_fin)S.assets.push(A('fund',{name:'Pénzügyi vagyon (gyorsbecslő)',own:own,am:o.q_fin}));
+      if(o.q_oth)S.assets.push(A('other',{name:'Egyéb vagyon (gyorsbecslő)',own:own,am:o.q_oth}));
+      if(o.q_debt)S.debts.push({id:nid('d'),name:'Tartozások (gyorsbecslő)',own:own,am:o.q_debt,cur:'HUF',kind:'loan',link:''});
+      renderAll();msg('A gyorsbecslő adatai betöltve – bontsa vagyonelemekre a pontos számításhoz.');
+      var t=document.getElementById('t-teszt');if(t)t.click();
+    });
+  })();
 })();
 })();

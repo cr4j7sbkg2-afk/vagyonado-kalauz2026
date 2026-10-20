@@ -323,7 +323,7 @@ label.btn{display:inline-block;cursor:pointer}
 .r-tax-lbl{font-size:13px;color:var(--muted)}
 .r-rows{padding:12px 18px;border-bottom:1px solid var(--line)}
 .r-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:4px 0}
-.r-row span:last-child{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+.r-row span:last-child{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .r-row.total{font-weight:600;border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
 .r-row .tpn{display:flex;flex-direction:column}
 .r-row .tpn small{font-size:12px;color:var(--muted)}
@@ -548,6 +548,37 @@ body.js .reveal.in{opacity:1;transform:none}
 @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
 body.js .hero-rings{animation:floaty 9s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){body.js .hero-rings{animation:none}}
+
+/* Cégérték-oldal */
+.masthead-sm{padding-block:40px 36px}
+.tab-link{text-decoration:none}
+.tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab[aria-current="page"] .n{color:var(--accent)}
+
+/* Gyorsbecslő */
+.quick{background:var(--surface);border-bottom:1px solid var(--line);padding:34px 0 30px;position:relative;z-index:1}
+.quick-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px 40px;align-items:end;margin-bottom:18px}
+.quick-head .eyebrow{grid-column:1/-1}
+.quick-head h2{font-size:26px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.01em}
+.quick-head p{font-size:14.5px;color:var(--muted);line-height:1.55;text-align:left}
+.quick-form{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px 32px;align-items:start}
+.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 16px}
+.qfld{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--ink)}
+.qfld small{font-weight:400;color:var(--muted);font-size:12px;line-height:1.35}
+.qfld small a{color:var(--brand2-text)}
+.qfld .inp{display:flex}
+.qopts{justify-content:flex-end;gap:8px;font-weight:400}
+.qopts .chk{font-size:13px;min-height:0}
+.quick-out{background:var(--bg);border-left:6px solid var(--seg1);padding:18px 20px 20px}
+.qo-tax{font-size:34px;font-weight:600;color:var(--accent);line-height:1.1;margin-top:8px;font-variant-numeric:tabular-nums}
+.qo-lbl{font-size:12.5px;color:var(--muted);margin-top:4px}
+.qo-note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.45;text-align:left}
+.qo-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.qo-btns .cta{margin-top:0;text-decoration:none;font-size:12px;padding:10px 16px}
+.formula-cta .cta{text-decoration:none;margin-top:6px}
+@media (max-width:900px){.quick-head,.quick-form{grid-template-columns:minmax(0,1fr)}.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.quick-grid{grid-template-columns:minmax(0,1fr)}.quick-head h2{font-size:22px}}
+body.kprint .quick{display:none !important}
 
 /* UX: menük, üres indulás, mobil eredménysáv, teljes kalauz, kapcsolat */
 .kmenu{position:relative}

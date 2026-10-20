@@ -9,6 +9,7 @@ Statikus, egyoldalas kalauz a 2026. évi vagyonadó-törvénytervezethez: laikus
 | `index.html` | A teljes tartalom (I. kalkulátor, II–IV. szöveges fülek), iroda neve, logó, szövegállapot-bélyeg | Szövegmódosítás, arculati változatok (`<html data-…>`) |
 | `styles.css` | Kinézet. **Az első blokk az arculat** (színek, betűk, logó mérete) | Színek, betűk cseréje |
 | `app.js` | Fülek + kalkulátor. A `RULES` objektum tartalmazza a jogszabályi számokat | Ha a kihirdetett törvény eltér a tervezettől |
+| `cegertek.html` + `cegertek.js` | Önálló cégérték-kalkulátor (1. melléklet képlete), saját oldal, kapcsolatfelvételi gombbal | A képlet paraméterei a `cegertek.js` elején; a `tests.html` összeveti a kalauz magjával |
 | `tests.html` | Fejlesztői ellenőrzés: a számítási függvények tesztjei | Minden `app.js`-módosítás után nyisd meg |
 | `_headers` | HTTP biztonsági fejlécek Netlify / Cloudflare Pages esetén | Nem kell módosítani |
 | `logo.png` | A BékésPartners logó (átlátszó háttér) | Cseréhez ugyanezen a néven töltsd fel az újat |
@@ -27,6 +28,8 @@ A build a **bekespartners.com arculatát** követi (mintha a főoldal egy extra 
 4. **Szövegállapot-bélyeg:** jelenleg nincs a fejlécen; az `index.html` fejlécében megjegyzésként ott a minta, ha később kellene.
 
 ## Kalkulátor-viselkedés
+
+- **Gyorsbecslő** a hero alatt (`#quick`, `app.js` vége): 5 mező + házas/illetőség; a „Pontos számítás” gomb az értékeket vagyonelemként átemeli a teljes kalkulátorba.
 
 - Üres indulás („Kezdjük” kártya); a példák a „Példa betöltése ▾” legördülőből tölthetők, a mentés/export a „Mentés és export ▾” menüben.
 - Mobilon rögzített alsó sáv mutatja a becsült adót; koppintásra az eredménypanelhez görget.

@@ -106,6 +106,34 @@
     </dl>
   </div>
 </section>
+<!-- Gyorsbecslő: 30 másodperces vagyonadó-becslés; a pontos számítás a kalkulátor fülön -->
+<section class="quick" id="quick" aria-labelledby="quick-h">
+  <div class="wrap">
+    <div class="quick-head">
+      <div class="eyebrow">Gyorsbecslő</div>
+      <h2 id="quick-h">Érint-e a vagyonadó? Fél perc alatt.</h2>
+      <p>Adja meg nagyságrendileg a vagyonát millió forintban – a becslő a tervezet kulcsai szerint számol. A részletekhez (értékelési szabályok, haszonélvezet, cégképlet, BVK) a teljes kalkulátor való.</p>
+    </div>
+    <form class="quick-form" id="qf" autocomplete="off" novalidate>
+      <div class="quick-grid">
+        <label class="qfld"><span>Ingatlanok</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_re" placeholder="0"><span>M Ft</span></span><small>lakás, nyaraló, telek, külföldi ingatlan – piaci értéken</small></label>
+        <label class="qfld"><span>Cégrészesedések</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_co" placeholder="0"><span>M Ft</span></span><small>a tervezet képlete szerinti értéken – <a href="cegertek.html">számolja ki →</a></small></label>
+        <label class="qfld"><span>Pénzügyi vagyon</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_fin" placeholder="0"><span>M Ft</span></span><small>bankszámla, értékpapír, alap, kripto, biztosítás</small></label>
+        <label class="qfld"><span>Egyéb</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_oth" placeholder="0"><span>M Ft</span></span><small>műtárgy, jármű, kölcsönök, jogok</small></label>
+        <label class="qfld"><span>Tartozások</span><span class="inp"><input type="number" min="0" step="any" inputmode="decimal" id="q_debt" placeholder="0"><span>M Ft</span></span><small>okiratba foglalt hitel, kölcsön</small></label>
+        <div class="qfld qopts">
+          <label class="chk"><input type="checkbox" id="q_mar"> Házas vagyok (közös vagyon, fele-fele)</label>
+          <label class="chk"><input type="checkbox" id="q_bel" checked> Belföldi illetőségű vagyok</label>
+        </div>
+      </div>
+      <div class="quick-out" aria-live="polite">
+        <div class="qo-main"><span class="badge b-info" id="qBadge">Adja meg az adatokat</span><div class="qo-tax" id="qTax">–</div><div class="qo-lbl">becsült éves vagyonadó, 2026 – <span id="qRange"></span></div></div>
+        <p class="qo-note" id="qNote">A becslés nem veszi figyelembe a haszonélvezetet, a kisebbségi diszkontot, az egyezményeket és a bizalmi vagyonkezelést; az értékek ±15%-os bizonytalanságával számol.</p>
+        <div class="qo-btns"><button type="button" class="cta" id="qGo">Pontos számítás a kalkulátorral</button><a class="cta outline" href="cegertek.html">Cégérték-kalkulátor</a></div>
+      </div>
+    </form>
+  </div>
+</section>
 <!-- Szakterületi színsáv feliratokkal (a weboldal és a sablon négyszegmensű vonala) -->
 <nav class="practice-rule" aria-label="BékésPartners szakterületek">
   <a class="pr-tax" href="https://www.bekespartners.com/ado/" target="_blank" rel="noopener noreferrer"><b>Adó</b><span>Az adótervezés tudománya</span></a>
@@ -132,7 +160,7 @@
 <section class="panel" id="teszt" role="tabpanel" aria-labelledby="t-teszt">
   <div class="prose k-intro">
     <h2>Vagyonadó-kalkulátor</h2>
-    <p>Vegye fel vagyonelemeit egyenként. A kalkulátor mindegyiket a tervezet saját értékelési szabálya szerint értékeli, adóalanyonként (Ön, házastárs, kiskorú gyermek, bizalmi vagyonkezelés) kiszámolja az adóalapot és a fizetendő adót, és megmutatja, mennyire bizonytalan a becslés. Az adatok csak az Ön böngészőjében számolódnak, sehova nem kerülnek.</p>
+    <p>Vegye fel vagyonelemeit egyenként. A kalkulátor mindegyiket a tervezet saját értékelési szabálya szerint értékeli, adóalanyonként (Ön, házastárs, kiskorú gyermek, bizalmi vagyonkezelés) kiszámolja az adóalapot és a fizetendő adót, és megmutatja, mennyire bizonytalan a becslés. Az adatok csak az Ön böngészőjében számolódnak, sehova nem kerülnek. Cégrészesedés képlet szerinti értékét külön is kiszámolhatja a <a href="cegertek.html">cégérték-kalkulátorral</a>.</p>
   </div>
   <noscript><div class="note"><b>A kalkulátorhoz JavaScript szükséges.</b>A II–IV. fül tartalma enélkül is olvasható.</div></noscript>
 
@@ -516,6 +544,7 @@
 
     <h3>6. A nem tőzsdei részesedés képlete</h3>
     <div class="formula">V = [(ST + 2 × H) ÷ 3] × tulajdoni hányad, ahol H = átlag(AE<sub>n</sub>, AE<sub>n−1</sub>, AE<sub>n−2</sub>) ÷ 0,15</div>
+    <p class="formula-cta"><a class="cta" href="cegertek.html">Cégérték-kalkulátor: számolja ki a saját cégét →</a></p>
     <p>Átrendezve: <strong>V = ST ÷ 3 + 4,44 × átlagos adózott eredmény</strong>. A képlet tehát implicit módon 6,67-szeres P/E szorzót alkalmaz kétharmados súllyal. Következmények:</p>
     <ul>
       <li>Magas jövedelmezőségű, alacsony tőkéjű társaságnál (szolgáltató, tanácsadó cégek) az érték jellemzően a könyv szerinti tőke többszöröse.</li>

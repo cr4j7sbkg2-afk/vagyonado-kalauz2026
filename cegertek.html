@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!-- Cégérték-kalkulátor – önálló oldal. Arculat és lábléc az index.html-lel közös (styles.css). Logika: cegertek.js -->
+<html lang="hu" data-hdr="hero" data-radius="0" data-density="m" data-tabs="line" data-upper="1" data-hcolor="accent" data-bg="neutral" data-stripe="4" data-facts="1" data-logopos="left" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Cégérték-kalkulátor a 2026-os vagyonadó-tervezet 1. melléklete szerint: V = (ST + 2H) ÷ 3 – saját tőke, hozamérték, holding, induló cég, rejtett tartalék, kisebbségi diszkont.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#13407D">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="hu_HU">
+<meta property="og:site_name" content="BékésPartners">
+<meta property="og:title" content="Cégérték-kalkulátor – nem tőzsdei cégrészesedés értéke a vagyonadó-tervezet szerint">
+<meta property="og:description" content="Számolja ki, mennyit ér a cége a 2026-os vagyonadó-tervezet képlete szerint, és mennyi vagyonadó jut a részesedésére.">
+<meta property="og:image" content="https://cr4j7sbkg2-afk.github.io/vagyonado-kalauz2026/hero.jpg">
+<meta property="og:url" content="https://cr4j7sbkg2-afk.github.io/vagyonado-kalauz2026/cegertek.html">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Cégérték-kalkulátor","applicationCategory":"FinanceApplication","inLanguage":"hu","author":{"@type":"Organization","name":"BékésPartners","url":"https://www.bekespartners.com/"}}</script>
+<meta name="color-scheme" content="light dark">
+<title>Cégérték-kalkulátor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231B4180'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' font-weight='700' text-anchor='middle' fill='%23fff'%3E%C2%A7%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/montserrat-latin-ext-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/montserrat-latin-ext-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-cegertek">
+<!-- Háttér-vízjel: a BékésPartners-logó négy gyűrűje; a IV. fülön az SQN-logó. Tisztán dekoratív. -->
+<div class="wm" aria-hidden="true">
+  <svg class="wm-rings" viewBox="0 0 400 100" width="560" height="140">
+    <circle cx="50" cy="50" r="38" fill="none" stroke="#ECA520" stroke-width="13"/>
+    <circle cx="150" cy="50" r="38" fill="none" stroke="#52BC86" stroke-width="13"/>
+    <circle cx="250" cy="50" r="38" fill="none" stroke="#84425D" stroke-width="13"/>
+    <circle cx="350" cy="50" r="38" fill="none" stroke="#62919D" stroke-width="13"/>
+  </svg>
+  <img class="wm-sqn" src="sqn-logo.png" alt="" width="272" height="252">
+</div>
+
+<header class="brandbar" id="brandbar">
+  <div class="wrap">
+    <div class="brandrow">
+      <div class="brandid">
+        <!-- LOGÓ: logo.png a repó gyökerében (átlátszó háttér). Mérete: styles.css --bar-logo-h -->
+        <a class="logolink" href="index.html" aria-label="BékésPartners – Vagyonadó-kalauz, kezdőlap"><img class="logo" src="logo.png" alt="BékésPartners" width="572" height="80"></a>
+      </div>
+      <div class="brandright">
+        <!-- FŐOLDALI NAVIGÁCIÓ tükre (bekespartners.com) – a linkek a főoldalra mutatnak; aloldal-címekre cserélhetők -->
+        <nav class="sitenav" aria-label="BékésPartners főoldal">
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Rólunk</a>
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Szolgáltatásaink</a>
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Insights</a>
+          <a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">Kapcsolat</a>
+        </nav>
+        <!-- MOTTÓ: a BékésPartners "Built on trust" jelmondat – töröld a sort, ha nem kell -->
+        <span class="motto">Built on trust</span>
+        <!-- SZÖVEGÁLLAPOT (kikapcsolva) – ha később kell, ide: <span class="stamp">Szövegállapot: …</span> -->
+      </div>
+    </div>
+  </div>
+</header>
+<section class="masthead masthead-sm" aria-label="Bevezető">
+  <div class="wrap">
+    <a class="practice-chip" href="https://www.bekespartners.com/ado/" target="_blank" rel="noopener noreferrer"><span class="pc-dot"></span>Adó<span class="pc-sep">·</span><span class="pc-tag">Az adótervezés tudománya</span></a>
+    <div class="eyebrow">Vagyonadó-tervezet · 1. melléklet · nem tőzsdei társasági részesedés</div>
+    <h1>Cégérték-kalkulátor</h1>
+    <p class="lead lead-full">Mennyit ér a cége a vagyonadó szempontjából? A tervezet nem a piaci értéket, hanem egy törvényi képletet alkalmaz: a saját tőke és a tőkésített nyereségképesség kétszeresének átlagát. A képlet a nyereséges, kevés tőkével működő cégeknél a könyv szerinti érték többszörösét adja.</p>
+    <p class="lead lead-short">Mennyit ér a cége a vagyonadó képlete szerint? Számolja ki lépésenként.</p>
+    <dl class="facts">
+      <div class="f-tax"><dt>Képlet</dt><dd>(ST + 2H) ÷ 3<small>× tulajdoni hányad</small></dd></div>
+      <div class="f-legal"><dt>Hozamérték</dt><dd>AE ÷ 0,15<small>3 év átlagos adózott eredménye</small></dd></div>
+      <div class="f-trust"><dt>Kisebbségi diszkont</dt><dd>25% · 30%<small>50% alatt, választható</small></dd></div>
+      <div class="f-found"><dt>Rejtett tartalék</dt><dd>500 M Ft<small>e saját tőke felett kötelező</small></dd></div>
+    </dl>
+  </div>
+</section>
+<nav class="practice-rule" aria-label="BékésPartners szakterületek">
+  <a class="pr-tax" href="https://www.bekespartners.com/ado/" target="_blank" rel="noopener noreferrer"><b>Adó</b><span>Az adótervezés tudománya</span></a>
+  <a class="pr-legal" href="https://www.bekespartners.com/jog/" target="_blank" rel="noopener noreferrer"><b>Jog</b><span>360° jogi szolgáltatások</span></a>
+  <a class="pr-trust" href="https://www.bekespartners.com/vagyonkezeles/" target="_blank" rel="noopener noreferrer"><b>Bizalmi vagyonkezelés</b><span>A bizalomról szól</span></a>
+  <a class="pr-found" href="https://www.bekespartners.com/alapitvany/" target="_blank" rel="noopener noreferrer"><b>Alapítvány</b><span>A jövőért</span></a>
+</nav>
+<nav class="tabbar" aria-label="Oldalak">
+  <div class="wrap"><div class="tabs">
+    <a class="tab tab-link" href="index.html"><span class="n">←</span>Vagyonadó-kalauz</a>
+    <span class="tab" aria-current="page"><span class="n">§</span>Cégérték-kalkulátor</span>
+  </div></div>
+</nav>
+
+<main class="wrap">
+<section class="panel" id="ceg">
+  <div class="prose k-intro">
+    <h2>Számolja ki a cégrészesedés értékét</h2>
+    <p>Az utolsó lezárt beszámoló saját tőkéje és az elmúlt három év adózott eredménye elég. A kalkulátor lépésenként mutatja a levezetést, kezeli a holdingot, az induló céget, az 500 millió forint feletti rejtett tartalékot és a kisebbségi diszkontot, és megmutatja, mennyi vagyonadó jut a részesedésre. Az adatok csak az Ön böngészőjében maradnak.</p>
+  </div>
+  <noscript><div class="note"><b>A kalkulátorhoz JavaScript szükséges.</b></div></noscript>
+  <div class="kbar">
+    <span class="kbar-l"><strong>Példák:</strong> a III. fül táblázatának cégei</span>
+    <span class="bar-actions">
+      <button type="button" class="btn small" data-ex="tanacsado">Tanácsadó kft.</button>
+      <button type="button" class="btn small" data-ex="ingatlan">Ingatlanos kft.</button>
+      <button type="button" class="btn small" data-ex="gyarto">Gyártó zrt.</button>
+      <button type="button" class="btn small" data-ex="veszteseges">Veszteséges cég</button>
+      <button type="button" class="btn small" data-ex="clear">Üres</button>
+    </span>
+  </div>
+  <div class="test">
+    <form class="form" id="cf" autocomplete="off" novalidate>
+      <fieldset>
+        <legend>1. A társaság adatai</legend>
+        <p class="fhint">Az utolsó lezárt üzleti évi beszámoló szerint. Összegek millió forintban; külföldi társaságnál a december 31-i MNB-árfolyamon átszámítva. <span class="ref">12. § (3), 1. mell. I.</span></p>
+        <div class="grid3">
+          <div class="fld"><label for="c_st">Saját tőke (ST)</label><span class="sub">az utolsó lezárt beszámoló szerint</span><div class="inp"><input type="number" step="any" id="c_st" inputmode="decimal"><span>M Ft</span></div></div>
+          <div class="fld"><label for="c_fy">A beszámoló üzleti éve</label><span class="sub">naptári évnél jellemzően 2026</span><div class="inp"><input type="number" step="1" id="c_fy" value="2026" inputmode="numeric"><span>év</span></div></div>
+          <div class="fld"><label for="c_div">Fordulónap után jóváhagyott osztalék</label><span class="sub">ha a saját tőke még tartalmazza</span><div class="inp"><input type="number" step="any" min="0" id="c_div" inputmode="decimal"><span>M Ft</span></div></div>
+          <div class="fld"><label for="c_ae1" id="l_ae1">Adózott eredmény – 2026</label><div class="inp"><input type="number" step="any" id="c_ae1" inputmode="decimal"><span>M Ft</span></div></div>
+          <div class="fld"><label for="c_ae2" id="l_ae2">Adózott eredmény – 2025</label><div class="inp"><input type="number" step="any" id="c_ae2" inputmode="decimal"><span>M Ft</span></div></div>
+          <div class="fld"><label for="c_ae3" id="l_ae3">Adózott eredmény – 2024</label><div class="inp"><input type="number" step="any" id="c_ae3" inputmode="decimal"><span>M Ft</span></div></div>
+        </div>
+        <div class="grid3" id="c_hidden" hidden>
+          <div class="fld"><label for="c_rt">Rejtett tartalék</label><span class="sub">befektetett ingatlan, részesedés, értékpapír: piaci − könyv szerinti érték, könyvvizsgáló által felülvizsgálva</span><div class="inp"><input type="number" step="any" min="0" id="c_rt" inputmode="decimal"><span>M Ft</span></div></div>
+          <div class="fld"><label for="c_dtl">Halasztott adókötelezettség</label><span class="sub">üresen hagyva a rejtett tartalék 15%-a <span class="ref">2. § 14. pont</span></span><div class="inp"><input type="number" step="any" min="0" id="c_dtl" inputmode="decimal"><span>M Ft</span></div></div>
+        </div>
+        <div class="kopts">
+          <label class="chk"><input type="checkbox" id="c_hold"> Holdingvállalkozás (a részesedések az eszközök legalább 90%-át adják) – csak a saját tőke számít <span class="ref">1. mell. II.</span></label>
+          <label class="chk"><input type="checkbox" id="c_new"> Jogelőd nélkül alapított társaság</label>
+          <label class="chk"><input type="checkbox" id="c_kulf"> Külföldi társaság – saját tőkésítési ráta</label>
+        </div>
+        <div class="grid3" id="c_newrow" hidden>
+          <div class="fld"><label for="c_fd">Az alapítás éve</label><span class="sub">az alapítás évében és az azt követő két évben H = 0, kivéve ha ST &gt; 500 M Ft vagy H &gt; ST 25%-a <span class="ref">1. mell. III.</span></span><div class="inp"><input type="number" step="1" id="c_fd" inputmode="numeric"><span>év</span></div></div>
+        </div>
+        <div class="grid3" id="c_kulfrow" hidden>
+          <div class="fld"><label for="c_T">Tőkésítési ráta</label><span class="sub">az ország kockázatmentes kamatlába + nem jegyzett társaságokra alkalmazott felár <span class="ref">1. mell. VI.</span></span><div class="inp"><input type="number" step="any" min="1" id="c_T" value="15" inputmode="decimal"><span>%</span></div></div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>2. Az Ön részesedése</legend>
+        <div class="grid3">
+          <div class="fld"><label for="c_sh">Közvetlen tulajdoni hányad</label><div class="inp"><input type="number" step="any" min="0" max="100" id="c_sh" value="100" inputmode="decimal"><span>%</span></div></div>
+          <div class="fld"><label for="c_ish">Közvetett tulajdoni hányad</label><span class="sub">más társaságon keresztül; a kisebbségi teszthez</span><div class="inp"><input type="number" step="any" min="0" max="100" id="c_ish" inputmode="decimal"><span>%</span></div></div>
+          <div class="fld"><label for="c_txv">Független eladás ára (100%-ra), ha volt</label><span class="sub">10% feletti részesedés független félnek, egy éven belül – figyelembe vehető <span class="ref">1. mell. V. c)</span></span><div class="inp"><input type="number" step="any" min="0" id="c_txv" inputmode="decimal"><span>M Ft</span></div></div>
+        </div>
+        <div class="kopts">
+          <label class="chk"><input type="checkbox" id="c_disc" checked> Kisebbségi diszkont alkalmazása (választható: 33%-ot elérő hányadnál 25%, az alatt 30%) <span class="ref">1. mell. V. b)</span></label>
+          <label class="chk"><input type="checkbox" id="c_usetx"> A független eladás árát alkalmazom a képlet helyett</label>
+        </div>
+      </fieldset>
+    </form>
+    <aside class="result" id="cSum">
+      <div class="r-top">
+        <span class="badge b-info" id="cBadge">—</span>
+        <div class="r-tax" id="cVal">–</div>
+        <div class="r-tax-lbl">a részesedés számított értéke a vagyonadó alapjában</div>
+        <div class="krange" id="cRatio"></div>
+      </div>
+      <div class="r-rows" id="cRows"></div>
+      <div class="r-sec">
+        <h3>Levezetés</h3>
+        <div class="ka-steps" id="cSteps"></div>
+      </div>
+      <div class="r-sec">
+        <h3>Tudnivalók</h3>
+        <div class="flags" id="cFlags"></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="prose">
+    <h3>Miért ad a képlet mást, mint a piaci érték?</h3>
+    <p>A tervezet a saját tőkét egyharmad, a tőkésített nyereségképességet kétharmad súllyal veszi figyelembe: <strong>V = ST ÷ 3 + 4,44 × átlagos adózott eredmény</strong>, ami implicit módon 6,67-szeres P/E szorzót jelent. Magas jövedelmezőségű, alacsony tőkéjű társaságnál (szolgáltató, tanácsadó cégek) az érték a könyv szerinti tőke többszöröse; veszteséges vagy alacsony hozamú, tőkeintenzív társaságnál a saját tőke egyharmadáig süllyedhet, mert negatív átlagnál H = 0. <span class="ref">1. mell. I.</span></p>
+    <ul>
+      <li><strong>Holding</strong> (a részesedések az eszközök legalább 90%-át adják): V = ST × hányad, hozamelem nélkül. <span class="ref">1. mell. II., 2. § 15. pont</span></li>
+      <li><strong>Induló cég:</strong> az alapítás évében és az azt követő két évben H = 0, kivéve ha a saját tőke meghaladja az 500 millió Ft-ot, vagy a hozamérték a saját tőke 25%-át. <span class="ref">1. mell. III.</span></li>
+      <li><strong>500 millió Ft feletti saját tőke:</strong> a rejtett tartalékkal (piaci és könyv szerinti érték különbözete, halasztott adóval csökkentve) növelt saját tőke számít; a társaság a beszámoló elfogadása után 30 napon belül adatot szolgáltat. <span class="ref">1. mell. IV., 30. §</span></li>
+      <li><strong>Független cégértékelés</strong> csak hiányzó adat, lényeges változás vagy különleges részvényjogok esetén, legalább két módszerrel, minősített értékelőtől. <span class="ref">12. § (4)–(7)</span></li>
+      <li>Anyavállalatnál a <strong>konszolidált</strong> beszámoló adatai az irányadók. <span class="ref">1. mell. VII.</span></li>
+    </ul>
+    <div class="contact-cta">
+      <div>
+        <div class="eyebrow">Kapcsolat</div>
+        <h3>Kérjen cégértékelést vagy egyeztetést</h3>
+        <p>A képlet szerinti érték a kiindulópont – a rejtett tartalék, a konszolidáció, a különleges részvényjogok és a tulajdonosi szerkezet alakítása egyedi vizsgálatot igényel. Egy egyeztetésen átnézzük, mit érdemes még 2026. december 31. előtt megtenni.</p>
+      </div>
+      <div class="contact-btns">
+        <a class="cta" href="mailto:office@bekespartners.com?subject=C%C3%A9g%C3%A9rt%C3%A9k%20%C3%A9s%20vagyonad%C3%B3%20%E2%80%93%20egyeztet%C3%A9s%20k%C3%A9r%C3%A9se">Egyeztetés kérése e-mailben</a>
+        <a class="cta outline" href="tel:+3616464646">+36&nbsp;1&nbsp;646&nbsp;4646</a>
+        <a class="cta outline" href="index.html#teszt">Vissza a vagyonadó-kalkulátorhoz</a>
+      </div>
+    </div>
+    <p class="disclaimer">A kalkulátor a kormany.hu-n közzétett 2026. évi vagyonadó-törvénytervezet 1. melléklete szerint számol. A végleges törvény eltérhet; a számított érték nem minősül cégértékelésnek és adótanácsadásnak. <strong>A §-hivatkozások kattinthatók</strong> – a tervezet szövegét nyitják meg új lapon.</p>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <picture>
+          <source srcset="logo.png" media="(prefers-reduced-motion: reduce)">
+          <img class="ft-logo" src="logo-kibomlas.gif" alt="BékésPartners – Tax · Legal · Trust · Foundation" width="940" height="144" loading="lazy">
+        </picture>
+        <p>Független ügyvédek és közgazdászok: adó, jog, bizalmi vagyonkezelés és alapítvány – hazai és nemzetközi ügyfeleknek. A PrimeGlobal tagja.</p>
+      </div>
+      <div class="ft-prac">
+        <div class="ft-h">Szakterületeink</div>
+        <a class="p-tax" href="https://www.bekespartners.com/ado/" target="_blank" rel="noopener noreferrer">Adó</a>
+        <a class="p-legal" href="https://www.bekespartners.com/jog/" target="_blank" rel="noopener noreferrer">Jog</a>
+        <a class="p-trust" href="https://www.bekespartners.com/vagyonkezeles/" target="_blank" rel="noopener noreferrer">Bizalmi vagyonkezelés</a>
+        <a class="p-found" href="https://www.bekespartners.com/alapitvany/" target="_blank" rel="noopener noreferrer">Alapítvány</a>
+      </div>
+      <div class="ft-contact">
+        <div class="ft-h">Kapcsolat</div>
+        <p>BAH Center, 1124 Budapest, Fürj u. 2.<br><a href="tel:+3616464646">+36&nbsp;1&nbsp;646&nbsp;4646</a><br><a href="mailto:office@bekespartners.com">office@bekespartners.com</a><br><a href="https://www.bekespartners.com/" target="_blank" rel="noopener noreferrer">bekespartners.com</a></p>
+      </div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 BékésPartners · Minden jog fenntartva</span><span class="ft-motto">Built on trust</span></div>
+  </div>
+</footer>
+
+<script src="app.js" defer></script>
+<script src="cegertek.js" defer></script>
+</body>
+</html>
