@@ -211,7 +211,7 @@ document.body.classList.add('js');
     ],d:{fy:YEAR},val:vEv},
     listed:{g:'Pénzügyi vagyon',l:'Tőzsdei részvény',ph:'pl. OTP, Richter, külföldi részvények',cls:'fin',cur:1,f:[
       {k:'cl',l:'Érték a záróárfolyamon',u:'m',s:'az év utolsó kereskedési napján'},
-      {k:'avg',l:'Érték az átlagárfolyamon',u:'m',s:'utolsó 30 kereskedési nap forgalommal súlyozott átlaga (2026-ra a dec. 15–31. közötti tárgyévi átlag is választható); elhagyható'},
+      {k:'avg',l:'Érték az átlagárfolyamon',u:'m',s:'a tárgyév utolsó 30 napjának forgalommal súlyozott átlaga (2026-ra a dec. 15–31. közötti tárgyévi átlag is választható); elhagyható'},
       {k:'huco',l:'Magyar társaság részvénye',t:'c'}
     ],val:vListed},
     cash:{g:'Pénzügyi vagyon',l:'Bankszámla, betét, készpénz',ph:'pl. bankszámlák',cls:'fin',cur:1,f:amt('Záró egyenleg','december 31-én'),val:function(a){return vSimple(a,'21. § (1)',0,1,'Záró egyenleg / névérték')}},
