@@ -40,12 +40,13 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="masthead">
+<!-- Rögzített márkasáv: görgetéskor is a képernyő tetején marad -->
+<div class="brandbar" id="brandbar">
   <div class="wrap">
     <div class="brandrow">
       <div class="brandid">
-        <!-- LOGÓ: logo.png a repó gyökerében (átlátszó háttér). Mérete: styles.css --logo-h -->
-        <img class="logo" src="logo.png" alt="BékésPartners" width="386" height="54">
+        <!-- LOGÓ: logo.png a repó gyökerében (átlátszó háttér). Mérete: styles.css --bar-logo-h -->
+        <a class="logolink" href="#teszt" aria-label="BékésPartners – Vagyonadó-kalauz, kezdőlap"><img class="logo" src="logo.png" alt="BékésPartners" width="386" height="54"></a>
       </div>
       <div class="brandright">
         <!-- MOTTÓ: a BékésPartners "Built on trust" jelmondat – töröld a sort, ha nem kell -->
@@ -53,6 +54,10 @@
         <!-- SZÖVEGÁLLAPOT (kikapcsolva) – ha később kell, ide: <span class="stamp">Szövegállapot: …</span> -->
       </div>
     </div>
+  </div>
+</div>
+<header class="masthead">
+  <div class="wrap">
     <div class="eyebrow">2026. évi … törvény a vagyonadóról · tervezet</div>
     <h1>Vagyonadó-kalauz</h1>
     <p class="lead">Számolja ki, mennyire érinti Önt a vagyonadó – majd olvassa el, mit jelent a kormany.hu-n közzétett törvénytervezet a vagyonos magánszemélyeknek, hogyan értékelné egy adótanácsadó, és mi a helyzet a bizalmi vagyonkezeléssel.</p>

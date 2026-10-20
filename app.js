@@ -44,7 +44,7 @@ var RULES=Object.freeze({
       var p=$(t.dataset.target);if(p)p.hidden=!on;
     });
     if(!init){try{history.replaceState(null,'','#'+id)}catch(e){}}
-    if(scroll){var nav=document.querySelector('.tabbar'),pn=$(id);if(nav&&pn){try{var top=pn.getBoundingClientRect().top+window.pageYOffset-nav.offsetHeight;window.scrollTo({top:Math.max(0,top),behavior:'auto'})}catch(e){}}}
+    if(scroll){var nav=document.querySelector('.tabbar'),bar=$('brandbar'),pn=$(id);if(nav&&pn){try{var top=pn.getBoundingClientRect().top+window.pageYOffset-nav.offsetHeight-(bar?bar.offsetHeight:0);window.scrollTo({top:Math.max(0,top),behavior:'auto'})}catch(e){}}}
   }
   tabs.forEach(function(t,i){
     t.addEventListener('click',function(){show(t.dataset.target,true)});
@@ -57,6 +57,7 @@ var RULES=Object.freeze({
   });
   document.querySelectorAll('[data-goto]').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.goto,true)})});
   show((location.hash||'').replace('#',''),false,true);
+  var bar=$('brandbar');if(bar){var st=function(){bar.classList.toggle('stuck',window.pageYOffset>4)};window.addEventListener('scroll',st,{passive:true});st()}
 })();
 
 /* ---------- Vagyonadó-kalkulátor ---------- */
