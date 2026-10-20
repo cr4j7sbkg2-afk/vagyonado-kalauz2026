@@ -11,11 +11,12 @@ Statikus, egyoldalas kalauz a 2026. évi vagyonadó-törvénytervezethez: laikus
 | `app.js` | Fülek + kalkulátor. A `RULES` objektum tartalmazza a jogszabályi számokat | Ha a kihirdetett törvény eltér a tervezettől |
 | `tests.html` | Fejlesztői ellenőrzés: a számítási függvények tesztjei | Minden `app.js`-módosítás után nyisd meg |
 | `_headers` | HTTP biztonsági fejlécek Netlify / Cloudflare Pages esetén | Nem kell módosítani |
-| `logo.svg` | *(opcionális)* az iroda logója | Feltöltés után az `index.html`-ben vedd ki a megjegyzésjelet |
+| `logo.png` | A BékésPartners logó (átlátszó háttér) | Cseréhez ugyanezen a néven töltsd fel az újat |
+| `fonts/` | Montserrat woff2 fájlok + licenc | Nem kell módosítani |
 
 ## Arculat beállítása
 
-A build a **BékésPartners 2026 arculattal** megy ki (navy #1B4180, blue #0078C7, Georgia / Arial, négyszegmensű gyakorlati színcsík, „Built on trust”). Az alábbi helyeken módosítható:
+A build a **BékésPartners arculattal** megy ki: `logo.png` a világos (#F0F0F0) fejlécben, Montserrat (önállóan hosztolva a `fonts/` mappából, SIL OFL), navy #13407B nagybetűs címek, a logó gyűrűszíneivel futó négyszegmensű csík, „Built on trust”. Az alábbi helyeken módosítható:
 
 1. **Színek, betűk:** `styles.css`, az első `:root{…}` blokk. `--brand` az elsődleges szín (fejléc, gombok), `--brand2` a másodlagos (csík, kis feliratok), `--brand-ink` a fejlécen futó szöveg színe.
 2. **Iroda neve, logó, jelmondat:** `index.html`, a `<header class="masthead">` első sorai – a `LOGÓ`, `IRODA NEVE` és `MOTTÓ` megjegyzésnél. A logó: töltsd fel `logo.svg` néven, és vedd ki a megjegyzésjelet az `<img class="logo">` sor körül (navy háttéren a fehér logóváltozat kell).

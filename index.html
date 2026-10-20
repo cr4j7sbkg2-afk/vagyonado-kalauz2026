@@ -17,7 +17,7 @@
         data-stripe   1 | 0 | 4                           (alsó csík: egyszínű | nincs | négyszegmensű BékésPartners-csík)
         data-facts    1 | 0                               (kulcsadatok a fejlécben)
         data-logopos  left | center
-        data-theme    (üres: rendszer szerint) | light | dark
+        data-theme    (üres: rendszer szerint) | light | dark   (most: light – a logó világos fejlécet kíván)
 
   TARTALOM
     • II–IV. fül: a megfelelő <section> szövege.
@@ -26,7 +26,7 @@
       ha a RULES változik, ezeket is frissíteni kell.
     • Szövegállapot-bélyeg: a fejléc .stamp eleme.
 -->
-<html lang="hu" data-hdr="band" data-radius="0" data-density="m" data-tabs="line" data-upper="0" data-hcolor="accent" data-bg="neutral" data-stripe="4" data-facts="1" data-logopos="left">
+<html lang="hu" data-hdr="light" data-radius="0" data-density="m" data-tabs="line" data-upper="1" data-hcolor="accent" data-bg="tint" data-stripe="4" data-facts="1" data-logopos="left" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -44,12 +44,8 @@
   <div class="wrap">
     <div class="brandrow">
       <div class="brandid">
-        <!-- LOGÓ: töltsd fel a logo.svg (vagy logo.png) fájlt a repóba, és vedd ki a megjegyzésjelet.
-             Ha a logó beleolvad a fejléc színébe, add hozzá a "light" osztályt: class="logo light"
-        <img class="logo" src="logo.svg" alt="">
-        -->
-        <!-- IRODA NEVE -->
-        <span class="firmname">BékésPartners</span>
+        <!-- LOGÓ: logo.png a repó gyökerében (átlátszó háttér). Mérete: styles.css --logo-h -->
+        <img class="logo" src="logo.png" alt="BékésPartners" width="386" height="54">
       </div>
       <div class="brandright">
         <!-- MOTTÓ: a BékésPartners "Built on trust" jelmondat – töröld a sort, ha nem kell -->
