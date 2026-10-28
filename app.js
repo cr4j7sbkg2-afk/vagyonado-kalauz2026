@@ -1,3 +1,5 @@
+/* Beágyazás elleni védelem (GitHub Pages nem küld frame-ancestors fejlécet) */
+try{if(window.top!==window.self){try{window.top.location=window.location}catch(e){document.documentElement.hidden=true}}}catch(e){}
 /* =====================================================================
    VAGYONADÓ-KALAUZ – app.js
    ---------------------------------------------------------------------
@@ -31,7 +33,7 @@ var RULES=Object.freeze({
 });
 
 /* ---------- Jogszabályi hivatkozások → élő források ----------
-   A .ref elemek kattinthatóvá válnak. Tervezet-§ → kormany.hu PDF; Itv./Ptk./Szja → njt.hu.
+   A .ref elemek kattinthatóvá válnak. Törvény-§ → T/930 PDF (parlament.hu); Itv./Ptk./Szja → njt.hu.
    KIHIRDETÉS UTÁN: a LAWS.draft.url-t az njt.hu-s címre kell cserélni (pl. https://njt.hu/jogszabaly/2026-XX-00-00),
    és anchor:true-ra állítani, hogy a §-horgonyok is működjenek. */
 var LAWS={
@@ -82,6 +84,7 @@ document.body.classList.add('js');
   var tabs=[].slice.call(document.querySelectorAll('.tabs [role="tab"]'));
   if(!tabs.length)return;
   var ids=tabs.map(function(t){return t.dataset.target});
+  window.addEventListener('hashchange',function(){var h=location.hash.slice(1);if(ids.indexOf(h)>=0)show(h,true)});
   function show(id,scroll,init){
     if(ids.indexOf(id)<0) id=ids[0];
     var all=id==='all';
@@ -119,17 +122,19 @@ document.body.classList.add('js');
   var f1=new Intl.NumberFormat('hu-HU',{maximumFractionDigits:1,useGrouping:'always'});
   var f2=new Intl.NumberFormat('hu-HU',{maximumFractionDigits:2,useGrouping:'always'});
   function fin(x){return (typeof x==='number'&&isFinite(x))?x:0}
-  function M(v){v=fin(+v);var a=Math.abs(v);if(a>=1000)return f2.format(v/1000)+' Mrd Ft';if(a>=100)return f0.format(v)+' M Ft';if(a>=10)return f1.format(v)+' M Ft';return f2.format(v)+' M Ft'}
+  function M(v){v=fin(+v);if(Math.abs(v)<0.0005)v=0;var a=Math.abs(v);if(a>=999.5)return f2.format(v/1000)+' Mrd Ft';if(a>=100)return f0.format(v)+' M Ft';if(a>=10)return f1.format(v)+' M Ft';return f2.format(v)+' M Ft'}
   function FT(m){return f0.format(Math.round(fin(+m)*1000)*1000)+' Ft'}
   function EFT(m){return f0.format(Math.round(fin(+m)*1e6))+' Ft'}
   function P(x){return f1.format(fin(x))+'%'}
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function n(v){var x=parseFloat(String(v==null?'':v).replace(/\s/g,'').replace(',','.'));return isFinite(x)?x:0}
+  function n(v){var t=String(v==null?'':v).replace(/\s/g,'');if(t.indexOf('.')>=0&&t.indexOf(',')>=0)t=t.replace(/\./g,'');var x=parseFloat(t.replace(',','.'));return isFinite(x)?Math.max(-1e9,Math.min(1e9,x)):0}
+  function nn(v){return Math.max(0,n(v))}
   function has(v){return String(v==null?'':v).trim()!==''}
   function tax(b){b=Math.max(0,fin(b));return Math.min(b,TOP)*RULES.RATE1+Math.max(0,b-TOP)*RULES.RATE2}
   function sum(a,b){return a+b}
   function niceStep(x){if(!(x>0))return 1;var e=Math.pow(10,Math.floor(Math.log10(x))),f=x/e;return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*e}
   var ID_RE=/^[a-z][a-z0-9]{3,40}$/;
+  function idOk(id){return ID_RE.test(id)&&id!=='constructor'&&!(id in Object.prototype)}
   function nid(p){var r;try{r=crypto.randomUUID().replace(/-/g,'').slice(0,12)}catch(e){r=Math.random().toString(36).slice(2,14)}return p+r}
   function ref(s){return ' <span class="ref">'+esc(s)+'</span>'}
 
@@ -137,7 +142,7 @@ document.body.classList.add('js');
   function blank(){return {v:3,src:'user',p:{cit:'y',ab:'n',fst:'res',mar:false,cust:false,spres:'same'},fx:{EUR:395,USD:345,CHF:425,GBP:460},g:{re:5,fin:4,co:5,oth:0,yrs:5},fee:{me:'',sp:'',ch:''},assets:[],debts:[],bvks:[]}}
   var S=blank();
   var CURS=[['HUF','HUF'],['EUR','EUR'],['USD','USD'],['CHF','CHF'],['GBP','GBP']];
-  function fx(c){return !c||c==='HUF'?1:(n(S.fx[c])||0)}
+  function fx(c){return !c||c==='HUF'?1:(nn(S.fx[c])||0)}
   function U(a){return a&&a.cur&&a.cur!=='HUF'?'M '+a.cur:'M Ft'}
   function curTxt(v,c,r){return !c||c==='HUF'?M(v):f2.format(v)+' M '+c+' × '+f0.format(r)+' = '+M(v*r)}
   var CLS={re:'Ingatlan',co:'Cégrészesedés, vállalkozás',fin:'Pénzügyi vagyon',mov:'Értékes ingóság',oth:'Jogok és egyéb'};
@@ -151,18 +156,19 @@ document.body.classList.add('js');
     {k:'uft',l:'Hátralévő időtartam',u:'év',w:function(a){return a.uf&&a.ufm==='term'}}
   ];
   function reF(kind){return [
-    {k:'m',l:'Értékelési módszer',t:'s',o:REM,rr:1},
+    {k:'m',l:'Értékelési módszer',t:'s',o:kind==='egy'?REM.filter(function(o){return o[0]!=='model'}):REM,rr:1},
     {k:'tx',l:'Ügyleti érték (100%)',u:'mft',s:'adásvételi ár, illetékérték vagy hagyatéki érték',w:isM('tx12')},
     {k:'iv',l:'Korábbi ügyleti érték (100%)',u:'mft',w:isM('idx')},
     {k:'iy',l:'Az ügylet éve',u:'év',w:isM('idx')},
     {k:'ir',l:'Becsült éves árváltozás',u:'%',neg:1,s:kind==='lak'?'az MNB-lakásárindex helyett':kind==='fold'?'a KSH termőföldár helyett':'a KSH-árindex helyett',w:isM('idx')},
     {k:'mv',l:'NAV-modell / becsült piaci érték (100%)',u:'mft',w:isM('model')},
     {k:'ev',l:'Szakértői forgalmi érték (100%)',u:'mft',w:isM('expert')},
+    {k:'mand',l:'Az értékelés kötelező: nincs 12 hónapon belüli ügyleti, 10 éven belüli indexált és NAV-modell szerinti érték',t:'c',s:'ekkor a díj 50%-a (max. 2 M Ft) levonható (12. § (2) a), 21. § (4))',w:isM('expert')},
     {k:'lt',l:'Megfizetett építmény- vagy telekadó',u:'mft',s:'éves összeg a tulajdoni hányadra'},
     {k:'chg',l:'Az ügylet óta lényeges állapotváltozás (pl. az ügyleti érték 20%-át elérő felújítás) történt',t:'c',rr:1,w:function(a){return a.m==='tx12'||a.m==='idx'}},
     {k:'uf',l:'Haszonélvezet vagy használati jog terheli',t:'c',rr:1}
   ].concat(UFF)}
-  function fyOf(a){return has(a.fy)?Math.round(n(a.fy)):YEAR}
+  function fyOf(a){return has(a.fy)?Math.min(YEAR+1,Math.max(1990,Math.round(n(a.fy)))):YEAR}
   function coF(kulf){var r=kulf?function(a){return fx(a.cur)}:function(){return 1};return [
     {k:'st',l:'Saját tőke',u:'m',neg:1,rr:1,s:'az utolsó lezárt beszámoló szerint'},
     {k:'fy',l:'A beszámoló üzleti éve',u:'év',rr:1,s:'2026-os adónál naptári évnél jellemzően 2026'},
@@ -174,10 +180,11 @@ document.body.classList.add('js');
     {k:'div',l:'Mérlegfordulónap után jóváhagyott osztalék',u:'m',s:'ha a saját tőke még tartalmazza'},
     {k:'fd',l:'Jogelőd nélküli alapítás éve',u:'év',s:'csak ha az elmúlt 3 évben alapították'},
     kulf?{k:'T',l:'Tőkésítési ráta',u:'%',s:'15%, vagy az ország kockázatmentes kamata + felár'}:null,
-    kulf?{k:'hre',l:'A társaság magyarországi ingatlanai',u:'m',s:'csak külföldi illetőségűnél számít (100%)'}:null,
-    kulf?{k:'hdebt',l:'Az ingatlanokhoz közvetlenül kapcsolódó tartozások',u:'m',s:'szerzés, fenntartás, fejlesztés hitele – levonható (18. §)',w:function(a){return has(a.hre)}}:null,
+    kulf?{k:'ivt',l:'Belföldi ingatlanvagyonnal rendelkező társaság (Itv. 102. § (1) o): a belföldi ingatlanok a mérleg szerinti eszközök – pénzeszköz és követelés nélkül – több mint 75%-a)',t:'c',rr:1}:null,
+    kulf?{k:'hre',l:'A társaság magyarországi ingatlanai',u:'m',s:'csak külföldi illetőségűnél számít (100%)',w:function(a){return a.ivt}}:null,
+    kulf?{k:'hdebt',l:'Az ingatlanokhoz közvetlenül kapcsolódó tartozások',u:'m',s:'szerzés, fenntartás, fejlesztés hitele – levonható (18. §)',w:function(a){return a.ivt&&has(a.hre)}}:null,
     {k:'simp',l:'Egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része (választható, ha a saját tőke legfeljebb 100 M Ft)',t:'c',w:function(a){return has(a.st)&&n(a.st)*r(a)<=100}},
-    {k:'hold',l:'Holding (elsődleges célja részesedések birtoklása és irányítása; a részesedések, értékpapírok, pénzeszközök és a tulajdonolt cégekkel szembeni követelések az eszközök legalább 90%-a)',t:'c'},
+    {k:'hold',l:'Holding (elsődleges célja részesedések birtoklása és irányítása; a részesedések, értékpapírok, egyéb befektetett pénzügyi eszközök, pénzeszközök, saját célra használt ingatlanok és a tulajdonolt cégekkel szembeni követelések az eszközök legalább 90%-a)',t:'c'},
     {k:'ish',l:'Közvetett tulajdoni hányad',u:'%',s:'más társaságon keresztül; a kisebbségi teszthez (közvetlen + közvetett + közeli hozzátartozói hányad < 50%)',w:function(a){return shareOf(a)<0.5}},
     {k:'rel',l:'Közeli hozzátartozók együttes részesedése',u:'%',s:'házastárs, szülő, gyermek, testvér stb. (Ptk. közeli hozzátartozó) hányada – a kisebbségi teszthez össze kell számítani; az élettársé nem (1. mell. V. d))',w:function(a){return shareOf(a)<0.5}},
     {k:'disc',l:'Kisebbségi diszkontot alkalmazok (választható)',t:'c',w:function(a){return qtOf(a)<0.5}},
@@ -189,7 +196,8 @@ document.body.classList.add('js');
   function amt(l,s){return [{k:'am',l:l,u:'m',s:s}]}
   var TYPES={
     re_lak:{g:'Ingatlan',l:'Belföldi lakás, ház',ph:'pl. budapesti lakás',cls:'re',sh:1,f:reF('lak'),d:{m:'tx12',ir:10,ufm:'life'},val:function(a){return vReHu(a,'lak')}},
-    re_egy:{g:'Ingatlan',l:'Belföldi egyéb ingatlan (iroda, üzlet, telek)',ph:'pl. bérbe adott iroda',cls:'re',sh:1,f:reF('egy'),d:{m:'model',ir:5,ufm:'life'},val:function(a){return vReHu(a,'egy')}},
+    re_udulo:{g:'Ingatlan',l:'Belföldi üdülő, nyaraló, telek',ph:'pl. balatoni nyaraló',cls:'re',sh:1,f:reF('udulo'),d:{m:'model',ir:5,ufm:'life'},val:function(a){return vReHu(a,'udulo')}},
+    re_egy:{g:'Ingatlan',l:'Belföldi egyéb ingatlan (iroda, üzlet, ipari, beépített mezőgazdasági)',ph:'pl. bérbe adott iroda',cls:'re',sh:1,f:reF('egy'),d:{m:'tx12',ir:5,ufm:'life'},val:function(a){return vReHu(a,'egy')}},
     re_fold:{g:'Ingatlan',l:'Termőföld',ph:'pl. szántó',cls:'re',sh:1,f:reF('fold'),d:{m:'model',ir:8,ufm:'life'},val:function(a){return vReHu(a,'fold')}},
     re_kulf:{g:'Ingatlan',l:'Külföldi ingatlan',ph:'pl. horvát apartman',cls:'re',sh:1,cur:1,tr:1,f:[
       {k:'m',l:'Értékelési módszer',t:'s',o:[['acq','Szerzési érték, évente továbbvezetve'],['off','Helyi hatósági (adó-, kataszteri) érték'],['exp','Helyi szakértői forgalmi érték']],rr:1},
@@ -201,10 +209,12 @@ document.body.classList.add('js');
       {k:'invy',l:'A beruházás éve',u:'év',w:isM('acq')},
       {k:'ov',l:'Hatósági érték (100%)',u:'m',w:isM('off')},
       {k:'ev',l:'Szakértői forgalmi érték (100%)',u:'m',w:isM('exp')},
+      {k:'mand',l:'Az értékelés kötelező: a szerzési, továbbvezetett és hatósági érték egyike sem állapítható meg',t:'c',s:'ekkor a díj 50%-a (max. 2 M Ft) levonható (12. § (2) a), 20. § (5))',w:isM('exp')},
       {k:'lt',l:'Fizetett helyi ingatlanadó',u:'mft',s:'a fekvés államában, éves'}
     ],d:{m:'acq',gm:'3',cur:'EUR'},val:vReKulf},
     co_hu:{g:'Cég és vállalkozás',l:'Nem tőzsdei magyar társaság',ph:'pl. Kft. üzletrész',cls:'co',sh:1,f:coF(false),d:{fy:YEAR,disc:true},val:function(a){return vCo(a,false)}},
     co_kulf:{g:'Cég és vállalkozás',l:'Nem tőzsdei külföldi társaság',ph:'pl. osztrák GmbH',cls:'co',sh:1,cur:1,tr:1,f:coF(true),d:{fy:YEAR,disc:true,cur:'EUR',T:15},val:function(a){return vCo(a,true)}},
+    co_val:{g:'Cég és vállalkozás',l:'Magyar cégrészesedés – kiszámított érték (cégérték-kalkulátorból)',ph:'pl. Kft. üzletrész (kiszámított)',cls:'co',cur:1,f:amt('Számított érték az Ön hányadára','a cégérték-kalkulátor eredménye vagy független cégértékelés'),val:function(a){var x=vSimple(a,'15. § (3), 1. melléklet',0.1,0,'Kiszámított érték');x.vHu=x.v;return x}},
     ev:{g:'Cég és vállalkozás',l:'Egyéni vállalkozás (vállalkozói jövedelem szerint)',ph:'pl. egyéni vállalkozás',cls:'co',f:[
       {k:'st',l:'Nettó vállalkozási vagyon',u:'mft',rr:1},
       {k:'fy',l:'Az utolsó lezárt év',u:'év',rr:1},
@@ -258,44 +268,48 @@ document.body.classList.add('js');
     var st=[],fl=[],unc=0,V=0,rf,meth,m=a.m||'tx12';
     if(m==='tx12'){V=n(a.tx);meth='12 hónapon belüli ügyleti érték';rf='19. § (1) a), 21. § (1)';st.push('Ügyleti érték: '+M(V))}
     else if(m==='idx'){
-      var b=n(a.iv),y=Math.round(n(a.iy)),r=n(a.ir)/100,yrs=y?Math.max(0,YEAR-y+0.5):0;
+      var b=n(a.iv),y=Math.round(n(a.iy)),r=Math.max(-0.99,n(a.ir)/100),yrs=!y||y>=YEAR?0:(kind==='lak'||kind==='fold'?YEAR-y+0.5:YEAR-y);
       V=fin(b*Math.pow(1+r,yrs));unc=0.08;meth='Indexált ügyleti érték';rf='19. § (1) b), (3)–(5), 2. melléklet';
-      st.push('Indexálás: '+M(b)+' × (1 '+(r<0?'−':'+')+' '+f1.format(Math.abs(r*100))+'%)^'+f1.format(yrs)+' év = '+M(V));
+      st.push('Indexálás: '+M(b)+' × (1 '+(r<0?'−':'+')+' '+f1.format(Math.abs(r*100))+'%)^'+f1.format(yrs)+' év = '+M(V)+(kind==='lak'||kind==='fold'?' (negyedéves/éves ármutató-hányados közelítése fél évvel)':' (az ügylet évét követő évtől, egész évek)'));
       if(!y) fl.push(['w','Adja meg az ügylet évét.']);
       else if(y<YEAR-9) fl.push(['c','Az ügylet több mint 10 éve volt: indexált érték nem alkalmazható, NAV-modell vagy szakértői érték kell.'+ref('19. § (1) b)')]);
       else if(y>=YEAR) fl.push(['w','Idei ügyletnél az ügyleti érték indexálás nélkül alkalmazandó.'+ref('21. § (1)')]);
-      fl.push(['i','A végleges indexált értéket a NAV kalkulátorával kell számolni '+(kind==='lak'?'(MNB-lakásárindex)':kind==='fold'?'(KSH termőföldár)':'(KSH-árindex)')+'; itt becsült éves változással számolunk.'+ref('19. § (4)')]);
-      if(kind==='egy') fl.push(['i','Nem lakás és nem termőföld: az indexálás a KSH ingatlantípusra alkalmazható éves árindexével, a NAV kalkulátorával történik (a 2. melléklet MNB-, illetve KSH-termőföld-indexe itt nem alkalmazható).'+ref('19. § (4)–(5), 2. mell. 1.4.')]);
+      fl.push(['i','A végleges indexált értéket a NAV kalkulátorával kell számolni '+(kind==='lak'?'(MNB-lakásárindex)':kind==='fold'?'(KSH termőföldár)':'(KSH-árindex)')+'; itt becsült éves változással számolunk; az indexált értéket ezer forintra kerekítve kell megállapítani.'+ref('19. § (4), (7)')]);
+      if(kind==='fold') fl.push(['i','Termőföld csak szántó, rét, legelő, szőlő, gyümölcsös vagy erdő művelési ágban indexálható, és csak ha a művelési ág az ügylet óta nem változott; egyébként NAV-modell vagy szakértői érték kell.'+ref('2. mell. 3.2., 3.6.')]);
+      if(kind==='egy'||kind==='udulo') fl.push(['i','Nem lakás és nem termőföld: az indexálás a KSH ingatlantípusra alkalmazható éves árindexével, a NAV kalkulátorával történik (a 2. melléklet MNB-, illetve KSH-termőföld-indexe itt nem alkalmazható).'+ref('19. § (4)–(5), 2. mell. 1.4.')]);
     }
     else if(m==='model'){V=n(a.mv);unc=0.15;meth='NAV tömeges modell / becsült érték';rf='19. § (1) c), 21. § (3), 22. §';st.push('NAV-modell vagy becsült piaci érték: '+M(V));
-      fl.push(['i','A NAV-modell ott alkalmazandó, ahol nincs 10 éven belüli ügyleti érték. Helyette független szakértői érték is választható, ami bírságvédelmet ad.'+ref('21. § (3)–(4), 31. § (2)')])}
+      fl.push(['i','A NAV-modell ott alkalmazandó, ahol nincs 10 éven belüli ügyleti érték; lakásra, üdülőre, telekre és felépítmény nélküli mezőgazdasági ingatlanra létezik. Helyette független szakértői érték is választható, ami bírságvédelmet ad; valós adatokkal használt modellnél a NAV csak az adatok valótlanságának bizonyításával térhet el.'+ref('5. § 31. pont, 21. § (3)–(4), 31. § (2), (4)')])}
     else{V=n(a.ev);unc=0.05;meth='Független szakértői forgalmi érték';rf='21. § (4), 23. §';st.push('Szakértői forgalmi érték: '+M(V));
-      if(V>=500&&kind!=='fold') fl.push(['w','500 M Ft-ot elérő ingatlant csak igazságügyi ingatlanforgalmi szakértő értékelhet, legalább két módszerrel.'+ref('23. § (3), (11)')]);
+      if(V>=500) fl.push(['w',kind==='fold'?'500 M Ft-ot elérő (kiemelt értékű) termőföldet termőföld-értékbecslő igazságügyi szakértő értékelhet, legalább két módszerrel.'+ref('23. § (1) b), (11)'):'500 M Ft-ot elérő (kiemelt értékű) ingatlant csak igazságügyi ingatlanforgalmi szakértő értékelhet, legalább két módszerrel.'+ref('23. § (3), (11)')]);
+      fl.push(['i','Az értékelésnek a tárgyév utolsó napjára kell szólnia; legfeljebb 12 hónappal korábbi értéknap is elfogadható, ha azóta nem volt lényeges változás; 10 évig a NAV kalkulátorával indexálható.'+ref('23. § (8)–(9)')]);
       fl.push(['i','Szabályszerű szakértői értéknél a NAV magasabb értéke után sem jár bírság és pótlék.'+ref('31. § (2)–(3)')]);
-      fl.push(['i',(V>=500&&kind!=='fold')?'Az értékelés itt kötelező, ezért díjának 50%-a (legfeljebb 2 M Ft) levonható az adóból – írja be az 5. pontban.'+ref('12. § (2) a)'):'Önként választott értékelés díja a javaslat szövege szerint nem vonható le: a levonás csak a kötelezően igénybe vett értékelőre jár.'+ref('12. § (2) a)')]);
+      fl.push(['i',a.mand?'Kötelezően igénybe vett értékelés: díjának 50%-a (legfeljebb 2 M Ft, áfával) levonható az adóból – írja be az 5. pontban.'+ref('12. § (2) a), 21. § (4)'):'Ha az ingatlanra van ügyleti, indexált vagy NAV-modell szerinti érték, a szakértő önként választott, és díja nem vonható le: a levonás csak a kötelezően igénybe vett értékelőre jár. Ha nincs ilyen érték, jelölje be a fenti négyzetet.'+ref('12. § (2) a), 21. § (4)')]);
       fl.push(['w','Ha a fordulónapot megelőző 12 hónapban adásvétel vagy öröklés történt, a szakértői érték csak kivételesen, az ügylet sajátos körülményeinek igazolásával alkalmazható az ügyleti érték helyett.'+ref('21. § (4)')])}
-    if(a.chg&&(m==='tx12'||m==='idx')) fl.push(['c','Lényeges állapotváltozás után az ügyleti és az indexált érték nem alkalmazható: szakértői forgalmi érték kell.'+ref('19. § (3), 21. § (1)')]);
+    if(a.chg&&(m==='tx12'||m==='idx')) fl.push(['c',m==='tx12'?'Lényeges állapotváltozás után az ügyleti érték nem alkalmazható: szakértői forgalmi érték kell.'+ref('21. § (1)'):'Lényeges állapotváltozás után az indexált érték nem alkalmazható: a NAV-modell szerinti érték, ennek hiányában szakértői forgalmi érték kell.'+ref('19. § (3), 21. § (3)–(4)')]);
     var sh=shareOf(a),v=V*sh;if(sh!==1) st.push('Tulajdoni hányad '+P(sh*100)+': '+M(v));
     if(a.uf){var u=itv72(V,a.ufm,n(a.ufa),n(a.uft)),d=Math.min(v,u.v*sh);v-=d;st.push('Haszonélvezet levonása: − '+M(d)+' ('+u.t+')');rf+=', 26. § (5)';
       if(a.ufm!=='term'&&!has(a.ufa)) fl.push(['w','Adja meg a haszonélvező életkorát.']);
+      if(a.ufm==='term'&&!has(a.uft)) fl.push(['w','Adja meg a jog hátralévő időtartamát.']);
       fl.push(['i','A jog értéke akkor vonható le, ha a számított érték a jog figyelmen kívül hagyásával készült (pl. a jogot az ügylet után alapították, vagy NAV-modell).'+ref('26. § (5)')])}
-    return {v:v,vHu:v,inc:true,liq:0,cls:'re',unc:unc,st:st,ref:rf,cr:n(a.lt),fl:fl,meth:meth};
+    return {v:v,vHu:v,inc:true,liq:0,cls:'re',unc:unc,st:st,ref:rf,cr:nn(a.lt),fl:fl,meth:meth};
   }
   function vReKulf(a){
     var r=fx(a.cur),m=a.m||'acq',V=0,st=[],fl=[],unc=0,rf,meth;
     if(m==='acq'){
       var g=a.gm==='idx'?n(a.gi)/100:0.03,y=Math.round(n(a.ay)),yrs=y?Math.max(0,YEAR-y):0,b=n(a.av)*r;
-      V=fin(b*Math.pow(1+g,yrs));meth='Szerzési érték továbbvezetve ('+(a.gm==='idx'?'helyi index':'évi 3%')+')';rf='20. § (1)–(2)';
+      V=fin(b*Math.pow(1+g,yrs));meth='Szerzési érték továbbvezetve ('+(a.gm==='idx'?'helyi index':'évi 3%')+')';rf='20. § (1)–(3)';
       st.push('Szerzési érték: '+curTxt(n(a.av),a.cur,r));
       st.push('Továbbvezetés '+yrs+' évre '+(a.gm==='idx'?'('+P(g*100)+'/év)':'(3%/év)')+': '+M(V));
       if(n(a.inv)){var iy=has(a.invy)?Math.round(n(a.invy)):YEAR,iv=fin(n(a.inv)*r*Math.pow(1+g,Math.max(0,YEAR-iy)));V+=iv;st.push('Értéknövelő beruházás ('+iy+'): + '+M(iv))}
       if(!y) fl.push(['w','Adja meg a szerzés évét.']);
       fl.push(['i','Ha az ingatlan valós értéke alacsonyabb a továbbvezetett értéknél, helyi szakértői értékkel igazolható.'+ref('20. § (6)')]);
     } else if(m==='off'){V=n(a.ov)*r;unc=0.05;meth='Helyi hatósági érték';rf='20. § (4)';st.push('Hatósági érték: '+curTxt(n(a.ov),a.cur,r))}
-    else{V=n(a.ev)*r;unc=0.05;meth='Helyi szakértői forgalmi érték';rf='20. § (5)–(6), 23. § (2)';st.push('Szakértői érték: '+curTxt(n(a.ev),a.cur,r))}
+    else{V=n(a.ev)*r;unc=0.05;meth='Helyi szakértői forgalmi érték';rf='20. § (5)–(6), 23. § (2)';st.push('Szakértői érték: '+curTxt(n(a.ev),a.cur,r));
+      fl.push(['i',a.mand?'Kötelezően igénybe vett értékelés: díjának 50%-a (legfeljebb 2 M Ft) levonható az adóból.'+ref('12. § (2) a), 20. § (5)'):'Ha a szerzési vagy hatósági érték megállapítható, a szakértői érték a 20. § (6) szerinti választás, és a díj nem vonható le; ha egyik sem, jelölje be a fenti négyzetet.'+ref('12. § (2) a), 20. § (5)–(6)')])}
     var sh=shareOf(a),v=V*sh;if(sh!==1) st.push('Tulajdoni hányad '+P(sh*100)+': '+M(v));
     if(a.cur&&a.cur!=='HUF') fl.push(['i','Az átszámítás az MNB december 31-i hivatalos árfolyamán történik.'+ref('14. §')]);
-    return {v:v,vHu:0,inc:true,liq:0,cls:'re',unc:unc,st:st,ref:rf,cr:n(a.lt),fl:fl,meth:meth,tr:1};
+    return {v:v,vHu:0,inc:true,liq:0,cls:'re',unc:unc,st:st,ref:rf,cr:nn(a.lt),fl:fl,meth:meth,tr:1};
   }
   function coCore(a,kulf,ev){
     var r=kulf?fx(a.cur):1,st=[],fl=[],rf=ev?'16. §, 1. melléklet':kulf?'15. § (3), (8), 1. melléklet':'15. § (3), 1. melléklet';
@@ -312,10 +326,10 @@ document.body.classList.add('js');
     if(!ae.length) fl.push(['w','Adjon meg legalább egy lezárt év adózott eredményét.']);
     st.push('Átlagos adózott eredmény '+M(avg)+(ae.length&&ae.length<3?' ('+ae.length+' év adatából)':'')+(avg<0?' negatív → H = 0':' → H = '+M(avg)+' ÷ '+f1.format(Tc*100)+'% = '+M(H)));
     var fy=fyOf(a),fd=has(a.fd)?Math.round(n(a.fd)):0,V100;
-    if(a.simp&&!ev&&ST<=100){V100=STa;mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = saját tőke = '+M(V100)+' (15. § (9))')}
+    if(a.simp&&!ev&&ST<=100){V100=Math.max(0,ST);mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = a beszámoló szerinti saját tőke = '+M(V100)+' (15. § (9))')}
     else if(a.hold&&!ev){V100=STa;mode='II. pont (holding)';st.push('Holding: V = ST = '+M(V100))}
     else{
-      if(fd&&fy-fd<=2){if(ST<=RULES.HIDDEN_ST&&!(H>0.25*ST)){H=0;mode='III. pont (induló cég)';st.push('Alapítás '+fd+', beszámoló '+fy+' → induló időszak, H = 0')}
+      if(fd&&fy-fd<=2&&fy-fd>=0){if(ST<=RULES.HIDDEN_ST&&!(H>0.25*ST)){H=0;mode='III. pont (induló cég)';st.push('Alapítás '+fd+', beszámoló '+fy+' → induló időszak, H = 0')}
         else fl.push(['i','Jogelőd nélkül alapított cég, de az induló kedvezmény nem jár, mert '+(ST>RULES.HIDDEN_ST?'a saját tőke meghaladja az 500 M Ft-ot':'a hozamérték meghaladja a saját tőke 25%-át')+'.'+ref('1. melléklet III.')])}
       V100=(STa+2*H)/3;st.push('V = ('+M(STa)+' + 2 × '+M(H)+') ÷ 3 = '+M(V100));
     }
@@ -323,20 +337,25 @@ document.body.classList.add('js');
   }
   function vCo(a,kulf){
     var c=coCore(a,kulf,false),st=c.st,fl=c.fl,rf=c.rf,V100=c.V100,meth='Törvényi képlet, '+c.mode,r=c.r;
-    if(a.tx){V100=n(a.txv)*r;meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100));rf+=', V. e)'}
+    if(a.tx&&!(n(a.txv)>0)) fl.push(['w','Adja meg a tranzakciós értéket (100%-ra vetítve), különben a képlet szerinti érték számít.']);
+    if(a.tx&&n(a.txv)>0){V100=n(a.txv)*r;meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100));rf+=', V. e)'}
     var q=shareOf(a),v=V100*q,disc=0;
     if(q!==1) st.push('Tulajdoni hányad '+P(q*100)+': '+M(v));
     var qt=qtOf(a);
-    if(q>0&&qt<0.5&&a.disc){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'): '+M(v));rf+=', V. d)'}
-    else if(q>0&&qt<0.5) fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. melléklet V. d)')]);
+    var discOK=!a.simp&&!(a.tx&&n(a.txv)>0);
+    if(q>0&&qt<0.5&&a.disc&&!discOK) fl.push(['i','Kisebbségi diszkont csak az 1. melléklet I–III. pontja szerinti értékre alkalmazható – az egyszerűsített (15. § (9)) és a tranzakciós áron alapuló (V. e)) értéknél nem.'+ref('1. mell. V. d)')]);
+    if(q>0&&qt<0.5&&a.disc&&discOK){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'; a 33%-os küszöböt az összeszámított hányadra mérjük): '+M(v));rf+=', V. d)'}
+    else if(q>0&&qt<0.5&&discOK) fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. melléklet V. d)')]);
     else if(q>0&&q<0.5&&qt>=0.5) fl.push(['i','A közvetett és a közeli hozzátartozói hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható (a benyújtott javaslat a Ptk. szerinti közeli hozzátartozók részesedését összeszámítja; az élettársét nem).'+ref('1. mell. V. d)')]);
     if(!a.simp&&!a.hold&&!a.val&&!a.tx&&has(a.st)&&c.ST*r<=100) fl.push(['i','Legfeljebb 100 M Ft saját tőkénél a képlet helyett választható az egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része.'+ref('15. § (9)')]);
     if(a.val){v=n(a.vv)*r;meth='Független cégértékelés';st=['Független cégértékelés (legalább két módszer): '+M(v)];rf='15. § (4)–(7)'}
+    if(kulf) fl.push(['i','Nem a magyar számviteli törvény szerinti beszámolónál saját tőke = eszközök és kötelezettségek különbözete (nettó eszközérték), adózott eredmény = a bevételek és ráfordítások jövedelemadóval csökkentett különbözete.'+ref('1. mell. IV. d)')]);
     if(kulf&&c.ST>RULES.HIDDEN_ST&&!has(a.rt)&&!a.val) fl.push(['c','Külföldi társaságnál, ha a rejtett tartalék adatai nem állnak rendelkezésre, független cégértékelés kötelező.'+ref('15. § (8)')]);
     if(!kulf&&c.ST>RULES.HIDDEN_ST) fl.push(['i','Az 500 M Ft feletti saját tőkéjű belföldi társaság a tulajdonos kérésére közli a rejtett tartalék adatait; könyvvizsgálói felülvizsgálat nem szükséges, ha a piaci értéket a törvény szerinti számítással állapítják meg.'+ref('34. § (1)–(2), 1. mell. IV. c)')]);
     if(c.fy>=YEAR&&!a.val&&!a.tx) fl.push(['i','A 2026-os adóhoz a bevalláskor elérhető utolsó lezárt beszámoló számít – naptári üzleti évnél már a 2026-os. A 2026-os eredmény és osztalékdöntés tehát még alakítja az értéket.'+ref('5. § 40. pont')]);
-    var hd=kulf&&has(a.hdebt)?Math.min(n(a.hre)*r,n(a.hdebt)*r):0,vHu=kulf?(has(a.hre)?Math.max(0,n(a.hre)*r-hd)*q:0):v;
-    if(kulf&&has(a.hre)) st.push('Külföldi illetőségűnél: belföldi ingatlanok '+M(n(a.hre)*r)+(hd?' − kapcsolódó tartozás '+M(hd):'')+' × '+P(q*100)+' = '+M(vHu)+' (18. §)');
+    var hd=kulf&&a.ivt&&has(a.hdebt)?Math.min(n(a.hre)*r,n(a.hdebt)*r):0,vHu=kulf?(a.ivt&&has(a.hre)?Math.max(0,n(a.hre)*r-hd)*q:0):v;
+    if(kulf&&!a.ivt) fl.push(['i','Külföldi illetőségű adóalanynál a külföldi társaság részesedése csak akkor adóköteles, ha a társaság belföldi ingatlanvagyonnal rendelkező társaság (Itv. 102. § (1) o)); belföldi illetőségűnél a teljes számított érték adóköteles.'+ref('7. § (2) d), 5. § 5. pont, 18. §')]);
+    if(kulf&&a.ivt&&has(a.hre)) st.push('Külföldi illetőségűnél: belföldi ingatlanok '+M(n(a.hre)*r)+(hd?' − kapcsolódó tartozás '+M(hd):'')+' × '+P(q*100)+' = '+M(vHu)+' (18. §)');
     var unc=(a.val||a.tx)?0.03:(c.fy>=YEAR?0.10:0.02);
     return {v:Math.max(0,fin(v)),vHu:Math.max(0,fin(vHu)),inc:true,liq:0,cls:'co',unc:unc,st:st,ref:rf,cr:0,fl:fl,meth:meth,tr:kulf?1:0};
   }
@@ -350,14 +369,14 @@ document.body.classList.add('js');
     if(av>0&&Math.abs(cl-av)/av>0.10){v=av;meth='Átlagárfolyam';st.push('A záróár több mint 10%-kal eltér az átlagtól → átlagárfolyamon: '+M(av))}
     return {v:v,vHu:a.huco?v:0,inc:true,liq:1,cls:'fin',unc:0.15,st:st,ref:'15. § (1)–(2)',cr:0,fl:[],meth:meth};
   }
-  function vSimple(a,rf,unc,liq,meth){var r=fx(a.cur),v=n(a.am)*r;return {v:v,vHu:0,inc:true,liq:liq,cls:TYPES[a.t].cls,unc:unc,st:[meth+': '+curTxt(n(a.am),a.cur,r)],ref:rf,cr:0,fl:[],meth:meth}}
-  function vRecv(a){var r=fx(a.cur),p=n(a.am)*r,b=n(a.bad)*r,v=Math.max(0,p-b);return {v:v,vHu:0,inc:true,liq:0,cls:'fin',unc:0,st:['Tőkeösszeg '+M(p)+(b?' − behajthatatlan '+M(b):'')+' = '+M(v)],ref:'25. § (6)',cr:0,fl:[],meth:'Tőkeösszeg'}}
-  function vOpt(a){var r=fx(a.cur),mk=n(a.mk)*r,iv=n(a.iv)*r,v=a.perf?0:Math.max(mk,iv);
+  function vSimple(a,rf,unc,liq,meth){var r=fx(a.cur),v=nn(a.am)*r;return {v:v,vHu:0,inc:true,liq:liq,cls:TYPES[a.t].cls,unc:unc,st:[meth+': '+curTxt(n(a.am),a.cur,r)],ref:rf,cr:0,fl:[],meth:meth}}
+  function vRecv(a){var r=fx(a.cur),p=nn(a.am)*r,b=nn(a.bad)*r,v=Math.max(0,p-b);return {v:v,vHu:0,inc:true,liq:0,cls:'fin',unc:0,st:['Tőkeösszeg '+M(p)+(b?' − behajthatatlan '+M(b):'')+' = '+M(v)],ref:'25. § (6)',cr:0,fl:[],meth:'Tőkeösszeg'}}
+  function vOpt(a){var r=fx(a.cur),mk=nn(a.mk)*r,iv=nn(a.iv)*r,v=a.perf?0:Math.max(mk,iv);
     return {v:v,vHu:0,inc:!a.perf,why:'teljesítményhez kötött, nem gyakorolható opció – nem kell figyelembe venni (27. § (7))',liq:0,cls:'fin',unc:0.2,st:a.perf?['Teljesítményhez kötött, nem gyakorolható és nem átruházható → 0']:['Piaci érték '+M(mk)+' és belső érték '+M(iv)+' közül a magasabb: '+M(v)],ref:'27. §',cr:0,fl:[],meth:'Piaci és belső érték közül a magasabb'}}
-  function vMov(a,lim,what){var r=fx(a.cur),v=n(a.am)*r,inc=v>lim||!!a.biz;
-    return {v:v,vHu:0,inc:inc,why:'személyes használati tárgy, '+what+' '+lim+' M Ft-os értékhatár alatt (9. § (3))',liq:0,cls:'mov',unc:0.2,st:['Szokásos piaci érték: '+curTxt(n(a.am),a.cur,r)+(inc?(a.biz&&v<=lim?' – vállalkozásban használt, teljes értéken (9. § (4))':''):' – értékhatár alatt, nem adóköteles')],ref:'9. § (3)–(4), 24. §',cr:n(a.gt),fl:inc&&!a.biz?[['i','Ingóságnál az elsődleges érték a 12 hónapon belüli vételár, majd összehasonlító ár, végül piaci biztosítási érték; szakértői érték választható.'+ref('24. § (2)–(3)')]]:[],meth:'Szokásos piaci érték'}}
+  function vMov(a,lim,what){var r=fx(a.cur),v=nn(a.am)*r,inc=v>lim||!!a.biz;
+    return {v:v,vHu:0,inc:inc,why:'személyes használati tárgy, '+what+' '+lim+' M Ft-os értékhatár alatt (9. § (3))',liq:0,cls:'mov',unc:0.2,st:['Szokásos piaci érték: '+curTxt(n(a.am),a.cur,r)+(inc?(a.biz&&v<=lim?' – vállalkozásban használt, teljes értéken (9. § (4))':''):' – értékhatár alatt, nem adóköteles')],ref:'9. § (3)–(4), 24. §',cr:nn(a.gt),fl:inc&&!a.biz?[['i','Ingóságnál az elsődleges érték a 12 hónapon belüli vételár, majd összehasonlító ár, végül piaci biztosítási érték; szakértői érték választható.'+ref('24. § (2)–(3)')]]:[],meth:'Szokásos piaci érték'}}
   function vUf(a){var u=itv72(n(a.pv),a.ufm,n(a.ufa),n(a.uft)),fl=[];if(a.ufm!=='term'&&!has(a.ufa)) fl.push(['w','Adja meg az életkorát.']);
-    return {v:u.v,vHu:a.hup?u.v:0,inc:true,liq:0,cls:'oth',unc:0.1,st:['Terhelt vagyonelem '+M(n(a.pv))+' → '+u.t+' = '+M(u.v)],ref:'26. § (1)–(2), Itv. 72. §',cr:0,fl:fl,meth:'Illetéktörvény 76. § szerinti érték'}}
+    return {v:u.v,vHu:a.hup?u.v:0,inc:true,liq:0,cls:'oth',unc:0.1,st:['Terhelt vagyonelem '+M(n(a.pv))+' → '+u.t+' = '+M(u.v)],ref:'26. § (1)–(2), Itv. 72. §',cr:0,fl:fl,meth:'Illetéktörvény 72. § szerinti érték'}}
   function vMrp(a){var v=n(a.am);return {v:v,vHu:0,inc:!!a.spec,why:'nem különleges MRP – nem kell figyelembe venni (9. § (5))',liq:0,cls:'oth',unc:0.1,st:['Részesedés értéke: '+M(v)+(a.spec?'':' – sima MRP, kimarad')],ref:'9. § (5), 17. § (9)',cr:0,fl:[],meth:'MRP'}}
   function valOf(a){try{if(!TYPES[a.t])throw new Error('type');var r=TYPES[a.t].val(a);r.v=fin(r.v);r.vHu=fin(r.vHu);r.cr=fin(r.cr);return r}catch(e){return {v:0,vHu:0,inc:false,why:'hibás adat',liq:0,cls:'oth',unc:0,st:[],ref:'',cr:0,fl:[['w','Hiányos adat.']],meth:'—'}}}
   function typeLabel(a){return TYPES[a.t]?TYPES[a.t].l:'Vagyonelem'}
@@ -380,11 +399,13 @@ document.body.classList.add('js');
     }
   }
 
+  /* Megjegyzés: a fl[][1] figyelmeztető szövegek konstansok (+ ref() escape-elve) és escape nélkül kerülnek innerHTML-be –
+     felhasználói eredetű szöveget (név stb.) csak esc()-pel szabad beléjük fűzni. */
   /* ---------- Számítás ---------- */
-  var VC={};
+  var VC=Object.create(null);
   function compute(ctx){
     ctx=ctx||{};var res=residency(),tp={},order=[];
-    function add(id,name,kind,bel,x){var t={id:id,name:name,kind:kind,res:bel,gross:0,treaty:0,tdebt:0,debt:0,cr:0,fee:0,allow:LIMIT,items:[],debts:[],liq:0,illiq:0};for(var k in x)t[k]=x[k];tp[id]=t;order.push(id)}
+    function add(id,name,kind,bel,x){var t={id:id,name:name,kind:kind,res:bel,gross:0,treaty:0,tdebt:0,tcr:0,debt:0,cr:0,fee:0,allow:LIMIT,items:[],debts:[],liq:0,illiq:0};for(var k in x)t[k]=x[k];tp[id]=t;order.push(id)}
     add('me','Ön','ind',res.bel);
     if(S.p.mar) add('sp','Házastárs','ind',S.p.spres==='bel'?true:S.p.spres==='kul'?false:res.bel);
     if(S.assets.some(function(a){return a.own==='minorinh'})) add('ch','Kiskorú gyermek','ind',res.bel);
@@ -395,12 +416,13 @@ document.body.classList.add('js');
         var t=tp[pf[0]]||tp.me,f=pf[1],base=fin((t.res?r.v:r.vHu)*f*sc),incl=r.inc&&base>0;
         var why=!r.inc?r.why:(!t.res&&!(r.vHu>0)?'külföldi illetőségű adóalanynál nem adóköteles (7. § (2))':'');
         t.items.push({a:a,r:r,f:f,amt:incl?base:0,incl:incl,why:why,gross:fin(r.v*f*sc)});
-        if(incl){t.gross+=base;t.cr+=(r.cr||0)*f;if(t.res&&a.tr&&r.tr)t.treaty+=base;if(r.liq)t.liq+=base;else t.illiq+=base}
+        if(incl){t.gross+=base;t.cr+=(r.cr||0)*f;if(t.res&&a.tr&&r.tr){t.treaty+=base;t.tcr+=(r.cr||0)*f}if(r.liq)t.liq+=base;else t.illiq+=base}
       });
     });
     S.debts.forEach(function(d){
-      var am=fin(n(d.am)*fx(d.cur));
-      alloc(d.own,d,{tp:tp,choice:ctx.choice,flat:ctx.flat}).forEach(function(pf){
+      var am=fin(nn(d.am)*fx(d.cur)),la=d.link?S.assets.filter(function(x){return x.id===d.link})[0]:null;
+      var parts=(d.own==='jointc'&&la&&la.own==='jointc')?alloc(la.own,la,{tp:tp,choice:ctx.choice,flat:ctx.flat}):alloc(d.own,d,{tp:tp,choice:ctx.choice,flat:ctx.flat});
+      parts.forEach(function(pf){
         var t=tp[pf[0]]||tp.me,x=am*pf[1],ok=true,why='';
         if(d.kind==='inf'){ok=false;why='nem okiratolt – nem vonható le (9. § (1))'}
         else if(!t.res){var li=d.link&&t.items.some(function(it){return it.a.id===d.link&&it.incl});if(!li){ok=false;why='külföldi illetőségűnél csak az adóköteles magyar vagyonelemhez közvetlenül kapcsolódó tartozás vonható le (9. § (2))'}}
@@ -408,19 +430,19 @@ document.body.classList.add('js');
         if(ok&&d.link&&t.items.some(function(it){return it.a.id===d.link&&it.incl&&it.a.tr&&it.r.tr}))t.tdebt+=x;
       });
     });
-    ['me','sp','ch'].forEach(function(id){if(tp[id])tp[id].fee=Math.min(n(S.fee[id])*RULES.FEE_SHARE,RULES.FEE_CAP)});
+    ['me','sp','ch'].forEach(function(id){if(tp[id])tp[id].fee=Math.min(nn(S.fee[id])*RULES.FEE_SHARE,RULES.FEE_CAP)});
     if(!ctx.flat){
-      S.bvks.forEach(function(b){tp['bvk:'+b.id].fee=Math.min(n(b.fee)*RULES.FEE_SHARE,RULES.FEE_CAP)});
+      S.bvks.forEach(function(b){tp['bvk:'+b.id].fee=Math.min(nn(b.fee)*RULES.FEE_SHARE,RULES.FEE_CAP)});
       var rem=LIMIT;
       S.bvks.filter(function(b){return b.lnk}).slice().sort(function(x,y){return n(x.ord)-n(y.ord)}).forEach(function(b){var t=tp['bvk:'+b.id],net=Math.max(0,t.gross-t.debt),g=Math.min(net,rem);t.allow=g;t.shared=1;rem-=g});
     }
     var total=0;
-    order.forEach(function(id){var t=tp[id];t.net=Math.max(0,t.gross-t.debt);t.base=Math.max(0,t.net-t.allow);t.raw=tax(t.base);t.trd=t.treaty>0?Math.min(t.raw,tax(Math.max(0,t.treaty-t.tdebt-t.allow))):0;var av=Math.max(0,t.raw-t.trd);t.cred=Math.min(av,t.cr+t.fee);t.tax=Math.round((av-t.cred)*1000)/1000;total+=t.tax});
+    order.forEach(function(id){var t=tp[id];t.net=Math.max(0,t.gross-t.debt);t.base=Math.max(0,t.net-t.allow);t.raw=tax(t.base);t.trd=t.treaty>0?Math.max(0,Math.min(t.raw,tax(Math.max(0,t.treaty-t.tdebt-LIMIT)))-t.tcr):0;var av=Math.max(0,t.raw-t.trd);t.cred=Math.min(av,t.cr+t.fee);t.tax=Math.round((av-t.cred)*1000)/1000;total+=t.tax});
     return {tp:tp,order:order,total:fin(total),res:res};
   }
   function indTax(r){return ['me','sp'].reduce(function(s,id){return s+(r.tp[id]?r.tp[id].tax:0)},0)}
   function optimize(){
-    var fixed={},ids=[];
+    var fixed=Object.create(null),ids=[];
     S.assets.forEach(function(a){if(a.own==='jointc'){if(a.alloc==='reg'||a.alloc==='half')fixed[a.id]=a.alloc;else{fixed[a.id]='half';ids.push(a.id)}}});
     var r0=compute({choice:fixed}),t0=indTax(r0),best=fixed,bt=t0;
     if(S.p.mar&&ids.length){
@@ -458,7 +480,9 @@ document.body.classList.add('js');
       if(S.bvks.filter(function(b){return b.lnk}).length>1) f.push(['i','Kapcsolt BVK-k: az 1 Mrd Ft-os sávot együtt egyszer alkalmazhatják; megosztásukhoz azonos tartalmú nyilatkozat kell, ennek hiányában a létrejöttük sorrendje dönt – a kalkulátor így számol.'+ref('28. § (4)–(6)')]);
       f.push(['w','Ha a BVK év közben megszűnik vagy teljesen kiadja a vagyont, ugyanaz a vagyon a BVK-nál és a kedvezményezettnél is adózhat.'+ref('5. § 35. pont c), 3. §')]);
     }
-    if(res.bel&&S.assets.some(function(a){return a.tr&&TYPES[a.t]&&TYPES[a.t].tr})) f.push(['w','Egyezményi mentesítés: a benyújtott javaslat szerint a levonás a mentesített külföldi vagyonra – a hozzá kapcsolódó tartozások és az 1 Mrd Ft-os mentes sáv levonása után – jutó adó; a kalkulátor így számol (példa: 3 Mrd belföldi + 2 Mrd mentesített külföldi vagyon → 40 M − 10 M = 30 M Ft). Egyezményenként ellenőrizni kell, kiterjed-e a vagyonadóra.'+ref('11. §, 12. § (2) c)')]);
+    (function(){var miss=[];['EUR','USD','CHF','GBP'].forEach(function(c){if(!(nn(S.fx[c])>0)&&(S.assets.some(function(a){return a.cur===c})||S.debts.some(function(d){return d.cur===c})))miss.push(c)});if(miss.length)f.push(['c','Hiányzó vagy nulla árfolyam: '+miss.join(', ')+' – a devizás tételek 0 Ft-tal szerepelnek. Adja meg az MNB december 31-i árfolyamot a 6. pontban.'+ref('14. §')])})();
+    if(S.p.mar&&S.p.spres==='kul'&&S.assets.some(function(a){return a.own==='jointc'})) f.push(['w','Külföldi illetőségű házastársnál a névre nyilvántartott közös vagyonelem hozzá rendelése a magyar adóalapot csökkentheti; ez a 4. § szerinti rendeltetésszerű joggyakorlás vizsgálata alá eshet, ha nincs adótól független indoka.'+ref('4. § (1)–(3), 10. § (2) b)')]);
+    if(res.bel&&S.assets.some(function(a){return a.tr&&TYPES[a.t]&&TYPES[a.t].tr})) f.push(['w','Egyezményi mentesítés: a levonás a mentesített külföldi vagyonra – a hozzá kapcsolódó tartozások és az 1 Mrd Ft-os sáv levonása után – jutó, a külföldön e vagyon után fizetett helyi adóval csökkentett adó; a kalkulátor így számol (példa: 3 Mrd belföldi + 2 Mrd mentesített külföldi vagyon → 40 M − 10 M = 30 M Ft). Ha az egyezmény a figyelembevételt sem engedi, a vagyonelemet ne vegye fel. Egyezményenként ellenőrizni kell, kiterjed-e a vagyonadóra.'+ref('11. § (2)–(3), 12. § (2) c)')]);
     if(r.total>0) f.push(['c','Vagyonátrendezés előtt: a NAV a vagyonadó köztudomásúvá válásától (az indokolás szerint 2026. május 14-től) vizsgálja, van-e az ügyletnek adótól független, valós gazdasági indoka.'+ref('4. § (1)–(3)')]);
     return f;
   }
@@ -488,7 +512,7 @@ document.body.classList.add('js');
       '<button type="button" class="btn small" data-tog="'+id+'" aria-expanded="'+(a.col?'false':'true')+'">'+(a.col?'Megnyit':'Összecsuk')+'</button><button type="button" class="btn small" data-del="'+id+'">Törlés</button></div>'+
       '<div class="ka-body"><div class="grid3">'+grid+'</div>'+(chks?'<div class="kopts">'+chks+'</div>':'')+'<div class="ka-steps" id="ks_'+id+'"></div><div class="ka-flags" id="kfl_'+id+'"></div></div></div>';
   }
-  var DKIND=[['loan','Okiratba foglalt hitel / kölcsön'],['legal','Jogszabályon, határozaton alapuló'],['opt','Opciós kötelezettség'],['inf','Nem okiratolt (nem vonható le)']];
+  var DKIND=[['loan','Okiratba foglalt hitel / kölcsön'],['legal','Jogszabályon, határozaton alapuló'],['opt','Opciós kötelezettség (a jogosult adatainak bevallásával)'],['inf','Nem okiratolt (nem vonható le)']];
   function debtCard(d){
     var links=[['','— nincs megjelölve —']].concat(S.assets.map(function(a){return [a.id,(a.name||typeLabel(a))]}));
     var fs=[{k:'own',l:'Adós',t:'s',o:ownerOpts().filter(function(x){return x[0]!=='minorinh'}),rr:1},{k:'am',l:'Fennálló összeg',u:'m'},{k:'cur',l:'Pénznem',t:'s',o:CURS,rr:1},{k:'kind',l:'Jogcím',t:'s',o:DKIND,rr:1},{k:'link',l:'Kapcsolódó vagyonelem',t:'s',o:links,s:'külföldi illetőségűnél kötelező'}];
@@ -524,13 +548,13 @@ document.body.classList.add('js');
     var G=[{k:'re',l:'Ingatlanok értékváltozása'},{k:'fin',l:'Pénzügyi vagyon hozama'},{k:'co',l:'Cégérték változása'},{k:'oth',l:'Ingóságok, egyéb'},{k:'yrs',l:'Előrejelzés hossza',u:'év'}];
     $('kProj').innerHTML=G.map(function(g){return fieldHTML('g',g.k,S.g,{k:g.k,l:g.l,u:g.u||'%/év',neg:g.k!=='yrs'})}).join('');
   }
-  function renderAll(){VC={};renderProfile();renderAssets();renderDebts();renderBvks();renderFees();renderFx();renderRemember();recalc()}
+  function renderAll(){VC=Object.create(null);renderProfile();renderAssets();renderDebts();renderBvks();renderFees();renderFx();renderRemember();recalc()}
 
   /* ---------- Megjelenítés: eredmény ---------- */
   var LAST=null;
   function recalc(){
     try{
-      VC={};
+      VC=Object.create(null);
       var opt=optimize(),r=compute({choice:opt.choice});
       var lo=compute({choice:opt.choice,scale:function(a,x){return 1-(x.unc||0)}}).total,hi=compute({choice:opt.choice,scale:function(a,x){return 1+(x.unc||0)}}).total;
       var diff=0;if(S.bvks.length){diff=r.total-compute({choice:opt.choice,flat:true}).total}
@@ -607,7 +631,7 @@ document.body.classList.add('js');
       row('1%-os sávban',function(t){return M(Math.min(t.base,TOP))},'sub')+
       (ids.some(function(id){return T2(id).base>TOP})?row('1,5%-os sávban (100 Mrd Ft felett)',function(t){return M(Math.max(0,t.base-TOP))},'sub'):'')+
       row('Számított adó',tot('raw',EFT))+
-      (ids.some(function(id){return T2(id).trd>0})?row('Egyezményi mentesítés – a külföldi vagyonra (kapcsolódó tartozásai és a mentes sáv levonása után) jutó adó (11. §, 12. § (2) c))',tot('trd',function(v){return '− '+EFT(v)})):'')+
+      (ids.some(function(id){return T2(id).trd>0})?row('Egyezményi mentesítés – a külföldi vagyonra (kapcsolódó tartozásai és az 1 Mrd Ft-os sáv levonása után) jutó, a külföldön fizetett helyi adóval csökkentett adó (11. § (2), 12. § (2) c))',tot('trd',function(v){return '− '+EFT(v)})):'')+
       row('Helyi adó, gépjárműadó, értékelési díj 50%-a',tot('cred',function(v){return '− '+EFT(v)}))+
       row('Fizetendő vagyonadó',tot('tax',FT),'tot')+
       row('Tényleges teher a nettó vagyonra',function(t){return t.net>0?f2.format(t.tax/t.net*100)+'%':'–'})+
@@ -653,7 +677,7 @@ document.body.classList.add('js');
     h+='<h3>Értékelési napló</h3><table><thead><tr><th scope="col">Vagyonelem</th><th scope="col">Módszer</th><th scope="col">Levezetés</th><th scope="col" class="num">Számított érték</th><th scope="col">Hivatkozás</th></tr></thead><tbody>'+S.assets.map(function(a){var R=VC[a.id]||valOf(a);return '<tr><td>'+esc(a.name||typeLabel(a))+'<br><small>'+esc(ownerName(a.own))+'</small></td><td>'+esc(R.meth)+'</td><td>'+R.st.map(esc).join('<br>')+'</td><td class="num">'+M(R.v)+(R.inc?'':' (nem adóköteles)')+'</td><td>'+esc(R.ref)+'</td></tr>'}).join('')+'</tbody></table>';
     var cum=0;h+='<h3>Előrejelzés</h3><table><thead><tr><th scope="col">Év</th><th scope="col" class="num">Nettó vagyon</th><th scope="col" class="num">Adó</th><th scope="col" class="num">Halmozott</th></tr></thead><tbody>'+L.proj.map(function(p){cum+=p.tax;return '<tr><td>'+p.y+'</td><td class="num">'+M(p.net)+'</td><td class="num">'+FT(p.tax)+'</td><td class="num">'+FT(cum)+'</td></tr>'}).join('')+'</tbody></table>';
     var fl=allFlags();h+='<h3>Teendők és figyelmeztetések</h3><ul>'+fl.map(function(x){return '<li>'+x[1]+'</li>'}).join('')+'</ul>';
-    h+='<p class="rp-meta">A becslés a kormany.hu-n közzétett törvénytervezeten alapul; nem minősül adótanácsadásnak.</p>';
+    h+='<p class="rp-meta">A becslés az Országgyűlésnek benyújtott T/930 törvényjavaslaton alapul; nem minősül adótanácsadásnak.</p>';
     $('kReport').innerHTML=h;
   }
 
@@ -662,7 +686,7 @@ document.body.classList.add('js');
   var PRESETS={
     family:{name:'vállalkozó házaspár',make:function(){var s=blank();s.p.mar=true;
       var lak=A('re_lak',{name:'Budapesti lakás',own:'joint',m:'idx',iv:180,iy:2019,ir:10,lt:0.35});
-      s.assets=[lak,A('re_lak',{name:'Balatoni nyaraló',own:'jointc',reg:'me',alloc:'auto',m:'model',mv:240,lt:0.12}),
+      s.assets=[lak,A('re_udulo',{name:'Balatoni nyaraló',own:'jointc',reg:'me',alloc:'auto',m:'model',mv:240,lt:0.12}),
         A('co_hu',{name:'Családi Kft. (60%)',sh:60,st:900,fy:YEAR,ae1:160,ae2:140,ae3:120,rt:300,dtl:27,div:100,col:false}),
         A('re_kulf',{name:'Horvát apartman',own:'joint',cur:'EUR',m:'acq',av:0.35,ay:2018,gm:'3'}),
         A('fund',{name:'Befektetési alapok',own:'jointc',reg:'sp',alloc:'auto',am:260}),A('cash',{name:'Bankszámlák',own:'joint',am:120}),
@@ -691,23 +715,23 @@ document.body.classList.add('js');
     var s=blank();o=obj(o);
     var p=obj(o.p);
     s.p={cit:p.cit==='n'?'n':'y',ab:p.ab==='y'?'y':'n',fst:['res','post','ltr','no'].indexOf(p.fst)>=0?p.fst:'res',mar:!!p.mar,cust:!!p.cust,spres:['same','bel','kul'].indexOf(p.spres)>=0?p.spres:'same'};
-    var fxo=obj(o.fx);['EUR','USD','CHF','GBP'].forEach(function(c){if(has(fxo[c]))s.fx[c]=str(fxo[c],16)});
-    var g=obj(o.g);['re','fin','co','oth','yrs'].forEach(function(k){if(has(g[k]))s.g[k]=str(g[k],16)});
-    var fee=obj(o.fee);['me','sp','ch'].forEach(function(k){s.fee[k]=str(fee[k],16)});
+    var fxo=obj(o.fx);['EUR','USD','CHF','GBP'].forEach(function(c){if(has(fxo[c]))s.fx[c]=String(nn(fxo[c]))});
+    var g=obj(o.g);['re','fin','co','oth','yrs'].forEach(function(k){if(has(g[k]))s.g[k]=String(k==='yrs'?Math.max(1,Math.min(30,Math.round(n(g[k])))):n(g[k]))});
+    var fee=obj(o.fee);['me','sp','ch'].forEach(function(k){s.fee[k]=has(fee[k])?String(nn(fee[k])):''});
     var seen=Object.create(null),bvkIds=Object.create(null),assetIds=Object.create(null);
-    (Array.isArray(o.bvks)?o.bvks:[]).slice(0,20).forEach(function(b){b=obj(b);var id=str(b.id);if(!ID_RE.test(id)||seen[id])return;seen[id]=1;bvkIds[id]=1;
-      s.bvks.push({id:id,name:str(b.name,80),law:b.law==='kulf'?'kulf':'hu',ctrl:b.ctrl==='kulf'?'kulf':'hu',ord:str(b.ord,8),lnk:!!b.lnk,fee:str(b.fee,16)})});
+    (Array.isArray(o.bvks)?o.bvks:[]).slice(0,20).forEach(function(b){b=obj(b);var id=str(b.id);if(!idOk(id)||seen[id])return;seen[id]=1;bvkIds[id]=1;
+      s.bvks.push({id:id,name:str(b.name,80),law:b.law==='kulf'?'kulf':'hu',ctrl:b.ctrl==='kulf'?'kulf':'hu',ord:has(b.ord)?String(Math.round(n(b.ord))):'',lnk:!!b.lnk,fee:has(b.fee)?String(nn(b.fee)):''})});
     (Array.isArray(o.assets)?o.assets:[]).slice(0,200).forEach(function(a){a=obj(a);var t=str(a.t),id=str(a.id);
-      if(!Object.prototype.hasOwnProperty.call(TYPES,t)||!ID_RE.test(id)||seen[id])return;seen[id]=1;assetIds[id]=1;
+      if(!Object.prototype.hasOwnProperty.call(TYPES,t)||!idOk(id)||seen[id])return;seen[id]=1;assetIds[id]=1;
       var T=TYPES[t],c=A(t,{id:id});
       c.name=str(a.name,80);c.col=a.col!==false;c.own=ownerOk(a.own,bvkIds);c.tr=!!a.tr;
       c.reg=a.reg==='sp'?'sp':'me';c.alloc=['auto','reg','half'].indexOf(a.alloc)>=0?a.alloc:'auto';
-      if(T.sh)c.sh=has(a.sh)?str(a.sh,8):100;
+      if(T.sh)c.sh=has(a.sh)?String(Math.max(0,Math.min(100,n(a.sh)))):100;
       if(T.cur)c.cur=opt(a.cur,CURS,'HUF');
-      T.f.forEach(function(fd){var v=a[fd.k];if(v==null)return;if(fd.t==='c')c[fd.k]=!!v;else if(fd.t==='s')c[fd.k]=opt(v,fd.o,c[fd.k]);else c[fd.k]=str(v,24)});
+      T.f.forEach(function(fd){var v=a[fd.k];if(v==null)return;if(fd.t==='c')c[fd.k]=!!v;else if(fd.t==='s')c[fd.k]=opt(v,fd.o,c[fd.k]);else c[fd.k]=has(v)?String(fd.neg?n(v):nn(v)):''});
       s.assets.push(c)});
-    (Array.isArray(o.debts)?o.debts:[]).slice(0,100).forEach(function(d){d=obj(d);var id=str(d.id);if(!ID_RE.test(id)||seen[id])return;seen[id]=1;
-      s.debts.push({id:id,name:str(d.name,80),own:ownerOk(d.own,bvkIds,true),am:str(d.am,24),cur:opt(d.cur,CURS,'HUF'),kind:opt(d.kind,DKIND,'loan'),link:assetIds[str(d.link)]?str(d.link):''})});
+    (Array.isArray(o.debts)?o.debts:[]).slice(0,100).forEach(function(d){d=obj(d);var id=str(d.id);if(!idOk(id)||seen[id])return;seen[id]=1;
+      s.debts.push({id:id,name:str(d.name,80),own:ownerOk(d.own,bvkIds,true),am:has(d.am)?String(nn(d.am)):'',cur:opt(d.cur,CURS,'HUF'),kind:opt(d.kind,DKIND,'loan'),link:assetIds[str(d.link)]?str(d.link):''})});
     var src=str(o.src,40);
     s.src=src.indexOf('preset:')===0&&Object.prototype.hasOwnProperty.call(PRESETS,src.slice(7))?src:'user';
     return s;
@@ -765,12 +789,13 @@ document.body.classList.add('js');
     if(d.bdel){touch();S.assets.forEach(function(a){if(a.own==='bvk:'+d.bdel)a.own='me'});S.debts.forEach(function(x){if(x.own==='bvk:'+d.bdel)x.own='me'});S.bvks=S.bvks.filter(function(b){return b.id!==d.bdel});renderAll();return}
   });
   $('kf').addEventListener('submit',function(e){e.preventDefault()});
-  $('kAdd').addEventListener('click',function(){touch();var t=$('kAddType').value;if(!TYPES[t])return;S.assets.forEach(function(a){a.col=true});var a=A(t,{col:false});S.assets.push(a);renderAssets();renderDebts();recalc();var el=$('kn_'+a.id);if(el)el.focus()});
+  $('kAdd').addEventListener('click',function(){touch();var t=$('kAddType').value;if(!Object.prototype.hasOwnProperty.call(TYPES,t))return;S.assets.forEach(function(a){a.col=true});var a=A(t,{col:false});S.assets.push(a);renderAssets();renderDebts();recalc();var el=$('kn_'+a.id);if(el)el.focus()});
   $('kAddDebt').addEventListener('click',function(){touch();S.debts.push({id:nid('d'),name:'',own:'me',am:'',cur:'HUF',kind:'loan',link:''});renderDebts();recalc()});
   $('kAddBvk').addEventListener('click',function(){touch();S.bvks.push({id:nid('b'),name:'BVK '+(S.bvks.length+1),law:'hu',ctrl:'hu',ord:S.bvks.length+1,lnk:false,fee:''});renderAll()});
   $('kPreset').addEventListener('change',function(){if(this.value){loadPreset(this.value);this.value=''}});
   document.querySelectorAll('.kmenu-list .btn').forEach(function(b){b.addEventListener('click',function(){var d=b.closest('details');if(d)d.open=false})});
   document.addEventListener('click',function(e){var d=document.querySelector('.kmenu[open]');if(d&&!d.contains(e.target))d.open=false});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){var d=document.querySelector('.kmenu[open]');if(d){d.open=false;var sm=d.querySelector('summary');if(sm)sm.focus()}}});
   $('kMini').addEventListener('click',function(){$('kSum').scrollIntoView({behavior:'smooth',block:'start'})});
   document.body.classList.add('has-mini');
   $('kClear').addEventListener('click',function(){S=blank();S.src='user';renderAll()});
@@ -796,7 +821,9 @@ document.body.classList.add('js');
   $('kPrint').addEventListener('click',function(){buildReport();document.body.classList.add('kprint');window.print()});
   window.addEventListener('afterprint',function(){document.body.classList.remove('kprint')});
   $('kToDetail').addEventListener('click',function(){$('kDetail').scrollIntoView({behavior:'smooth',block:'start'})});
-  document.querySelectorAll('.ktab').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.ktab').forEach(function(x){var on=x===b;x.setAttribute('aria-selected',on?'true':'false');$('kp-'+x.dataset.kp).hidden=!on})})});
+  (function(){var kt=Array.prototype.slice.call(document.querySelectorAll('.ktab'));function pick(b){kt.forEach(function(x){var on=x===b;x.setAttribute('aria-selected',on?'true':'false');x.tabIndex=on?0:-1;var pn=$('kp-'+x.dataset.kp);if(pn)pn.hidden=!on})}
+    kt.forEach(function(b,i){b.setAttribute('aria-controls','kp-'+b.dataset.kp);var pn=$('kp-'+b.dataset.kp);if(pn){pn.setAttribute('role','tabpanel');pn.setAttribute('aria-labelledby',b.id||(b.id='ktab-'+b.dataset.kp))}b.tabIndex=b.getAttribute('aria-selected')==='true'?0:-1;
+      b.addEventListener('click',function(){pick(b)});b.addEventListener('keydown',function(e){var k=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:e.key==='Home'?0:e.key==='End'?kt.length-1:-1;if(k<0)return;e.preventDefault();var nb=kt[(k+kt.length)%kt.length];nb.focus();pick(nb)})})})();
   document.querySelectorAll('[data-kpreset]').forEach(function(b){b.addEventListener('click',function(){loadPreset(b.dataset.kpreset)})});
 
   /* Tesztelhető, csak olvasható export – állapotot nem ér el */
@@ -831,7 +858,7 @@ document.body.classList.add('js');
       if(m.tax>0){b.className='badge b-crit';b.textContent='Érintett'}
       else if(ratio>0.8){b.className='badge b-warn';b.textContent='Határközelben'}
       else{b.className='badge b-ok';b.textContent='Valószínűleg nem érintett'}
-      $('qNote').textContent=(o.mar?'Házastársaknál a közös vagyon fele-fele megosztásával, két mentes sávval számolva. ':'')+(o.det&&!o.bel?'Külföldi illetőségűnél csak az ingatlant és a cégrészesedést vettük figyelembe (feltéve, hogy magyarországiak). ':'')+'A becslés nem veszi figyelembe a haszonélvezetet, a kisebbségi diszkontot, az egyezményeket és a bizalmi vagyonkezelést; az értékek ±15%-os bizonytalanságával számol.';
+      $('qNote').textContent=(o.mar?'Házastársaknál a közös vagyon fele-fele megosztásával, két mentes sávval számolva. ':'')+(o.det&&!o.bel?'Külföldi illetőségűnél csak a magyar ingatlant és a magyar cégrészesedést vettük figyelembe, és a tartozás csak akkor vonható le, ha ezekhez közvetlenül kapcsolódik. ':'')+'A becslés nem veszi figyelembe a haszonélvezetet, a kisebbségi diszkontot, az egyezményeket és a bizalmi vagyonkezelést; az értékek ±15%-os bizonytalanságával számol.';
     }
     qf.addEventListener('input',paint);qf.addEventListener('change',paint);$('qDetails').addEventListener('toggle',paint);$('qDetails').addEventListener('input',paint);$('qDetails').addEventListener('change',paint);
     qf.addEventListener('submit',function(e){e.preventDefault()});
@@ -841,10 +868,10 @@ document.body.classList.add('js');
       var own=o.mar?'joint':'me';
       if(o.det){
         if(o.q_re)S.assets.push(A('re_lak',{name:'Ingatlanok (gyorsbecslő)',own:own,m:'model',mv:o.q_re,col:false}));
-        if(o.q_co)S.assets.push(A('other',{name:'Cégrészesedések – képlet szerinti becsült érték',own:own,am:o.q_co}));
+        if(o.q_co)S.assets.push(A('co_val',{name:'Cégrészesedések – képlet szerinti becsült érték',own:own,am:o.q_co}));
         if(o.q_fin)S.assets.push(A('fund',{name:'Pénzügyi vagyon (gyorsbecslő)',own:own,am:o.q_fin}));
         if(o.q_oth)S.assets.push(A('other',{name:'Egyéb vagyon (gyorsbecslő)',own:own,am:o.q_oth}));
-        if(o.q_debt)S.debts.push({id:nid('d'),name:'Tartozások (gyorsbecslő)',own:own,am:o.q_debt,cur:'HUF',kind:'loan',link:''});
+        if(o.q_debt)S.debts.push({id:nid('d'),name:'Tartozások (gyorsbecslő)',own:own,am:o.q_debt,cur:'HUF',kind:'loan',link:(!o.bel&&S.assets.length&&S.assets[0].t==='re_lak')?S.assets[0].id:''});
       } else if(o.net){S.assets.push(A('other',{name:'Nettó vagyon (gyorsbecslő) – bontsa vagyonelemekre',own:own,am:o.net,col:false}))}
       renderAll();msg('A gyorsbecslő adatai betöltve – bontsa vagyonelemekre a pontos számításhoz.');
       var t=document.getElementById('t-teszt');if(t)t.click();

@@ -72,6 +72,10 @@
     t('T/930: egyszerűsített értékelés ST ≤ 100 M (ST 90, 50%)',C.value({st:90,ae:[60,60,60],sh:50,fy:2026,T:15,simp:true}).v,45);
     t('T/930: egyszerűsítés nem jár ST > 100 M-nál',C.value({st:150,ae:[120,120,120],sh:100,fy:2026,T:15,simp:true}).v,(150+2*120/0.15)/3);
     t('T/930: házastársak 30% + 30% → nincs diszkont',C.value({st:150,ae:[120,120,120],sh:30,rel:30,fy:2026,T:15,disc:true}).v,(150+2*120/0.15)/3*0.3);
+    t('T/930: egyszerűsített érték = beszámoló szerinti ST, osztalékkorrekció nélkül (ST 90, DIV 30)',C.value({st:90,div:30,ae:[60,60,60],sh:100,fy:2026,T:15,simp:true}).v,90);
+    t('T/930: egyszerűsített értéknél nincs kisebbségi diszkont (ST 90, 30%)',C.value({st:90,ae:[60,60,60],sh:30,fy:2026,T:15,simp:true,disc:true}).v,27);
+    t('Tranzakciós ár bejelölve, de üres → képlet',C.value({st:150,ae:[120,120,120],sh:100,fy:2026,T:15,usetx:true,txv:0}).v,(150+2*120/0.15)/3);
+    t('Induló cég hibás évszámmal (alapítás a beszámoló után) → I. pont',C.value({st:100,ae:[2,2,2],sh:100,fy:2026,fd:2027,T:15}).v,(100+2*2/0.15)/3);
     t('T/930: testvérek 20% + 20% → 25% diszkont',C.value({st:150,ae:[120,120,120],sh:20,rel:20,fy:2026,T:15,disc:true}).v,(150+2*120/0.15)/3*0.2*0.75);
   } else t('cegertek.js betöltődött',0,1);
   // RULES

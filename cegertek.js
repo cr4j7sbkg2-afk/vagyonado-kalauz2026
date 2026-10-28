@@ -41,7 +41,7 @@ function value(i){
   if(!ae.length)fl.push(['w','Adjon meg legalább egy lezárt év adózott eredményét.']);
   st.push('Átlagos adózott eredmény '+M(avg)+(ae.length&&ae.length<3?' ('+ae.length+' év adatából)':'')+(avg<0?' negatív → H = 0':' → H = '+M(avg)+' ÷ '+f1.format(T*100)+'% = '+M(H)));
   var V100;
-  if(i.simp&&ST<=100){V100=STa;mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = saját tőke = '+M(V100)+ref('15. § (9)'))}
+  if(i.simp&&ST<=100){V100=Math.max(0,ST);mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = a beszámoló szerinti saját tőke = '+M(V100)+ref('15. § (9)'))}
   else if(i.hold){V100=STa;mode='II. pont (holding)';st.push('Holding: V = ST = '+M(V100))}
   else{
     if(i.fd&&i.fy-i.fd<=2&&i.fy-i.fd>=0){
@@ -51,11 +51,14 @@ function value(i){
     V100=(STa+2*H)/3;st.push('V = ('+M(STa)+' + 2 × '+M(H)+') ÷ 3 = '+M(V100));
   }
   var meth='Törvényi képlet, '+mode;
+  if(i.usetx&&!(fin(i.txv)>0))fl.push(['w','Adja meg a független eladás árát (100%-ra vetítve), különben a képlet szerinti érték számít.']);
   if(i.usetx&&fin(i.txv)>0){V100=fin(i.txv);meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100)+ref('1. mell. V. e)'))}
   var q=Math.max(0,Math.min(100,fin(i.sh)))/100,qi=Math.max(0,Math.min(100,fin(i.ish)))/100,qr=Math.max(0,Math.min(100,fin(i.rel)))/100,qt=q+qi+qr,v=V100*q,disc=0;
   if(q!==1)st.push('Tulajdoni hányad '+P(q*100)+': '+M(v));
-  if(q>0&&qt<0.5&&i.disc){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'): '+M(v))}
-  else if(q>0&&qt<0.5)fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. mell. V. d)')]);
+  var discOK=!i.simp&&!(i.usetx&&fin(i.txv)>0);
+  if(q>0&&qt<0.5&&i.disc&&!discOK)fl.push(['i','Kisebbségi diszkont csak az 1. melléklet I–III. pontja szerinti értékre alkalmazható – az egyszerűsített és a tranzakciós áron alapuló értéknél nem.'+ref('1. mell. V. d)')]);
+  if(q>0&&qt<0.5&&i.disc&&discOK){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'; a 33%-os küszöböt az összeszámított hányadra mérjük): '+M(v))}
+  else if(q>0&&qt<0.5&&discOK)fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. mell. V. d)')]);
   else if(q>0&&q<0.5&&qt>=0.5)fl.push(['i','A közvetett és a közeli hozzátartozói hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható (a Ptk. szerinti közeli hozzátartozók hányadát össze kell számítani; az élettársét nem).'+ref('1. mell. V. d)')]);
   if(!i.simp&&!i.hold&&!i.usetx&&ST<=100&&has(i.st))fl.push(['i','Legfeljebb 100 M Ft saját tőkénél a képlet helyett választható az egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része.'+ref('15. § (9)')]);
   if(i.fy>=YEAR&&!i.usetx)fl.push(['i','A 2026-os adóhoz a bevalláskor elérhető utolsó lezárt beszámoló számít – naptári üzleti évnél a 2026-os. A 2026-os eredmény és az osztalékdöntés tehát még alakítja az értéket.'+ref('5. § 40. pont')]);
@@ -65,7 +68,7 @@ function value(i){
 }
 
 function read(){
-  var fy=Math.round(n($('c_fy').value))||YEAR;
+  var fy=Math.min(YEAR+1,Math.max(1990,Math.round(n($('c_fy').value))||YEAR));
   return {st:n($('c_st').value),fy:fy,div:n($('c_div').value),ae:['c_ae1','c_ae2','c_ae3'].filter(function(k){return has($(k).value)}).map(function(k){return n($(k).value)}),
     rt:n($('c_rt').value),dtl:$('c_dtl').value,hold:$('c_hold').checked,fd:$('c_new').checked&&has($('c_fd').value)?Math.round(n($('c_fd').value)):0,
     kulf:$('c_kulf').checked,T:n($('c_T').value),sh:has($('c_sh').value)?n($('c_sh').value):100,ish:n($('c_ish').value),rel:n($('c_rel').value),disc:$('c_disc').checked,simp:$('c_simp').checked,usetx:$('c_usetx').checked,txv:n($('c_txv').value)};

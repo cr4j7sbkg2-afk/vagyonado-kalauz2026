@@ -41,6 +41,7 @@
 <meta property="og:title" content="Vagyonadó-kalauz – kalkulátor és elemzés a 2026-os vagyonadó-tervezethez">
 <meta property="og:description" content="Számolja ki, mennyire érinti Önt a vagyonadó, és olvassa el, mit jelent a törvényjavaslat a vagyonos magánszemélyeknek és a bizalmi vagyonkezeléseknek.">
 <meta property="og:image" content="https://cr4j7sbkg2-afk.github.io/vagyonado-kalauz2026/hero.jpg">
+<link rel="canonical" href="https://cr4j7sbkg2-afk.github.io/vagyonado-kalauz2026/">
 <meta property="og:url" content="https://cr4j7sbkg2-afk.github.io/vagyonado-kalauz2026/">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Vagyonadó-kalauz","inLanguage":"hu","author":{"@type":"Organization","name":"BékésPartners","url":"https://www.bekespartners.com/"},"publisher":{"@type":"Organization","name":"BékésPartners"},"about":"2026. évi vagyonadó-törvénytervezet","dateModified":"2026-10-20"}</script>
@@ -166,7 +167,7 @@
 
   <div class="kbar" id="kBar">
     <span class="kbar-l" id="kStatus"><strong>Saját adatok</strong> – csak ebben a lapfülben.</span>
-    <span class="bar-actions">
+    <div class="bar-actions">
       <select class="sel small" id="kPreset" aria-label="Példa betöltése">
         <option value="">Példa betöltése ▾</option>
         <option value="family">Vállalkozó házaspár</option>
@@ -187,7 +188,7 @@
         </div>
       </details>
       <span class="ksub" id="kMsg" aria-live="polite"></span>
-    </span>
+    </div>
   </div>
 
   <div class="test">
@@ -357,8 +358,8 @@
       <li><strong>Részvényeknél elmaradt a 2026-os átmeneti átlagár-választás:</strong> már 2026-ra is az év végi záróárfolyam a főszabály (10%-ot meghaladó eltérésnél az utolsó 180 nap súlyozott átlaga). A kötvényekre vonatkozó átmeneti választás megmaradt. <span class="ref">39. §</span></li>
       <li><strong>Ingatlan:</strong> aki a NAV értékelési modelljét valós adatokkal használja, annál a NAV csak az adatok valótlanságának bizonyításával állapíthat meg más értéket; a modell az üdülőkre és a telkekre is kiterjed; a szakértőt 30%-ot meghaladó alulértékelésnél 100 ezer Ft bírság és ismétlődésnél törlés fenyegeti. <span class="ref">31. § (4), 23. § (5)–(7)</span></li>
       <li><strong>Külföldi ingatlantartó cég:</strong> az ingatlanhoz kapcsolódó tartozások levonhatók, a csökkentett értéket a tulajdoni hányaddal kell arányosítani. <span class="ref">18. §</span></li>
-      <li><strong>Adminisztráció:</strong> a rejtett tartalékhoz nem kell könyvvizsgálói felülvizsgálat, ha a piaci értéket a törvényi számítás adja; az 500 M Ft feletti tőkéjű cég csak a tulajdonos kérésére ad adatot; adathiány esetén végső soron a bekerülési érték számít; az adószámos magánszemély tevékenységéhez használt ingóságok teljes értékben számítanak; a külföldi magánszemélynek adóazonosító hiányában a bevallás előtt be kell jelentkeznie. <span class="ref">34. §, 15. § (10), 16. § (4), 29. § (8)</span></li>
-      <li><strong>Kapcsolódó, külön törvényjavaslatban: „exit tax”.</strong> Aki 2027. január 1-jétől megszünteti magyar adóügyi illetőségét, és az előző tíz évből legalább ötben belföldi illetőségű volt, annak 500 M Ft feletti értékpapír-, részesedés-, kripto- és biztosítási vagyona (vagy legalább 20%-os, 250 M Ft feletti részesedése) nem realizált értéknövekménye után 15% szja-t kell fizetnie; EU/EGT-be költözésnél a fizetés kamatmentesen halasztódik. Ez a vagyonadótól független, de a kiköltözési tervezést közvetlenül érinti.</li>
+      <li><strong>Adminisztráció:</strong> a rejtett tartalékhoz nem kell könyvvizsgálói felülvizsgálat, ha a piaci értéket a törvényi számítás adja; az 500 M Ft feletti tőkéjű cég csak a tulajdonos kérésére ad adatot; adathiány esetén végső soron a bekerülési érték számít; az adószámos magánszemély tevékenységéhez használt ingóságok teljes értékben számítanak; a külföldi magánszemélynek adóazonosító hiányában a bevallás előtt be kell jelentkeznie. <span class="ref">34. §, 15. § (10), 9. § (4), 16. § (4), 29. § (8)</span></li>
+      <li><strong>Kapcsolódó, külön törvényjavaslatban: „exit tax”.</strong> Aki 2027. január 1-jétől megszünteti magyar adóügyi illetőségét, és az előző tíz évből legalább ötben belföldi illetőségű volt, annak 500 M Ft feletti értékpapír-, részesedés-, kripto- és biztosítási vagyona (vagy legalább 20%-os, 250 M Ft feletti részesedése) nem realizált értéknövekménye után 15% szja-t kell fizetnie; EU/EGT-be költözésnél a fizetés kamatmentesen halasztódik. Ez a vagyonadótól független, de a kiköltözési tervezést közvetlenül érinti (a részletek a benyújtott adócsomag sajtóösszefoglalóin alapulnak).</li>
     </ul>
 
     <h3>Kit érint?</h3>
@@ -429,7 +430,7 @@
 
     <h3>Mi marad ki?</h3>
     <ul>
-      <li>A lakás szokásos berendezése és a személyes használati tárgyak, ha nem lépik át a fenti értékhatárokat. Egyéni vállalkozói, őstermelői vagy adószám birtokában folytatott más önálló tevékenységhez használt, illetve költségként elszámolt ingóságnál ez a mentesség nem él. <span class="ref">9. § (3)–(4), 16. § (4)</span></li>
+      <li>A lakás szokásos berendezése és a személyes használati tárgyak, ha nem lépik át a fenti értékhatárokat. Egyéni vállalkozói, őstermelői vagy adószám birtokában folytatott más önálló tevékenységhez használt, illetve költségként elszámolt ingóságnál ez a mentesség nem él. <span class="ref">9. § (3)–(4), 16. § (4)</span> A visszajáró helyi adó és gépjárműadó nem vonható le az adóból. <span class="ref">12. § (2) b)</span></li>
       <li>A Munkavállalói Résztulajdonosi Programban (MRP) lévő részesedés, kivéve a „különleges” MRP-t. <span class="ref">9. § (5)</span></li>
       <li>Az a személyes közreműködéshez vagy teljesítményhez kötött opció (tipikusan munkavállalói, vezetői opció), amely a feltétel teljesüléséig nem gyakorolható és nem ruházható át. <span class="ref">27. § (7)</span></li>
     </ul>
@@ -511,12 +512,12 @@
           <tr><td>Külföldi ingatlantartó cég</td><td>Belföldi ingatlan értéke × hányad</td><td>Az ingatlanhoz közvetlenül kapcsolódó tartozások levonhatók, a csökkentett érték arányosítandó <span class="ref">18. §</span></td><td>Kedvező a hitelből vett ingatlanoknál</td></tr>
           <tr><td>Egyezményi beszámítás</td><td>A mentesített vagyonra jutó adó (felosztási mód nélkül)</td><td>A külföldi vagyonhoz kapcsolódó tartozásokat és az 1 Mrd-os sávot is figyelembe kell venni <span class="ref">11. §, 12. § (2) c)</span></td><td><strong>Adóemelő:</strong> 3 + 2 Mrd példán 20 M helyett 30 M Ft</td></tr>
           <tr><td>Részvények 2026-os átlagára</td><td>Választható volt a tárgyévi átlag</td><td>Elhagyva; a kötvényekre megmaradt <span class="ref">39. §</span></td><td>Év végi záróár a főszabály</td></tr>
-          <tr><td>NAV ingatlanmodell</td><td>Lakóingatlan, termőföld</td><td>Üdülő és telek is; a NAV csak az adatok valótlanságának bizonyításával térhet el; az indexálásnál a NAV-kalkulátor kötelező <span class="ref">5. § 30., 37., 41., 19. § (4), 23. § (9), 31. § (4)</span></td><td>Modellhasználat bírságvédelmet ad</td></tr>
+          <tr><td>NAV ingatlanmodell</td><td>Lakóingatlan, termőföld</td><td>Üdülő és telek is; a NAV csak az adatok valótlanságának bizonyításával térhet el; az indexálásnál a NAV-kalkulátor kötelező <span class="ref">5. § 31., 37., 41. pont, 19. § (4), 23. § (9), 31. § (4)</span></td><td>Modellhasználat bírságvédelmet ad</td></tr>
           <tr><td>Ingatlanértékelő szankciója</td><td>Törlés három alulértékelés után</td><td>100 ezer Ft bírság 70% alatti értéknél; 365 napon belül három végleges bírság → törlés; újabb bírság újraindítja a 2 éves várakozást; minden belföldi ingatlanértékelő (igazságügyi szakértő is) a NAV nyilvántartásába kerül <span class="ref">23. § (5)–(7)</span></td><td>Szigorúbb szakértői felelősség</td></tr>
           <tr><td>Korábban szerzett külföldi ingatlan</td><td>Továbbvezetés 3% / helyi index</td><td>Részletes visszamenőleges indexálás a régi vételárra vagy hatósági értékre, az értéknövelő beruházásokkal együtt <span class="ref">20. § (3)</span></td><td>A kalkulátor módszere változatlan</td></tr>
           <tr><td>Adószámos magánszemély</td><td>Egyéni vállalkozó, őstermelő</td><td>Az adószám birtokában folytatott más önálló tevékenység is; az ehhez használt ingóságok teljes értéke számít, külön hozamérték nélkül <span class="ref">9. § (4), 16. § (4)</span></td><td>Szélesebb kör</td></tr>
-          <tr><td>Kiskorú, öröklés</td><td>90 napos NAV-határidő a hagyatékátadás után</td><td>A kiskorú tartozásai is kezelendők; a 90 napos határidő kikerült, helyette az elévülés nyugszik a halál és a hagyatékátadás megismerése között; örökölt vagyon önellenőrzésénél a NAV állapítja meg az adót <span class="ref">10. § (4)–(5), 29. § (2)–(5)</span></td><td>Eljárási pontosítás</td></tr>
-          <tr><td>Egyéb</td><td>–</td><td>Cégértékelési szolgáltatás és szabályozott piac fogalma; a termőföldből kikerült a külterületi feltétel; ingóság biztosítási értéke egyedi értékelésen alapuló szerződéses érték; külföldi magánszemély adóazonosító nélkül bejelentkezik; bevallás a NAV elektronikus felületén <span class="ref">5. § 6., 33., 39. pont, 24. § (2) c), 29. § (8)</span></td><td>Pontosítások</td></tr>
+          <tr><td>Kiskorú, öröklés</td><td>90 napos NAV-határidő a hagyatékátadás után</td><td>A kiskorú tartozásai is kezelendők; a 90 napos határidő kikerült, helyette az elévülés nyugszik a halál és a hagyatékátadás megismerése között; a fordulónapig át nem adott örökség adóját az örökös a hagyatékátadó végzés jogerőre emelkedését követő nyolcadik hónap végéig jogkövetkezmény nélküli önellenőrzéssel vagy első bevallással rendezi; a NAV csak akkor állapítja meg, ha az önellenőrzést az Art. kizárja <span class="ref">10. § (4)–(5), 29. § (2)–(5)</span></td><td>Eljárási pontosítás</td></tr>
+          <tr><td>Egyéb</td><td>–</td><td>Cégértékelési szolgáltatás és szabályozott piac fogalma; a termőföldből kikerült a külterületi feltétel; ingóság biztosítási értéke egyedi értékelésen alapuló szerződéses érték; külföldi magánszemély adóazonosító nélkül bejelentkezik; bevallás a NAV elektronikus felületén <span class="ref">5. § 6., 33., 39. pont, 24. § (2) c), 29. § (1), (8)</span></td><td>Pontosítások</td></tr>
         </tbody>
       </table>
     </div>
@@ -554,7 +555,7 @@
       <li><strong>Kiskorú gyermek:</strong> a szülői felügyeletet gyakorló szülőnél, közös felügyeletnél fele-fele; az örökölt, saját keresményből szerzett és helyettesítő vagyon a gyermeknél. <span class="ref">10. § (4)–(5)</span> A szülőtől kapott ajándék tehát nem képez külön mentes sávot.</li>
       <li><strong>Átlátható szervezetek</strong> (polgári jogi társaság, átlátható partnership): a tagoknál, a rájuk eső tartozással együtt. <span class="ref">10. § (6)–(7)</span></li>
       <li><strong>Eltérő illetőségű házastársak:</strong> a házastársak külön adóalanyok, illetőségüket külön kell vizsgálni. A közös vagyon megosztása a külföldi illetőségű házastársra is irányadó, nála azonban a ráeső hányadból csak a belföldi ingatlan és a magyar társasági részesedés adózik, és csak az ezekhez kapcsolódó tartozás vonható le. A megosztási választás így illetőség-tervezési eszköz is, amelyet az <span class="ref">4. § (1)–(3)</span> szerinti vizsgálat érinthet. <span class="ref">5. § 3. pont, 7. § (2), 9. § (2), 10. § (2)</span></li>
-      <li><strong>Élettársak:</strong> a 7. § (2)–(3) szerinti megosztási választás kizárólag házastársakat illet meg; élettársaknál minden vagyonelem a polgári jogi tulajdoni hányad szerint adózik. <span class="ref">10. § (1)</span> Az élettárs ugyanakkor a Ptk. szerinti hozzátartozó, ezért az élettársak által létrehozott vagyonkezelési adóalanyok kapcsoltak, és egy mentes sávon osztoznak. <span class="ref">Ptk. 8:1. § (1) 2. pont, 28. § (3)</span></li>
+      <li><strong>Élettársak:</strong> a 10. § (2)–(3) szerinti megosztási választás kizárólag házastársakat illet meg; élettársaknál minden vagyonelem a polgári jogi tulajdoni hányad szerint adózik. <span class="ref">10. § (1)</span> Az élettárs ugyanakkor a Ptk. szerinti hozzátartozó, ezért az élettársak által létrehozott vagyonkezelési adóalanyok kapcsoltak, és egy mentes sávon osztoznak. <span class="ref">Ptk. 8:1. § (1) 2. pont, 28. § (3)</span></li>
     </ul>
 
     <h3>5. Értékelési szabályok vagyonelemenként</h3>
@@ -566,7 +567,7 @@
           <tr><td>Nem tőzsdei részesedés</td><td>1. melléklet szerinti képlet; meghatározott esetekben független cégértékelés legalább két módszerrel. <span class="ref">15. § (3)–(8)</span></td></tr>
           <tr><td>Egyéni vállalkozás (vállalkozói szja)</td><td>Képlet a nettó vállalkozási vagyonnal és a vállalkozói jövedelemmel, 100%-os hányaddal. Átalányadózónál vagyonelemenként. <span class="ref">16. §</span></td></tr>
           <tr><td>Ügyvédi iroda, szövetkezet, egyéni cég stb.</td><td>Képlet a magánszemélyre jutó felosztható tőkével és eredménnyel; a személyes közreműködésért járó juttatás nem hozam. <span class="ref">17. §</span></td></tr>
-          <tr><td>Belföldi ingatlan</td><td>Kötelező sorrend: 12 hónapon belüli ügyleti érték → 10 éven belüli indexált érték → NAV tömeges modell; szakértői forgalmi érték választható. <span class="ref">19–23. §</span></td></tr>
+          <tr><td>Belföldi ingatlan</td><td>Kötelező sorrend: 12 hónapon belüli ügyleti érték → 10 éven belüli indexált érték → NAV tömeges modell (lakás, üdülő, telek, felépítmény nélküli mezőgazdasági ingatlan); szakértői forgalmi érték választható, és ha egyik érték sem áll rendelkezésre (pl. iroda, üzlet, ipari ingatlan 10 évnél régebbi ügylettel), kötelező – ekkor a díj 50%-a levonható. <span class="ref">19–23. §, 21. § (4), 12. § (2) a)</span></td></tr>
           <tr><td>Külföldi ingatlan</td><td>Szerzési érték + értéknövelő beruházás, évente +3% vagy a fekvés szerinti hivatalos index; ennek hiányában hatósági érték, majd szakértő. Alacsonyabb szakértői érték igazolással alkalmazható. <span class="ref">20. §</span></td></tr>
           <tr><td>Ingó dolog, gyűjtemény</td><td>12 hónapon belüli független vételár → dokumentált összehasonlító ár → piaci értéket kifejező biztosítási érték (újrabeszerzési érték nem); vagy szakértő. A gyűjtemény egységként. <span class="ref">24. §</span></td></tr>
           <tr><td>Pénzeszköz</td><td>Névérték, illetve december 31-i záró egyenleg. <span class="ref">25. § (1)</span></td></tr>
@@ -660,9 +661,9 @@
       <li>Kötelező elektronikus ügyintézés, ezer forintra kerekítés, vagyonelemenkénti részletes bevallás (jogcím, időpont, hányad, módszer, alapadatok). <span class="ref">29. § (6)–(9)</span></li>
       <li>Iratmegőrzés az elévülésig, az indexálási számításokkal együtt. <span class="ref">19. § (6), 29. § (10)</span></li>
       <li>Adatellentmondás esetén 15 napos tisztázó felhívás; ellenőrzés indul, ha nem válaszolnak, vagy ha az eltérés 500 millió Ft-os adóalap-csökkenést ér el. <span class="ref">32. §</span></li>
-      <li>Haláleset a fordulónap után: az elhunyt adóját a NAV állapítja meg; a tervezet 90 napos, hagyatékátadáshoz kötött határideje a benyújtott javaslatból kikerült, helyette az elévülés nyugszik a halál és a hagyatékátadás megismerése között. Az örökölt vagyon miatti önellenőrzés esetén az adót a NAV állapítja meg. <span class="ref">29. § (2)–(5)</span></li>
+      <li>Haláleset a fordulónap után: az elhunyt adóját a NAV állapítja meg; a tervezet 90 napos, hagyatékátadáshoz kötött határideje a benyújtott javaslatból kikerült, helyette az elévülés nyugszik a halál és a hagyatékátadás megismerése között. A fordulónapig át nem adott örökség adóját az örökös a hagyatékátadó végzés jogerőre emelkedését követő nyolcadik hónap végéig önellenőrzéssel (jogkövetkezmény nélkül), illetve – ha enélkül nem lett volna adóköteles – első bevallással rendezi; a NAV csak akkor állapítja meg, ha az önellenőrzést az Art. kizárja. <span class="ref">29. § (2)–(5)</span></li>
       <li>Kiskorú adóalanynál a vagyonelemek mellett az igazolt tartozásokat is a szülői felügyeletet gyakorló szülőnél kell figyelembe venni. <span class="ref">10. § (4)–(5)</span></li>
-      <li>Az adóazonosító jellel nem rendelkező külföldi magánszemélynek a bevallás előtt be kell jelentkeznie a NAV-nál; a bevallás a NAV elektronikus felületén történik. <span class="ref">29. § (8)</span></li>
+      <li>Az adóazonosító jellel nem rendelkező külföldi magánszemélynek a bevallás előtt be kell jelentkeznie a NAV-nál; a bevallás a NAV elektronikus felületén történik. <span class="ref">29. § (1), (8)</span></li>
     </ul>
 
     <h3>10/A. Szankciók, elévülés – az Art. általános szabályai</h3>
@@ -686,14 +687,14 @@
       <li><strong>Nincs adóelőleg.</strong> A tervezet évente egyszeri, a tárgyévet követő augusztus 31-i bevallást és fizetést ír elő; előlegfizetési kötelezettséget nem tartalmaz. <span class="ref">29. § (1)</span></li>
       <li><strong>Nincs indexálás.</strong> Az 1 milliárd forintos mentes sáv, a 100 milliárdos sávhatár és az ingóságok 3, illetve 10 millió forintos értékhatára fix összeg; a javaslat valorizálást nem ír elő. Infláció és eszközár-emelkedés mellett ezért évről évre többen és nagyobb vagyonhányaddal kerülnek a hatály alá. <span class="ref">9. § (1), (3), 12. § (1)</span></li>
       <li><strong>Minden év december 31. fordulónap</strong>, a tárgyévi vagyonállapot alapján; a tárgyév illetőség-változásnál és vagyonkezelési adóalany megszűnésénél rövidül. <span class="ref">8. §, 5. § 35. pont</span></li>
-      <li><strong>Exit tax 2027. január 1-jétől</strong> – a vagyonadóval egy napon benyújtott, külön adócsomagban (az Szja tv. új, „Az adóügyi illetőség változásából származó jövedelem” alcíme). Aki megszünteti magyar adóügyi illetőségét, és az előző tíz adóévből legalább ötben belföldi illetőségű volt, annak az illetőségváltáskor nem realizált értéknövekménye után 15% szja-t kell fizetnie, ha az érintett eszközök (társasági részesedés, értékpapír, befektetési jegy, kriptoeszköz, TBSZ, NYESZ, életbiztosítási maradékjog) összértéke meghaladja az 500 M Ft-ot, vagy legalább 20%-os, 250 M Ft-ot meghaladó részesedése van. Az adóalap az illetőség megszűnését megelőző napi szokásos piaci érték; a veszteségek nem számolhatók el a nyereségekkel szemben. EU/EGT-államba költözésnél a fizetés kamatmentesen halasztódik az értékesítésig, más célországnál az adóévi bevallási határidőig esedékes. A vagyonadó miatti kiköltözés tehát önmagában adóztatható eseménnyé válik.</li>
+      <li><strong>Exit tax 2027. január 1-jétől</strong> – a vagyonadóval egy napon benyújtott, külön adócsomagban (az Szja tv. új, „Az adóügyi illetőség változásából származó jövedelem” alcíme). Aki megszünteti magyar adóügyi illetőségét, és az előző tíz adóévből legalább ötben belföldi illetőségű volt, annak az illetőségváltáskor nem realizált értéknövekménye után 15% szja-t kell fizetnie, ha az érintett eszközök (társasági részesedés, értékpapír, befektetési jegy, kriptoeszköz, TBSZ, NYESZ, életbiztosítási maradékjog) összértéke meghaladja az 500 M Ft-ot, vagy legalább 20%-os, 250 M Ft-ot meghaladó részesedése van. Az adóalap az illetőség megszűnését megelőző napi szokásos piaci érték; a veszteségek nem számolhatók el a nyereségekkel szemben. EU/EGT-államba költözésnél a fizetés kamatmentesen halasztódik az értékesítésig, más célországnál az adóévi bevallási határidőig esedékes. A vagyonadó miatti kiköltözés tehát önmagában adóztatható eseménnyé válik. <em>A számok a benyújtott adócsomag sajtóösszefoglalóin alapulnak; a csomag normaszövegével még nem egyeztettük.</em></li>
     </ul>
 
     <h3>11. Szövegszintű hiányosságok és értelmezési kockázatok</h3>
     <ol class="issues">
       <li><strong>Visszaható hatályú vizsgálat.</strong> A normaszöveg a „köztudomásúvá válást” nem köti naptári dátumhoz; a 4. §-hoz fűzött indokolás viszont kifejezetten <strong>2026. május 14-ét</strong>, a vagyonadóztatás feltételeinek meghatározásáról szóló kormányhatározat Magyar Közlönyben való megjelenésének napját jelöli meg (az egyeztetési tervezet indokolása 1147/2026. (V. 14.), a T/930 indokolása 47/2026. (V. 14.) számmal hivatkozik rá – a számeltérés vélhetően elírás, a dátum azonos). Az indokolás nem normaszöveg, így a dátum jogvitában vitatható marad, de a NAV gyakorlata várhatóan ehhez igazodik: az ezt követő vagyonátrendezéseknél kell adótól független indokkal számolni. A jogbiztonság szempontjából ez a javaslat legtámadhatóbb pontja. <span class="ref">4. § (2), indokolás a 4. §-hoz</span></li>
       <li><strong>Nem lakóingatlanok indexálása – rendezve.</strong> A tervezetben a KSH-árindexes indexálás és a 2. melléklet 1.4. pontja ellentmondani látszott; a T/930 19. § (4) bekezdése kimondja, hogy a lakás és a termőföld a 2. melléklet, minden más ingatlan a 19. § (5) szerinti KSH-index alapján, a NAV kalkulátorával indexálható.</li>
-      <li><strong>Értékelési díj levonhatósága.</strong> Csak a „kötelezően igénybe vett” szolgáltatás díja vonható le, a 21. § (4) szerinti önként választott szakértőé a szó szerinti értelmezés alapján nem.</li>
+      <li><strong>Értékelési díj levonhatósága.</strong> Csak a „kötelezően igénybe vett” szolgáltatás díja vonható le: akkor, ha az ingatlanra sem ügyleti, sem indexált, sem NAV-modell szerinti érték nincs (tipikusan iroda, üzlet, ipari ingatlan 10 évnél régebbi szerzéssel), illetve ha a cégértékelés kötelező. A 21. § (4) szerinti önként választott szakértőé a szó szerinti értelmezés alapján nem. A kiemelt (500 M Ft feletti) érték önmagában nem teszi kötelezővé az értékelést, csak azt dönti el, hogy ki végezheti.</li>
       <li><strong>Haszonélvezeti levonás köre.</strong> A 26. § (5) c) pontja minden, a NAV-modellel (22. §) értékelt ingatlanra kiterjed, ami a belföldi ingatlanok szinte egészét jelenti. A tipikus családi konstrukcióban (szülői haszonélvezet, gyermeki tulajdon) ez kedvező, de a szabály célja bizonytalan.</li>
       <li><strong>Holding és konszolidáció viszonya.</strong> Nem egyértelmű, hogy konszolidáló holdingnál a II. pont (csak saját tőke) vagy a VII. pont (konszolidált adatok, hozamelemmel) az erősebb.</li>
       <li><strong>Nem nevesített elemek.</strong> Az önkéntes pénztári egyéni számla, a NYESZ vagy a nyugdíj-előtakarékossági jogosultságok kezelése csak a vagyonelem általános fogalmából vezethető le.</li>
@@ -709,7 +710,7 @@
       <li><span class="when">2026. október–december</span>Vagyonleltár, illetőség, házastársi vagyonjog és meglévő struktúrák (BVK, alapítvány, trust) felülvizsgálata. Új ügylet csak dokumentált, adótól független indokkal. <span class="ref">4. § (3)</span></li>
       <li><span class="when">2026. december 31.</span>Fordulónap: bankszámlák, értékpapír-, kripto- és nemesfém-kivonatok rögzítése; biztosítói igazolás kérése.</li>
       <li><span class="when">2027. január 14.</span>Meglévő vagyonkezelési adóalanyok bejelentése. <span class="ref">39. § (3)</span></li>
-      <li><span class="when">2027. január–június</span>Ingatlan-értékbecslések, cégértékelői megbízások, kapcsolt vagyonkezelői megosztás előkészítése.</li>
+      <li><span class="when">2027. január–június</span>Ingatlan-értékbecslések (a 2027-ben készült értékelésnek is 2026. december 31-i értéknapra kell szólnia <span class="ref">23. § (8)</span>), cégértékelői megbízások, kapcsolt vagyonkezelői megosztás előkészítése. Naptári évtől eltérő üzleti évű cégeknél a 2026-os rejtett tartalék adatszolgáltatás határideje 2027. augusztus 1. <span class="ref">38. § (2)</span></li>
       <li><span class="when">2026. november–december</span>Parlamenti vita és szavazás a T/930-ról, kihirdetés; a tervezett hatálybalépés december 15. A kalauz a kihirdetett szöveg alapján frissül.</li>
       <li><span class="when">2027. május–július</span>Beszámolók elfogadása; az 500 M Ft feletti tőkéjű cégeknél a rejtett tartalék adatainak tulajdonosi kérése. <span class="ref">34. §</span></li>
       <li><span class="when">2027. augusztus 31.</span>Bevallás és befizetés; házastársi és kapcsolt nyilatkozatok; szükség esetén fizetési könnyítési kérelem.</li>
@@ -743,7 +744,7 @@
   </div>
   <div class="sqn-statement">
     <p>A tervezet szerint a bizalmi vagyonkezelésben kezelt vagyon önálló adóalany: saját mentes sávval, saját bevallással – és az adót a kezelt vagyonból kell megfizetni.</p>
-    <span class="sqn-statement-src">A vagyonadó-törvény tervezete, 3. § és 24. §</span>
+    <span class="sqn-statement-src">T/930 törvényjavaslat, 6. §, 28. § és 33. § (12)</span>
   </div>
   <div class="prose">
     <div class="eyebrow"><span class="ref">Ptk. 6:310. §</span> és köv. · bizalmi vagyonkezelési szerződés</div>
@@ -852,7 +853,7 @@
     <p>A bejelentésnek tartalmaznia kell az irányadó jogot, a külföldi azonosítókat, a tényleges irányítás helyét, a képviselő adatait, az iratőrzés helyét, valamennyi vagyonrendelő adatait, és ha valamelyik vagyonrendelő más BVK vagyonrendelőjével hozzátartozói vagy kapcsolt vállalkozási viszonyban áll, ennek a viszonynak a jogcímét. <span class="ref">33. § (7)</span> Több vagyonkezelőnél egy elsődleges képviselőt kell bejelenteni; ha egyiküknek sincs belföldi lakóhelye vagy székhelye, belföldi kézbesítési meghatalmazott kell. Adószám nélküli BVK a bejelentéssel egyidejűleg adószámot kap. <span class="ref">33. § (3), (6), (9)</span></p>
 
     <h3>Magánalapítvány és vagyonkezelő alapítvány (KEVA)</h3>
-    <p>A tervezet a magánalapítványt a bizalmi vagyonkezeléssel azonos módon, önálló vagyonkezelési adóalanyként kezeli. Magánalapítvány az alapító, a csatlakozó vagy ezek hozzátartozója mint kedvezményezett érdekében a Ptk. szerint létrehozott alapítvány, továbbá a <strong>nem közhasznú vagyonkezelő alapítvány</strong> – az alapító, a csatlakozó és a kedvezményezett személyétől függetlenül. <span class="ref">5. § 27. és 45. pont</span> A közhasznú jogállású vagyonkezelő alapítvány (<span class="ref">2019. évi XIII. tv.</span>) tehát nem adóalany, a nem közhasznú igen.</p>
+    <p>A tervezet a magánalapítványt a bizalmi vagyonkezeléssel azonos módon, önálló vagyonkezelési adóalanyként kezeli. Magánalapítvány az alapító, a csatlakozó vagy ezek hozzátartozója mint kedvezményezett érdekében a Ptk. szerint létrehozott alapítvány, továbbá a <strong>nem közhasznú vagyonkezelő alapítvány</strong> – az alapító, a csatlakozó és a kedvezményezett személyétől függetlenül. <span class="ref">5. § 27. és 45. pont</span> A közhasznú jogállású vagyonkezelő alapítvány (<span class="ref">2019. évi XIII. tv.</span>) tehát csak akkor nem adóalany, ha nem az alapító, a csatlakozó vagy hozzátartozójuk mint kedvezményezett érdekében működik; a nem közhasznú vagyonkezelő alapítvány mindig az.</p>
     <ul>
       <li>A magánalapítványra a BVK-nál leírt szabályok érvényesek: saját mentes sáv, kapcsoltság az azonos alapítótól vagy hozzátartozóktól származó alapítványokkal és BVK-kkal, bejelentés 30 napon, a már működőknél 2027. január 14-én belül. <span class="ref">28. §, 33. §, 39. § (3)</span></li>
       <li>Az adózói kötelezettségeket az alapítvány képviselője (kuratórium) teljesíti, az adó az alapítványi vagyont terheli. <span class="ref">33. § (2)</span></li>
