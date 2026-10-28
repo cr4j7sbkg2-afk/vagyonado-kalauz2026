@@ -18,14 +18,14 @@ var $=function(id){return document.getElementById(id)};
 /* ---------- Jogszabályi paraméterek ---------- */
 var RULES=Object.freeze({
   YEAR:2026,          /* első tárgyév */
-  LIMIT:1000,         /* mentes sáv, M Ft (6. §) */
-  TOP:100000,         /* 1,5 %-os sáv kezdete, M Ft adóalap (9. § (1)) */
+  LIMIT:1000,         /* mentes sáv, M Ft (9. §) */
+  TOP:100000,         /* 1,5 %-os sáv kezdete, M Ft adóalap (12. § (1)) */
   RATE1:0.01,         /* alapkulcs */
   RATE2:0.015,        /* felső kulcs */
-  FEE_SHARE:0.5,      /* értékelési díj levonható hányada (9. § (2) a)) */
+  FEE_SHARE:0.5,      /* értékelési díj levonható hányada (12. § (2) a)) */
   FEE_CAP:2,          /* értékelési díj levonás maximuma, M Ft */
-  MOV_ART:3,          /* műtárgy, ékszer, gyűjtemény értékhatár, M Ft (6. § (3)) */
-  MOV_VEH:10,         /* jármű értékhatár, M Ft (6. § (3)) */
+  MOV_ART:3,          /* műtárgy, ékszer, gyűjtemény értékhatár, M Ft (9. § (3)) */
+  MOV_VEH:10,         /* jármű értékhatár, M Ft (9. § (3)) */
   HIDDEN_ST:500,      /* rejtett tartalék figyelembevétele e saját tőke felett, M Ft (1. mell. IV.) */
   CAP_RATE:0.15       /* tőkésítési ráta a cégképletben (1. mell. I.) */
 });
@@ -35,8 +35,8 @@ var RULES=Object.freeze({
    KIHIRDETÉS UTÁN: a LAWS.draft.url-t az njt.hu-s címre kell cserélni (pl. https://njt.hu/jogszabaly/2026-XX-00-00),
    és anchor:true-ra állítani, hogy a §-horgonyok is működjenek. */
 var LAWS={
-  draft:{url:'https://kormany.hu/application/documents/d7cbe62a-f849-4056-824c-2186cfc74240/download',name:'a vagyonadóról szóló törvény 2026. október 6-i egyeztetési tervezete (kormany.hu, PDF)',anchor:false},
-  bill:{re:/^T\/930\s*/i,url:'https://www.parlament.hu/irom43/00930/00930.pdf',name:'T/930 törvényjavaslat a vagyonadóról – benyújtva 2026. 10. 27. (parlament.hu, PDF)',anchor:false},
+  draft:{url:'https://www.parlament.hu/irom43/00930/00930.pdf',name:'T/930 törvényjavaslat a vagyonadóról – benyújtva 2026. 10. 27. (parlament.hu, PDF)',anchor:false},
+  bill:{re:/^T\/930\s*/i,url:'https://www.parlament.hu/irom43/00930/00930.pdf',name:'törvényjavaslat a vagyonadóról – benyújtva 2026. 10. 27. (parlament.hu, PDF)',anchor:false},
   itv:{re:/^Itv\.?\s*/i,url:'https://njt.hu/jogszabaly/1990-93-00-00',name:'1990. évi XCIII. törvény az illetékekről (njt.hu)',anchor:true},
   ptk:{re:/^Ptk\.?\s*/i,url:'https://njt.hu/jogszabaly/2013-5-00-00',name:'2013. évi V. törvény a Polgári Törvénykönyvről (njt.hu)',anchor:true},
   szja:{re:/^Szja\s*tv\.?\s*/i,url:'https://njt.hu/jogszabaly/1995-117-00-00',name:'1995. évi CXVII. törvény a személyi jövedelemadóról (njt.hu)',anchor:true}
@@ -159,7 +159,7 @@ document.body.classList.add('js');
     {k:'mv',l:'NAV-modell / becsült piaci érték (100%)',u:'mft',w:isM('model')},
     {k:'ev',l:'Szakértői forgalmi érték (100%)',u:'mft',w:isM('expert')},
     {k:'lt',l:'Megfizetett építmény- vagy telekadó',u:'mft',s:'éves összeg a tulajdoni hányadra'},
-    {k:'chg',l:'Az ügylet óta lényeges állapotváltozás (pl. jelentős felújítás) történt',t:'c',rr:1,w:function(a){return a.m==='tx12'||a.m==='idx'}},
+    {k:'chg',l:'Az ügylet óta lényeges állapotváltozás (pl. az ügyleti érték 20%-át elérő felújítás) történt',t:'c',rr:1,w:function(a){return a.m==='tx12'||a.m==='idx'}},
     {k:'uf',l:'Haszonélvezet vagy használati jog terheli',t:'c',rr:1}
   ].concat(UFF)}
   function fyOf(a){return has(a.fy)?Math.round(n(a.fy)):YEAR}
@@ -170,16 +170,16 @@ document.body.classList.add('js');
     {k:'ae2',l:function(a){return 'Adózott eredmény – '+(fyOf(a)-1)},u:'m',neg:1},
     {k:'ae3',l:function(a){return 'Adózott eredmény – '+(fyOf(a)-2)},u:'m',neg:1},
     {k:'rt',l:'Rejtett tartalék',u:'m',s:'befektetett ingatlan, részesedés, értékpapír: piaci − könyv szerinti érték',w:function(a){return n(a.st)*r(a)>RULES.HIDDEN_ST}},
-    {k:'dtl',l:'Kapcsolódó halasztott adókötelezettség',u:'m',s:'üresen hagyva a rejtett tartalék 15%-a (2. § 14. pont)',w:function(a){return n(a.st)*r(a)>RULES.HIDDEN_ST}},
+    {k:'dtl',l:'Kapcsolódó halasztott adókötelezettség',u:'m',s:'üresen hagyva a rejtett tartalék 15%-a (5. § 15. pont)',w:function(a){return n(a.st)*r(a)>RULES.HIDDEN_ST}},
     {k:'div',l:'Mérlegfordulónap után jóváhagyott osztalék',u:'m',s:'ha a saját tőke még tartalmazza'},
     {k:'fd',l:'Jogelőd nélküli alapítás éve',u:'év',s:'csak ha az elmúlt 3 évben alapították'},
     kulf?{k:'T',l:'Tőkésítési ráta',u:'%',s:'15%, vagy az ország kockázatmentes kamata + felár'}:null,
     kulf?{k:'hre',l:'A társaság magyarországi ingatlanai',u:'m',s:'csak külföldi illetőségűnél számít (100%)'}:null,
-    kulf?{k:'hdebt',l:'Az ingatlanokhoz közvetlenül kapcsolódó tartozások',u:'m',s:'szerzés, fenntartás, fejlesztés hitele – levonható (T/930 18. §)',w:function(a){return has(a.hre)}}:null,
+    kulf?{k:'hdebt',l:'Az ingatlanokhoz közvetlenül kapcsolódó tartozások',u:'m',s:'szerzés, fenntartás, fejlesztés hitele – levonható (18. §)',w:function(a){return has(a.hre)}}:null,
     {k:'simp',l:'Egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része (választható, ha a saját tőke legfeljebb 100 M Ft)',t:'c',w:function(a){return has(a.st)&&n(a.st)*r(a)<=100}},
     {k:'hold',l:'Holding (elsődleges célja részesedések birtoklása és irányítása; a részesedések, értékpapírok, pénzeszközök és a tulajdonolt cégekkel szembeni követelések az eszközök legalább 90%-a)',t:'c'},
     {k:'ish',l:'Közvetett tulajdoni hányad',u:'%',s:'más társaságon keresztül; a kisebbségi teszthez (közvetlen + közvetett + közeli hozzátartozói hányad < 50%)',w:function(a){return shareOf(a)<0.5}},
-    {k:'rel',l:'Közeli hozzátartozók együttes részesedése',u:'%',s:'házastárs, szülő, gyermek, testvér stb. (Ptk. közeli hozzátartozó) hányada – a kisebbségi teszthez össze kell számítani; az élettársé nem (T/930 1. mell. V. d))',w:function(a){return shareOf(a)<0.5}},
+    {k:'rel',l:'Közeli hozzátartozók együttes részesedése',u:'%',s:'házastárs, szülő, gyermek, testvér stb. (Ptk. közeli hozzátartozó) hányada – a kisebbségi teszthez össze kell számítani; az élettársé nem (1. mell. V. d))',w:function(a){return shareOf(a)<0.5}},
     {k:'disc',l:'Kisebbségi diszkontot alkalmazok (választható)',t:'c',w:function(a){return qtOf(a)<0.5}},
     {k:'tx',l:'Az elmúlt évben 10% feletti részesedést adtak el független félnek',t:'c',rr:1},
     {k:'txv',l:'Tranzakciós érték 100%-ra vetítve',u:'m',w:function(a){return a.tx}},
@@ -216,18 +216,18 @@ document.body.classList.add('js');
     ],d:{fy:YEAR},val:vEv},
     listed:{g:'Pénzügyi vagyon',l:'Tőzsdei részvény',ph:'pl. OTP, Richter, külföldi részvények',cls:'fin',cur:1,f:[
       {k:'cl',l:'Érték a záróárfolyamon',u:'m',s:'az év utolsó kereskedési napján'},
-      {k:'avg',l:'Érték az átlagárfolyamon',u:'m',s:'a tárgyév utolsó 30 napjának forgalommal súlyozott átlaga; elhagyható (a 2026-os külön átlagár-választást a benyújtott javaslat elhagyta)'},
+      {k:'avg',l:'Érték az átlagárfolyamon',u:'m',s:'a tárgyév utolsó 180 napjának forgalommal súlyozott átlaga; elhagyható (a 2026-os külön átlagár-választást a benyújtott javaslat elhagyta)'},
       {k:'huco',l:'Magyar társaság részvénye',t:'c'}
     ],val:vListed},
-    cash:{g:'Pénzügyi vagyon',l:'Bankszámla, betét, készpénz',ph:'pl. bankszámlák',cls:'fin',cur:1,f:amt('Záró egyenleg','december 31-én'),val:function(a){return vSimple(a,'21. § (1)',0,1,'Záró egyenleg / névérték')}},
-    bond:{g:'Pénzügyi vagyon',l:'Állampapír, kötvény',ph:'pl. MÁP Plusz',cls:'fin',cur:1,f:amt('Számított érték','tőzsdei: utolsó 20 kereskedési nap záróár-átlaga; nem forgalmazott: névérték'),val:function(a){return vSimple(a,'21. § (2)–(5), 35. § (3)',0.02,1,'20 napos záróár-átlag / névérték')}},
-    fund:{g:'Pénzügyi vagyon',l:'Befektetési alap, ETF',ph:'pl. befektetési alapok',cls:'fin',cur:1,f:amt('Érték nettó eszközértéken','december 31-i nettó eszközérték × darabszám'),val:function(a){return vSimple(a,'21. § (4)',0.1,1,'Nettó eszközérték')}},
-    crypto:{g:'Pénzügyi vagyon',l:'Kriptoeszköz',ph:'pl. bitcoin',cls:'fin',cur:1,f:amt('Érték a platform záróárfolyamán'),val:function(a){return vSimple(a,'21. § (12)',0.3,1,'Platform záróárfolyam')}},
-    metal:{g:'Pénzügyi vagyon',l:'Befektetési arany, ezüst',ph:'pl. aranyrúd',cls:'fin',cur:1,f:amt('Érték a referenciaáron','színfém × nemzetközi referenciaár'),val:function(a){return vSimple(a,'21. § (13)',0.1,1,'Referenciaár')}},
-    ins:{g:'Pénzügyi vagyon',l:'Biztosítás visszavásárlási értéke',ph:'pl. unit-linked',cls:'fin',cur:1,f:amt('Visszavásárlási érték','a szerződő vagyonában'),val:function(a){return vSimple(a,'21. § (8)',0.03,0,'Visszavásárlási érték')}},
-    pens:{g:'Pénzügyi vagyon',l:'Nyugdíjbiztosítás',ph:'pl. nyugdíjbiztosítás',cls:'fin',cur:1,f:amt('Visszavásárlási érték','a biztosított vagyonában'),val:function(a){return vSimple(a,'21. § (9)',0.03,0,'Visszavásárlási érték')}},
+    cash:{g:'Pénzügyi vagyon',l:'Bankszámla, betét, készpénz',ph:'pl. bankszámlák',cls:'fin',cur:1,f:amt('Záró egyenleg','december 31-én'),val:function(a){return vSimple(a,'25. § (1)',0,1,'Záró egyenleg / névérték')}},
+    bond:{g:'Pénzügyi vagyon',l:'Állampapír, kötvény',ph:'pl. MÁP Plusz',cls:'fin',cur:1,f:amt('Számított érték','tőzsdei: utolsó 20 kereskedési nap záróár-átlaga; nem forgalmazott: névérték'),val:function(a){return vSimple(a,'25. § (2)–(5), 39. § (2)',0.02,1,'20 napos záróár-átlag / névérték')}},
+    fund:{g:'Pénzügyi vagyon',l:'Befektetési alap, ETF',ph:'pl. befektetési alapok',cls:'fin',cur:1,f:amt('Érték nettó eszközértéken','december 31-i nettó eszközérték × darabszám'),val:function(a){return vSimple(a,'25. § (4)',0.1,1,'Nettó eszközérték')}},
+    crypto:{g:'Pénzügyi vagyon',l:'Kriptoeszköz',ph:'pl. bitcoin',cls:'fin',cur:1,f:amt('Érték a platform záróárfolyamán'),val:function(a){return vSimple(a,'25. § (12)',0.3,1,'Platform záróárfolyam')}},
+    metal:{g:'Pénzügyi vagyon',l:'Befektetési arany, ezüst',ph:'pl. aranyrúd',cls:'fin',cur:1,f:amt('Érték a referenciaáron','színfém × nemzetközi referenciaár'),val:function(a){return vSimple(a,'25. § (13)',0.1,1,'Referenciaár')}},
+    ins:{g:'Pénzügyi vagyon',l:'Biztosítás visszavásárlási értéke',ph:'pl. unit-linked',cls:'fin',cur:1,f:amt('Visszavásárlási érték','a szerződő vagyonában'),val:function(a){return vSimple(a,'25. § (8)',0.03,0,'Visszavásárlási érték')}},
+    pens:{g:'Pénzügyi vagyon',l:'Nyugdíjbiztosítás',ph:'pl. nyugdíjbiztosítás',cls:'fin',cur:1,f:amt('Visszavásárlási érték','a biztosított vagyonában'),val:function(a){return vSimple(a,'25. § (9)',0.03,0,'Visszavásárlási érték')}},
     recv:{g:'Pénzügyi vagyon',l:'Adott kölcsön, követelés',ph:'pl. tagi kölcsön',cls:'fin',cur:1,f:[{k:'am',l:'Fennálló tőkeösszeg',u:'m'},{k:'bad',l:'Ebből behajthatatlan',u:'m'}],val:vRecv},
-    deriv:{g:'Pénzügyi vagyon',l:'Származtatott ügylet (nyitott pozíció)',ph:'pl. CFD-pozíció',cls:'fin',cur:1,f:amt('Pozitív piaci érték','a szolgáltató december 31-i kimutatása'),val:function(a){return vSimple(a,'21. § (7)',0.2,1,'Pozitív piaci érték')}},
+    deriv:{g:'Pénzügyi vagyon',l:'Származtatott ügylet (nyitott pozíció)',ph:'pl. CFD-pozíció',cls:'fin',cur:1,f:amt('Pozitív piaci érték','a szolgáltató december 31-i kimutatása'),val:function(a){return vSimple(a,'25. § (7)',0.2,1,'Pozitív piaci érték')}},
     opt:{g:'Pénzügyi vagyon',l:'Opciós jog',ph:'pl. munkavállalói opció',cls:'fin',cur:1,f:[{k:'mk',l:'Szokásos piaci érték',u:'m'},{k:'iv',l:'Belső érték',u:'m',s:'mögöttes érték − gyakorlási ár'},{k:'perf',l:'Jövőbeli személyes teljesítménytől függ, addig nem gyakorolható és nem ruházható át',t:'c'}],val:vOpt},
     art:{g:'Értékes ingóság',l:'Műtárgy, ékszer (egyedi darab)',ph:'pl. festmény',cls:'mov',cur:1,f:[{k:'am',l:'Szokásos piaci érték',u:'m'},{k:'biz',l:'Vállalkozásban (egyéni vállalkozó, őstermelő, adószámos magánszemély) használt, vagy költséget számol el utána',t:'c'}],val:function(a){return vMov(a,RULES.MOV_ART,'műtárgy, ékszer')}},
     coll:{g:'Értékes ingóság',l:'Gyűjtemény (együtt értékelve)',ph:'pl. bélyeggyűjtemény',cls:'mov',cur:1,f:[{k:'am',l:'A gyűjtemény együttes értéke',u:'m'},{k:'biz',l:'Vállalkozásban (egyéni vállalkozó, őstermelő, adószámos magánszemély) használt',t:'c'}],val:function(a){return vMov(a,RULES.MOV_ART,'gyűjtemény')}},
@@ -240,7 +240,7 @@ document.body.classList.add('js');
       {k:'hup',l:'Magyarországi ingatlanon áll fenn',t:'c'}
     ],d:{ufm:'life',hup:true},val:vUf},
     mrp:{g:'Jogok és egyéb',l:'MRP-részesedés',ph:'pl. munkavállalói résztulajdonosi program',cls:'oth',f:[{k:'am',l:'A részesedés értéke',u:'mft'},{k:'spec',l:'Különleges MRP (nem a „sima” MRP)',t:'c'}],val:vMrp},
-    other:{g:'Jogok és egyéb',l:'Egyéb vagyonelem (szokásos piaci érték)',ph:'pl. önkéntes pénztári számla',cls:'oth',cur:1,f:amt('Szokásos piaci érték','a tervezet által nem nevesített elem: 10. §'),val:function(a){return vSimple(a,'10. §',0.15,0,'Szokásos piaci érték')}}
+    other:{g:'Jogok és egyéb',l:'Egyéb vagyonelem (szokásos piaci érték)',ph:'pl. önkéntes pénztári számla',cls:'oth',cur:1,f:amt('Szokásos piaci érték','a törvény által nem nevesített elem: 13. §'),val:function(a){return vSimple(a,'13. §',0.15,0,'Szokásos piaci érték')}}
   };
   var COMMON=[['own'],['reg'],['alloc'],['sh'],['cur'],['name'],['tr'],['col']];
 
@@ -256,55 +256,55 @@ document.body.classList.add('js');
   }
   function vReHu(a,kind){
     var st=[],fl=[],unc=0,V=0,rf,meth,m=a.m||'tx12';
-    if(m==='tx12'){V=n(a.tx);meth='12 hónapon belüli ügyleti érték';rf='15. § (1) a), 17. § (1)';st.push('Ügyleti érték: '+M(V))}
+    if(m==='tx12'){V=n(a.tx);meth='12 hónapon belüli ügyleti érték';rf='19. § (1) a), 21. § (1)';st.push('Ügyleti érték: '+M(V))}
     else if(m==='idx'){
       var b=n(a.iv),y=Math.round(n(a.iy)),r=n(a.ir)/100,yrs=y?Math.max(0,YEAR-y+0.5):0;
-      V=fin(b*Math.pow(1+r,yrs));unc=0.08;meth='Indexált ügyleti érték';rf='15. § (1) b), (3)–(5), 2. melléklet';
+      V=fin(b*Math.pow(1+r,yrs));unc=0.08;meth='Indexált ügyleti érték';rf='19. § (1) b), (3)–(5), 2. melléklet';
       st.push('Indexálás: '+M(b)+' × (1 '+(r<0?'−':'+')+' '+f1.format(Math.abs(r*100))+'%)^'+f1.format(yrs)+' év = '+M(V));
       if(!y) fl.push(['w','Adja meg az ügylet évét.']);
-      else if(y<YEAR-9) fl.push(['c','Az ügylet több mint 10 éve volt: indexált érték nem alkalmazható, NAV-modell vagy szakértői érték kell.'+ref('15. § (1) b)')]);
-      else if(y>=YEAR) fl.push(['w','Idei ügyletnél az ügyleti érték indexálás nélkül alkalmazandó.'+ref('17. § (1)')]);
-      fl.push(['i','A végleges indexált értéket a NAV kalkulátorával kell számolni '+(kind==='lak'?'(MNB-lakásárindex)':kind==='fold'?'(KSH termőföldár)':'(KSH-árindex)')+'; itt becsült éves változással számolunk.'+ref('17. § (6)')]);
-      if(kind==='egy') fl.push(['w','Nem lakás és nem termőföld: a 15. § (5) KSH-indexet enged, a 2. melléklet 1.4. pontja szerint viszont nem indexálható – a szöveg ellentmondásos.']);
+      else if(y<YEAR-9) fl.push(['c','Az ügylet több mint 10 éve volt: indexált érték nem alkalmazható, NAV-modell vagy szakértői érték kell.'+ref('19. § (1) b)')]);
+      else if(y>=YEAR) fl.push(['w','Idei ügyletnél az ügyleti érték indexálás nélkül alkalmazandó.'+ref('21. § (1)')]);
+      fl.push(['i','A végleges indexált értéket a NAV kalkulátorával kell számolni '+(kind==='lak'?'(MNB-lakásárindex)':kind==='fold'?'(KSH termőföldár)':'(KSH-árindex)')+'; itt becsült éves változással számolunk.'+ref('19. § (4)')]);
+      if(kind==='egy') fl.push(['i','Nem lakás és nem termőföld: az indexálás a KSH ingatlantípusra alkalmazható éves árindexével, a NAV kalkulátorával történik (a 2. melléklet MNB-, illetve KSH-termőföld-indexe itt nem alkalmazható).'+ref('19. § (4)–(5), 2. mell. 1.4.')]);
     }
-    else if(m==='model'){V=n(a.mv);unc=0.15;meth='NAV tömeges modell / becsült érték';rf='15. § (1) c), 17. § (3), 18. §';st.push('NAV-modell vagy becsült piaci érték: '+M(V));
-      fl.push(['i','A NAV-modell ott alkalmazandó, ahol nincs 10 éven belüli ügyleti érték. Helyette független szakértői érték is választható, ami bírságvédelmet ad.'+ref('17. § (3)–(4), 27. § (2)')])}
-    else{V=n(a.ev);unc=0.05;meth='Független szakértői forgalmi érték';rf='17. § (4), 19. §';st.push('Szakértői forgalmi érték: '+M(V));
-      if(V>=500&&kind!=='fold') fl.push(['w','500 M Ft-ot elérő ingatlant csak igazságügyi ingatlanforgalmi szakértő értékelhet, legalább két módszerrel.'+ref('19. § (3), (7)')]);
-      fl.push(['i','Szabályszerű szakértői értéknél a NAV magasabb értéke után sem jár bírság és pótlék.'+ref('27. § (2)–(3)')]);
-      fl.push(['i',(V>=500&&kind!=='fold')?'Az értékelés itt kötelező, ezért díjának 50%-a (legfeljebb 2 M Ft) levonható az adóból – írja be az 5. pontban.'+ref('9. § (2) a)'):'Önként választott értékelés díja a tervezet szövege szerint nem vonható le: a levonás csak a kötelezően igénybe vett értékelőre jár.'+ref('9. § (2) a)')]);
-      fl.push(['w','Ha a fordulónapot megelőző 12 hónapban adásvétel vagy öröklés történt, a szakértői érték csak kivételesen, az ügylet sajátos körülményeinek igazolásával alkalmazható az ügyleti érték helyett.'+ref('17. § (4)')])}
-    if(a.chg&&(m==='tx12'||m==='idx')) fl.push(['c','Lényeges állapotváltozás után az ügyleti és az indexált érték nem alkalmazható: szakértői forgalmi érték kell.'+ref('15. § (3), 17. § (1)')]);
+    else if(m==='model'){V=n(a.mv);unc=0.15;meth='NAV tömeges modell / becsült érték';rf='19. § (1) c), 21. § (3), 22. §';st.push('NAV-modell vagy becsült piaci érték: '+M(V));
+      fl.push(['i','A NAV-modell ott alkalmazandó, ahol nincs 10 éven belüli ügyleti érték. Helyette független szakértői érték is választható, ami bírságvédelmet ad.'+ref('21. § (3)–(4), 31. § (2)')])}
+    else{V=n(a.ev);unc=0.05;meth='Független szakértői forgalmi érték';rf='21. § (4), 23. §';st.push('Szakértői forgalmi érték: '+M(V));
+      if(V>=500&&kind!=='fold') fl.push(['w','500 M Ft-ot elérő ingatlant csak igazságügyi ingatlanforgalmi szakértő értékelhet, legalább két módszerrel.'+ref('23. § (3), (11)')]);
+      fl.push(['i','Szabályszerű szakértői értéknél a NAV magasabb értéke után sem jár bírság és pótlék.'+ref('31. § (2)–(3)')]);
+      fl.push(['i',(V>=500&&kind!=='fold')?'Az értékelés itt kötelező, ezért díjának 50%-a (legfeljebb 2 M Ft) levonható az adóból – írja be az 5. pontban.'+ref('12. § (2) a)'):'Önként választott értékelés díja a javaslat szövege szerint nem vonható le: a levonás csak a kötelezően igénybe vett értékelőre jár.'+ref('12. § (2) a)')]);
+      fl.push(['w','Ha a fordulónapot megelőző 12 hónapban adásvétel vagy öröklés történt, a szakértői érték csak kivételesen, az ügylet sajátos körülményeinek igazolásával alkalmazható az ügyleti érték helyett.'+ref('21. § (4)')])}
+    if(a.chg&&(m==='tx12'||m==='idx')) fl.push(['c','Lényeges állapotváltozás után az ügyleti és az indexált érték nem alkalmazható: szakértői forgalmi érték kell.'+ref('19. § (3), 21. § (1)')]);
     var sh=shareOf(a),v=V*sh;if(sh!==1) st.push('Tulajdoni hányad '+P(sh*100)+': '+M(v));
-    if(a.uf){var u=itv72(V,a.ufm,n(a.ufa),n(a.uft)),d=Math.min(v,u.v*sh);v-=d;st.push('Haszonélvezet levonása: − '+M(d)+' ('+u.t+')');rf+=', 22. § (5)';
+    if(a.uf){var u=itv72(V,a.ufm,n(a.ufa),n(a.uft)),d=Math.min(v,u.v*sh);v-=d;st.push('Haszonélvezet levonása: − '+M(d)+' ('+u.t+')');rf+=', 26. § (5)';
       if(a.ufm!=='term'&&!has(a.ufa)) fl.push(['w','Adja meg a haszonélvező életkorát.']);
-      fl.push(['i','A jog értéke akkor vonható le, ha a számított érték a jog figyelmen kívül hagyásával készült (pl. a jogot az ügylet után alapították, vagy NAV-modell).'+ref('22. § (5)')])}
+      fl.push(['i','A jog értéke akkor vonható le, ha a számított érték a jog figyelmen kívül hagyásával készült (pl. a jogot az ügylet után alapították, vagy NAV-modell).'+ref('26. § (5)')])}
     return {v:v,vHu:v,inc:true,liq:0,cls:'re',unc:unc,st:st,ref:rf,cr:n(a.lt),fl:fl,meth:meth};
   }
   function vReKulf(a){
     var r=fx(a.cur),m=a.m||'acq',V=0,st=[],fl=[],unc=0,rf,meth;
     if(m==='acq'){
       var g=a.gm==='idx'?n(a.gi)/100:0.03,y=Math.round(n(a.ay)),yrs=y?Math.max(0,YEAR-y):0,b=n(a.av)*r;
-      V=fin(b*Math.pow(1+g,yrs));meth='Szerzési érték továbbvezetve ('+(a.gm==='idx'?'helyi index':'évi 3%')+')';rf='16. § (1)–(2)';
+      V=fin(b*Math.pow(1+g,yrs));meth='Szerzési érték továbbvezetve ('+(a.gm==='idx'?'helyi index':'évi 3%')+')';rf='20. § (1)–(2)';
       st.push('Szerzési érték: '+curTxt(n(a.av),a.cur,r));
       st.push('Továbbvezetés '+yrs+' évre '+(a.gm==='idx'?'('+P(g*100)+'/év)':'(3%/év)')+': '+M(V));
       if(n(a.inv)){var iy=has(a.invy)?Math.round(n(a.invy)):YEAR,iv=fin(n(a.inv)*r*Math.pow(1+g,Math.max(0,YEAR-iy)));V+=iv;st.push('Értéknövelő beruházás ('+iy+'): + '+M(iv))}
       if(!y) fl.push(['w','Adja meg a szerzés évét.']);
-      fl.push(['i','Ha az ingatlan valós értéke alacsonyabb a továbbvezetett értéknél, helyi szakértői értékkel igazolható.'+ref('16. § (5)')]);
-    } else if(m==='off'){V=n(a.ov)*r;unc=0.05;meth='Helyi hatósági érték';rf='16. § (3)';st.push('Hatósági érték: '+curTxt(n(a.ov),a.cur,r))}
-    else{V=n(a.ev)*r;unc=0.05;meth='Helyi szakértői forgalmi érték';rf='16. § (4)–(5), 19. § (1) c)';st.push('Szakértői érték: '+curTxt(n(a.ev),a.cur,r))}
+      fl.push(['i','Ha az ingatlan valós értéke alacsonyabb a továbbvezetett értéknél, helyi szakértői értékkel igazolható.'+ref('20. § (6)')]);
+    } else if(m==='off'){V=n(a.ov)*r;unc=0.05;meth='Helyi hatósági érték';rf='20. § (4)';st.push('Hatósági érték: '+curTxt(n(a.ov),a.cur,r))}
+    else{V=n(a.ev)*r;unc=0.05;meth='Helyi szakértői forgalmi érték';rf='20. § (5)–(6), 23. § (2)';st.push('Szakértői érték: '+curTxt(n(a.ev),a.cur,r))}
     var sh=shareOf(a),v=V*sh;if(sh!==1) st.push('Tulajdoni hányad '+P(sh*100)+': '+M(v));
-    if(a.cur&&a.cur!=='HUF') fl.push(['i','Az átszámítás az MNB december 31-i hivatalos árfolyamán történik.'+ref('11. §')]);
+    if(a.cur&&a.cur!=='HUF') fl.push(['i','Az átszámítás az MNB december 31-i hivatalos árfolyamán történik.'+ref('14. §')]);
     return {v:v,vHu:0,inc:true,liq:0,cls:'re',unc:unc,st:st,ref:rf,cr:n(a.lt),fl:fl,meth:meth,tr:1};
   }
   function coCore(a,kulf,ev){
-    var r=kulf?fx(a.cur):1,st=[],fl=[],rf=ev?'13. §, 1. melléklet':kulf?'12. § (3), (8), 1. melléklet':'12. § (3), 1. melléklet';
+    var r=kulf?fx(a.cur):1,st=[],fl=[],rf=ev?'16. §, 1. melléklet':kulf?'15. § (3), (8), 1. melléklet':'15. § (3), 1. melléklet';
     var ST=n(a.st)*r,RT=n(a.rt)*r,DT=has(a.dtl)?n(a.dtl)*r:0.15*RT,DIV=ev?0:n(a.div)*r;
     var ae=['ae1','ae2','ae3'].filter(function(k){return has(a[k])}).map(function(k){return n(a[k])*r});
     var Tc=kulf&&has(a.T)&&n(a.T)>0?n(a.T)/100:RULES.CAP_RATE;
     var avg=ae.length?ae.reduce(sum,0)/ae.length:0,STa=ST<0?0:ST;
-    if(ST<0) st.push((ev?'Negatív nettó vállalkozási vagyon ':'Negatív saját tőke ')+M(ST)+' → nullának tekintendő, a hozamértéket nem csökkenti (T/930 1. mell. V. a))');
-    if(ST>RULES.HIDDEN_ST){var hr=Math.max(0,RT-DT);STa=ST+hr;st.push((ev?'Nettó vállalkozási vagyon ':'Saját tőke ')+M(ST)+' > 500 M Ft → + rejtett tartalék ('+M(RT)+' − halasztott adó '+M(DT)+(has(a.dtl)?'':' [becslés hiányában a rejtett tartalék 15%-a, 2. § 14. pont]')+') = '+M(STa));
+    if(ST<0) st.push((ev?'Negatív nettó vállalkozási vagyon ':'Negatív saját tőke ')+M(ST)+' → nullának tekintendő, a hozamértéket nem csökkenti (1. mell. V. a))');
+    if(ST>RULES.HIDDEN_ST){var hr=Math.max(0,RT-DT);STa=ST+hr;st.push((ev?'Nettó vállalkozási vagyon ':'Saját tőke ')+M(ST)+' > 500 M Ft → + rejtett tartalék ('+M(RT)+' − halasztott adó '+M(DT)+(has(a.dtl)?'':' [becslés hiányában a rejtett tartalék 15%-a, 5. § 15. pont]')+') = '+M(STa));
       if(!has(a.rt)) fl.push(['w','500 M Ft feletti '+(ev?'nettó vállalkozási vagyonnál':'saját tőkénél')+' a rejtett tartalékkal növelt érték számít: adja meg a befektetett ingatlanok, részesedések és értékpapírok piaci és könyv szerinti értékének különbözetét.'+ref('1. melléklet IV. b)–c)')])}
     else st.push((ev?'Nettó vállalkozási vagyon: ':'Saját tőke: ')+M(ST));
     if(DIV>0){STa=Math.max(0,STa-DIV);st.push('Mérlegfordulónap után jóváhagyott osztalék: − '+M(DIV)+' → '+M(STa))}
@@ -312,7 +312,7 @@ document.body.classList.add('js');
     if(!ae.length) fl.push(['w','Adjon meg legalább egy lezárt év adózott eredményét.']);
     st.push('Átlagos adózott eredmény '+M(avg)+(ae.length&&ae.length<3?' ('+ae.length+' év adatából)':'')+(avg<0?' negatív → H = 0':' → H = '+M(avg)+' ÷ '+f1.format(Tc*100)+'% = '+M(H)));
     var fy=fyOf(a),fd=has(a.fd)?Math.round(n(a.fd)):0,V100;
-    if(a.simp&&!ev&&ST<=100){V100=STa;mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = saját tőke = '+M(V100)+' (T/930 15. § (9))')}
+    if(a.simp&&!ev&&ST<=100){V100=STa;mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = saját tőke = '+M(V100)+' (15. § (9))')}
     else if(a.hold&&!ev){V100=STa;mode='II. pont (holding)';st.push('Holding: V = ST = '+M(V100))}
     else{
       if(fd&&fy-fd<=2){if(ST<=RULES.HIDDEN_ST&&!(H>0.25*ST)){H=0;mode='III. pont (induló cég)';st.push('Alapítás '+fd+', beszámoló '+fy+' → induló időszak, H = 0')}
@@ -323,48 +323,48 @@ document.body.classList.add('js');
   }
   function vCo(a,kulf){
     var c=coCore(a,kulf,false),st=c.st,fl=c.fl,rf=c.rf,V100=c.V100,meth='Törvényi képlet, '+c.mode,r=c.r;
-    if(a.tx){V100=n(a.txv)*r;meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100));rf+=', V. c)'}
+    if(a.tx){V100=n(a.txv)*r;meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100));rf+=', V. e)'}
     var q=shareOf(a),v=V100*q,disc=0;
     if(q!==1) st.push('Tulajdoni hányad '+P(q*100)+': '+M(v));
     var qt=qtOf(a);
-    if(q>0&&qt<0.5&&a.disc){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'): '+M(v));rf+=', V. b)'}
-    else if(q>0&&qt<0.5) fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. melléklet V. b), T/930 1. mell. V. d)')]);
-    else if(q>0&&q<0.5&&qt>=0.5) fl.push(['i','A közvetett és a közeli hozzátartozói hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható (a benyújtott javaslat a Ptk. szerinti közeli hozzátartozók részesedését összeszámítja; az élettársét nem).'+ref('T/930 1. mell. V. d)')]);
-    if(!a.simp&&!a.hold&&!a.val&&!a.tx&&has(a.st)&&c.ST*r<=100) fl.push(['i','Legfeljebb 100 M Ft saját tőkénél a képlet helyett választható az egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része.'+ref('T/930 15. § (9)')]);
-    if(a.val){v=n(a.vv)*r;meth='Független cégértékelés';st=['Független cégértékelés (legalább két módszer): '+M(v)];rf='12. § (4)–(7)'}
-    if(kulf&&c.ST>RULES.HIDDEN_ST&&!has(a.rt)&&!a.val) fl.push(['c','Külföldi társaságnál, ha a rejtett tartalék adatai nem állnak rendelkezésre, független cégértékelés kötelező.'+ref('12. § (8)')]);
-    if(!kulf&&c.ST>RULES.HIDDEN_ST) fl.push(['i','Az 500 M Ft feletti saját tőkéjű belföldi társaság a tulajdonos kérésére közli a rejtett tartalék adatait; könyvvizsgálói felülvizsgálat nem szükséges, ha a piaci értéket a törvény szerinti számítással állapítják meg.'+ref('T/930 34. § (1)–(2), 1. mell. IV. c)')]);
-    if(c.fy>=YEAR&&!a.val&&!a.tx) fl.push(['i','A 2026-os adóhoz a bevalláskor elérhető utolsó lezárt beszámoló számít – naptári üzleti évnél már a 2026-os. A 2026-os eredmény és osztalékdöntés tehát még alakítja az értéket.'+ref('2. § 37. pont')]);
+    if(q>0&&qt<0.5&&a.disc){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'): '+M(v));rf+=', V. d)'}
+    else if(q>0&&qt<0.5) fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. melléklet V. d)')]);
+    else if(q>0&&q<0.5&&qt>=0.5) fl.push(['i','A közvetett és a közeli hozzátartozói hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható (a benyújtott javaslat a Ptk. szerinti közeli hozzátartozók részesedését összeszámítja; az élettársét nem).'+ref('1. mell. V. d)')]);
+    if(!a.simp&&!a.hold&&!a.val&&!a.tx&&has(a.st)&&c.ST*r<=100) fl.push(['i','Legfeljebb 100 M Ft saját tőkénél a képlet helyett választható az egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része.'+ref('15. § (9)')]);
+    if(a.val){v=n(a.vv)*r;meth='Független cégértékelés';st=['Független cégértékelés (legalább két módszer): '+M(v)];rf='15. § (4)–(7)'}
+    if(kulf&&c.ST>RULES.HIDDEN_ST&&!has(a.rt)&&!a.val) fl.push(['c','Külföldi társaságnál, ha a rejtett tartalék adatai nem állnak rendelkezésre, független cégértékelés kötelező.'+ref('15. § (8)')]);
+    if(!kulf&&c.ST>RULES.HIDDEN_ST) fl.push(['i','Az 500 M Ft feletti saját tőkéjű belföldi társaság a tulajdonos kérésére közli a rejtett tartalék adatait; könyvvizsgálói felülvizsgálat nem szükséges, ha a piaci értéket a törvény szerinti számítással állapítják meg.'+ref('34. § (1)–(2), 1. mell. IV. c)')]);
+    if(c.fy>=YEAR&&!a.val&&!a.tx) fl.push(['i','A 2026-os adóhoz a bevalláskor elérhető utolsó lezárt beszámoló számít – naptári üzleti évnél már a 2026-os. A 2026-os eredmény és osztalékdöntés tehát még alakítja az értéket.'+ref('5. § 40. pont')]);
     var hd=kulf&&has(a.hdebt)?Math.min(n(a.hre)*r,n(a.hdebt)*r):0,vHu=kulf?(has(a.hre)?Math.max(0,n(a.hre)*r-hd)*q:0):v;
-    if(kulf&&has(a.hre)) st.push('Külföldi illetőségűnél: belföldi ingatlanok '+M(n(a.hre)*r)+(hd?' − kapcsolódó tartozás '+M(hd):'')+' × '+P(q*100)+' = '+M(vHu)+' (T/930 18. §)');
+    if(kulf&&has(a.hre)) st.push('Külföldi illetőségűnél: belföldi ingatlanok '+M(n(a.hre)*r)+(hd?' − kapcsolódó tartozás '+M(hd):'')+' × '+P(q*100)+' = '+M(vHu)+' (18. §)');
     var unc=(a.val||a.tx)?0.03:(c.fy>=YEAR?0.10:0.02);
     return {v:Math.max(0,fin(v)),vHu:Math.max(0,fin(vHu)),inc:true,liq:0,cls:'co',unc:unc,st:st,ref:rf,cr:0,fl:fl,meth:meth,tr:kulf?1:0};
   }
   function vEv(a){
     var c=coCore(a,false,true);
-    c.fl.push(['i','Csak a vállalkozói jövedelem szerint adózó egyéni vállalkozónál; átalányadózónál és őstermelőnél elemenként kell értékelni.'+ref('13. § (4)')]);
+    c.fl.push(['i','Csak a vállalkozói jövedelem szerint adózó egyéni vállalkozónál; átalányadózónál és őstermelőnél elemenként kell értékelni.'+ref('16. § (4)')]);
     return {v:Math.max(0,c.V100),vHu:0,inc:true,liq:0,cls:'co',unc:c.fy>=YEAR?0.1:0.02,st:c.st,ref:c.rf,cr:0,fl:c.fl,meth:'Törvényi képlet, '+c.mode};
   }
   function vListed(a){
     var r=fx(a.cur),cl=n(a.cl)*r,av=has(a.avg)?n(a.avg)*r:0,v=cl,st=['Záróárfolyamon: '+curTxt(n(a.cl),a.cur,r)],meth='Záróárfolyam';
     if(av>0&&Math.abs(cl-av)/av>0.10){v=av;meth='Átlagárfolyam';st.push('A záróár több mint 10%-kal eltér az átlagtól → átlagárfolyamon: '+M(av))}
-    return {v:v,vHu:a.huco?v:0,inc:true,liq:1,cls:'fin',unc:0.15,st:st,ref:'12. § (1)–(2), 35. § (2)',cr:0,fl:[],meth:meth};
+    return {v:v,vHu:a.huco?v:0,inc:true,liq:1,cls:'fin',unc:0.15,st:st,ref:'15. § (1)–(2)',cr:0,fl:[],meth:meth};
   }
   function vSimple(a,rf,unc,liq,meth){var r=fx(a.cur),v=n(a.am)*r;return {v:v,vHu:0,inc:true,liq:liq,cls:TYPES[a.t].cls,unc:unc,st:[meth+': '+curTxt(n(a.am),a.cur,r)],ref:rf,cr:0,fl:[],meth:meth}}
-  function vRecv(a){var r=fx(a.cur),p=n(a.am)*r,b=n(a.bad)*r,v=Math.max(0,p-b);return {v:v,vHu:0,inc:true,liq:0,cls:'fin',unc:0,st:['Tőkeösszeg '+M(p)+(b?' − behajthatatlan '+M(b):'')+' = '+M(v)],ref:'21. § (6)',cr:0,fl:[],meth:'Tőkeösszeg'}}
+  function vRecv(a){var r=fx(a.cur),p=n(a.am)*r,b=n(a.bad)*r,v=Math.max(0,p-b);return {v:v,vHu:0,inc:true,liq:0,cls:'fin',unc:0,st:['Tőkeösszeg '+M(p)+(b?' − behajthatatlan '+M(b):'')+' = '+M(v)],ref:'25. § (6)',cr:0,fl:[],meth:'Tőkeösszeg'}}
   function vOpt(a){var r=fx(a.cur),mk=n(a.mk)*r,iv=n(a.iv)*r,v=a.perf?0:Math.max(mk,iv);
-    return {v:v,vHu:0,inc:!a.perf,why:'teljesítményhez kötött, nem gyakorolható opció – nem kell figyelembe venni (23. § (7))',liq:0,cls:'fin',unc:0.2,st:a.perf?['Teljesítményhez kötött, nem gyakorolható és nem átruházható → 0']:['Piaci érték '+M(mk)+' és belső érték '+M(iv)+' közül a magasabb: '+M(v)],ref:'23. §',cr:0,fl:[],meth:'Piaci és belső érték közül a magasabb'}}
+    return {v:v,vHu:0,inc:!a.perf,why:'teljesítményhez kötött, nem gyakorolható opció – nem kell figyelembe venni (27. § (7))',liq:0,cls:'fin',unc:0.2,st:a.perf?['Teljesítményhez kötött, nem gyakorolható és nem átruházható → 0']:['Piaci érték '+M(mk)+' és belső érték '+M(iv)+' közül a magasabb: '+M(v)],ref:'27. §',cr:0,fl:[],meth:'Piaci és belső érték közül a magasabb'}}
   function vMov(a,lim,what){var r=fx(a.cur),v=n(a.am)*r,inc=v>lim||!!a.biz;
-    return {v:v,vHu:0,inc:inc,why:'személyes használati tárgy, '+what+' '+lim+' M Ft-os értékhatár alatt (6. § (3))',liq:0,cls:'mov',unc:0.2,st:['Szokásos piaci érték: '+curTxt(n(a.am),a.cur,r)+(inc?(a.biz&&v<=lim?' – vállalkozásban használt, teljes értéken (6. § (4))':''):' – értékhatár alatt, nem adóköteles')],ref:'6. § (3)–(4), 20. §',cr:n(a.gt),fl:inc&&!a.biz?[['i','Ingóságnál az elsődleges érték a 12 hónapon belüli vételár, majd összehasonlító ár, végül piaci biztosítási érték; szakértői érték választható.'+ref('20. § (2)–(3)')]]:[],meth:'Szokásos piaci érték'}}
+    return {v:v,vHu:0,inc:inc,why:'személyes használati tárgy, '+what+' '+lim+' M Ft-os értékhatár alatt (9. § (3))',liq:0,cls:'mov',unc:0.2,st:['Szokásos piaci érték: '+curTxt(n(a.am),a.cur,r)+(inc?(a.biz&&v<=lim?' – vállalkozásban használt, teljes értéken (9. § (4))':''):' – értékhatár alatt, nem adóköteles')],ref:'9. § (3)–(4), 24. §',cr:n(a.gt),fl:inc&&!a.biz?[['i','Ingóságnál az elsődleges érték a 12 hónapon belüli vételár, majd összehasonlító ár, végül piaci biztosítási érték; szakértői érték választható.'+ref('24. § (2)–(3)')]]:[],meth:'Szokásos piaci érték'}}
   function vUf(a){var u=itv72(n(a.pv),a.ufm,n(a.ufa),n(a.uft)),fl=[];if(a.ufm!=='term'&&!has(a.ufa)) fl.push(['w','Adja meg az életkorát.']);
-    return {v:u.v,vHu:a.hup?u.v:0,inc:true,liq:0,cls:'oth',unc:0.1,st:['Terhelt vagyonelem '+M(n(a.pv))+' → '+u.t+' = '+M(u.v)],ref:'22. § (1)–(2), Itv. 72. §',cr:0,fl:fl,meth:'Illetéktörvény 72. § szerinti érték'}}
-  function vMrp(a){var v=n(a.am);return {v:v,vHu:0,inc:!!a.spec,why:'nem különleges MRP – nem kell figyelembe venni (6. § (5))',liq:0,cls:'oth',unc:0.1,st:['Részesedés értéke: '+M(v)+(a.spec?'':' – sima MRP, kimarad')],ref:'6. § (5), 14. § (9)',cr:0,fl:[],meth:'MRP'}}
+    return {v:u.v,vHu:a.hup?u.v:0,inc:true,liq:0,cls:'oth',unc:0.1,st:['Terhelt vagyonelem '+M(n(a.pv))+' → '+u.t+' = '+M(u.v)],ref:'26. § (1)–(2), Itv. 72. §',cr:0,fl:fl,meth:'Illetéktörvény 76. § szerinti érték'}}
+  function vMrp(a){var v=n(a.am);return {v:v,vHu:0,inc:!!a.spec,why:'nem különleges MRP – nem kell figyelembe venni (9. § (5))',liq:0,cls:'oth',unc:0.1,st:['Részesedés értéke: '+M(v)+(a.spec?'':' – sima MRP, kimarad')],ref:'9. § (5), 17. § (9)',cr:0,fl:[],meth:'MRP'}}
   function valOf(a){try{if(!TYPES[a.t])throw new Error('type');var r=TYPES[a.t].val(a);r.v=fin(r.v);r.vHu=fin(r.vHu);r.cr=fin(r.cr);return r}catch(e){return {v:0,vHu:0,inc:false,why:'hibás adat',liq:0,cls:'oth',unc:0,st:[],ref:'',cr:0,fl:[['w','Hiányos adat.']],meth:'—'}}}
   function typeLabel(a){return TYPES[a.t]?TYPES[a.t].l:'Vagyonelem'}
 
   /* ---------- Adóalanyok, tulajdon ---------- */
   function residency(){var p=S.p;if(p.cit==='y')return p.ab==='y'?{bel:false,code:'kul10'}:{bel:true,code:'bel'};return p.fst==='res'?{bel:true,code:'bel_kulf'}:{bel:false,code:'kul_'+p.fst}}
-  function bvkRes(b,res){if(b.law!=='kulf')return {bel:true,why:'magyar jogú: mindig belföldi illetőségű (2. § 4. pont)'};if(b.ctrl!=='kulf')return {bel:true,why:'a tényleges irányítás Magyarországon van (2. § 35. pont)'};return {bel:false,why:'külföldi jog, külföldi irányítás'+(res.bel?' – belföldi vagyonrendelőnél a vélelmet meg kell dönteni':'')}}
+  function bvkRes(b,res){if(b.law!=='kulf')return {bel:true,why:'magyar jogú: mindig belföldi illetőségű (5. § 4. pont)'};if(b.ctrl!=='kulf')return {bel:true,why:'a tényleges irányítás Magyarországon van (5. § 38. pont)'};return {bel:false,why:'külföldi jog, külföldi irányítás'+(res.bel?' – belföldi vagyonrendelőnél a vélelmet meg kell dönteni':'')}}
   function ownerOpts(){var o=[['me','Ön']];if(S.p.mar)o.push(['sp','Házastárs'],['joint','Házastársi közös – fele-fele'],['jointc','Közös, egyikük nevén nyilvántartva']);o.push(['minor','Kiskorú gyermek (szülőnél adózik)'],['minorinh','Kiskorú gyermek öröksége / keresménye']);S.bvks.forEach(function(b){o.push(['bvk:'+b.id,'BVK: '+(b.name||'névtelen')])});return o}
   function ownerName(own){var o=ownerOpts().filter(function(x){return x[0]===own})[0];return o?o[1]:'Ön'}
   function alloc(own,a,ctx){
@@ -393,7 +393,7 @@ document.body.classList.add('js');
       var r=VC[a.id]||(VC[a.id]=valOf(a)),sc=ctx.scale?fin(ctx.scale(a,r)):1;
       alloc(a.own,a,{tp:tp,choice:ctx.choice,flat:ctx.flat}).forEach(function(pf){
         var t=tp[pf[0]]||tp.me,f=pf[1],base=fin((t.res?r.v:r.vHu)*f*sc),incl=r.inc&&base>0;
-        var why=!r.inc?r.why:(!t.res&&!(r.vHu>0)?'külföldi illetőségű adóalanynál nem adóköteles (4. § (2))':'');
+        var why=!r.inc?r.why:(!t.res&&!(r.vHu>0)?'külföldi illetőségű adóalanynál nem adóköteles (7. § (2))':'');
         t.items.push({a:a,r:r,f:f,amt:incl?base:0,incl:incl,why:why,gross:fin(r.v*f*sc)});
         if(incl){t.gross+=base;t.cr+=(r.cr||0)*f;if(t.res&&a.tr&&r.tr)t.treaty+=base;if(r.liq)t.liq+=base;else t.illiq+=base}
       });
@@ -402,8 +402,8 @@ document.body.classList.add('js');
       var am=fin(n(d.am)*fx(d.cur));
       alloc(d.own,d,{tp:tp,choice:ctx.choice,flat:ctx.flat}).forEach(function(pf){
         var t=tp[pf[0]]||tp.me,x=am*pf[1],ok=true,why='';
-        if(d.kind==='inf'){ok=false;why='nem okiratolt – nem vonható le (6. § (1))'}
-        else if(!t.res){var li=d.link&&t.items.some(function(it){return it.a.id===d.link&&it.incl});if(!li){ok=false;why='külföldi illetőségűnél csak az adóköteles magyar vagyonelemhez közvetlenül kapcsolódó tartozás vonható le (6. § (2))'}}
+        if(d.kind==='inf'){ok=false;why='nem okiratolt – nem vonható le (9. § (1))'}
+        else if(!t.res){var li=d.link&&t.items.some(function(it){return it.a.id===d.link&&it.incl});if(!li){ok=false;why='külföldi illetőségűnél csak az adóköteles magyar vagyonelemhez közvetlenül kapcsolódó tartozás vonható le (9. § (2))'}}
         t.debts.push({d:d,amt:x,ok:ok,why:why});if(ok)t.debt+=x;
         if(ok&&d.link&&t.items.some(function(it){return it.a.id===d.link&&it.incl&&it.a.tr&&it.r.tr}))t.tdebt+=x;
       });
@@ -435,31 +435,31 @@ document.body.classList.add('js');
   /* ---------- Figyelmeztetések ---------- */
   function globalFlags(r,opt,diff){
     var f=[],res=r.res,p=S.p;
-    if(res.code==='bel') f.push(['i','Belföldi illetőségű: a teljes világvagyona adózik – külföldön élve is, kettős állampolgárként is, amíg nem él legalább 10 éve külföldön.'+ref('2. § 3. pont')]);
-    if(res.code==='bel_kulf') f.push(['i','Magyarországon élő külföldi állampolgár: belföldi illetőségű, a világvagyona adózik.'+ref('2. § 3. pont')]);
-    if(!res.bel) f.push(['i','Külföldi illetőségű: csak a magyarországi ingatlan, az ahhoz kapcsolódó jog, a magyar társasági részesedés és a magyar ingatlanos társaság részesedése adózik; tartozásból csak az ezekhez közvetlenül kapcsolódó vonható le.'+ref('4. § (2), 6. § (2)')]);
-    if(res.code==='kul_post') f.push(['w','A kiküldetési kivétel csak a munkavégzés kezdetétől 5 évig él; a már itt dolgozóknál a hatálybalépéstől számít.'+ref('2. § 3. pont a), 34. § (1)')]);
-    if(res.code==='kul_ltr') f.push(['w','A huzamos tartózkodási kivétel évente vizsgálandó: 183 nap felett belföldi illetőségűvé válik.'+ref('2. § 3. pont c)')]);
-    if(res.code==='kul10') f.push(['w','A 10 éves külföldi életvitelt a tárgyév utolsó napjára kell igazolni (lakóhely, munka, család, illetőségigazolás).'+ref('2. § 3. pont b)')]);
+    if(res.code==='bel') f.push(['i','Belföldi illetőségű: a teljes világvagyona adózik – külföldön élve is, kettős állampolgárként is, amíg nem él legalább 10 éve külföldön.'+ref('5. § 3. pont')]);
+    if(res.code==='bel_kulf') f.push(['i','Magyarországon élő külföldi állampolgár: belföldi illetőségű, a világvagyona adózik.'+ref('5. § 3. pont')]);
+    if(!res.bel) f.push(['i','Külföldi illetőségű: csak a magyarországi ingatlan, az ahhoz kapcsolódó jog, a magyar társasági részesedés és a magyar ingatlanos társaság részesedése adózik; tartozásból csak az ezekhez közvetlenül kapcsolódó vonható le.'+ref('7. § (2), 9. § (2)')]);
+    if(res.code==='kul_post') f.push(['w','A kiküldetési kivétel csak a munkavégzés kezdetétől 5 évig él; a már itt dolgozóknál a hatálybalépéstől számít.'+ref('5. § 3. pont a), 38. § (1)')]);
+    if(res.code==='kul_ltr') f.push(['w','A huzamos tartózkodási kivétel évente vizsgálandó: 183 nap felett belföldi illetőségűvé válik.'+ref('5. § 3. pont c)')]);
+    if(res.code==='kul10') f.push(['w','A 10 éves külföldi életvitelt a tárgyév utolsó napjára kell igazolni (lakóhely, munka, család, illetőségigazolás).'+ref('5. § 3. pont b)')]);
     r.order.forEach(function(id){var t=r.tp[id];if(t.kind==='ind'&&t.allow-t.net>0&&t.allow-t.net<=200&&t.net>0) f.push(['w',esc(t.name)+': a nettó vagyon csak '+M(t.allow-t.net)+'-tal van a mentes sáv alatt – egy erős tőzsdei év vagy átértékelés átbillentheti.'])});
-    if(r.total>0) f.push(['c','Bevallás és befizetés: 2027. augusztus 31., kötelezően elektronikusan, ezer forintra kerekítve. Bevallani csak fizetendő adó esetén kell.'+ref('25. §')]);
-    r.order.forEach(function(id){var t=r.tp[id];if(t.tax>0&&t.gross>0&&t.illiq/t.gross>=0.5) f.push(['w',esc(t.name)+': a vagyon legalább fele nem likvid – ez fizetési könnyítésnél kedvező szempont (legfeljebb 12, kivételesen, különösen lakóingatlan vagy cégrészesedés után 24 hónap). Automatikus részletfizetés nincs.'+ref('26. §')])});
-    if(opt&&opt.saving>0.0005) f.push(['c','Házastársi megosztás: a névre szóló közös elemek választható megosztásával évente '+FT(opt.saving)+' takarítható meg (a kalkulátor ezzel számol). Feltétel: azonos tartalmú nyilatkozat 2027. augusztus 31-ig.'+ref('7. § (2)–(3)')]);
-    if(p.mar) f.push(['i','Házassági vagyonjogi szerződésnél annak megosztása irányadó; enélkül a névre szóló elemeknél választhatnak, a többi fele-fele adózik.'+ref('7. § (2)')]);
-    if(S.assets.some(function(a){return a.own==='minor'})) f.push(['i','A kiskorú gyermek nem örökölt vagyona a szülői felügyeletet gyakorló szülőnél adózik, közös felügyeletnél a két szülőnél fele-fele – házasságtól függetlenül.'+(p.cust&&!p.mar?' A másik szülőre eső felét a kalkulátor nem számolja.':'')+ref('7. § (4)')]);
-    if(p.mar&&p.spres!=='same') f.push(['i','A házastárs illetőségét külön adta meg: '+(p.spres==='bel'?'belföldi illetőségű, a ráeső teljes vagyon adózik.':'külföldi illetőségű, a ráeső hányadból csak a belföldi ingatlan és a magyar társasági részesedés adózik.')+ref('2. § 3. pont, 4. § (2), 7. §')]);
-    if(S.assets.some(function(a){return a.own==='minorinh'})) f.push(['i','Az örökölt és a saját keresményből szerzett vagyon a gyermek saját adóalapjába tartozik, saját 1 Mrd Ft-os sávval.'+ref('7. § (5)')]);
+    if(r.total>0) f.push(['c','Bevallás és befizetés: 2027. augusztus 31., kötelezően elektronikusan, ezer forintra kerekítve. Bevallani csak fizetendő adó esetén kell.'+ref('29. §')]);
+    r.order.forEach(function(id){var t=r.tp[id];if(t.tax>0&&t.gross>0&&t.illiq/t.gross>=0.5) f.push(['w',esc(t.name)+': a vagyon legalább fele nem likvid – ez fizetési könnyítésnél kedvező szempont (legfeljebb 12, kivételesen, különösen lakóingatlan vagy cégrészesedés után 24 hónap). Automatikus részletfizetés nincs.'+ref('30. §')])});
+    if(opt&&opt.saving>0.0005) f.push(['c','Házastársi megosztás: a névre szóló közös elemek választható megosztásával évente '+FT(opt.saving)+' takarítható meg (a kalkulátor ezzel számol). Feltétel: azonos tartalmú nyilatkozat 2027. augusztus 31-ig.'+ref('10. § (2)–(3)')]);
+    if(p.mar) f.push(['i','Házassági vagyonjogi szerződésnél annak megosztása irányadó; enélkül a névre szóló elemeknél választhatnak, a többi fele-fele adózik.'+ref('10. § (2)')]);
+    if(S.assets.some(function(a){return a.own==='minor'})) f.push(['i','A kiskorú gyermek nem örökölt vagyona a szülői felügyeletet gyakorló szülőnél adózik, közös felügyeletnél a két szülőnél fele-fele – házasságtól függetlenül.'+(p.cust&&!p.mar?' A másik szülőre eső felét a kalkulátor nem számolja.':'')+ref('10. § (4)')]);
+    if(p.mar&&p.spres!=='same') f.push(['i','A házastárs illetőségét külön adta meg: '+(p.spres==='bel'?'belföldi illetőségű, a ráeső teljes vagyon adózik.':'külföldi illetőségű, a ráeső hányadból csak a belföldi ingatlan és a magyar társasági részesedés adózik.')+ref('5. § 3. pont, 7. § (2), 10. §')]);
+    if(S.assets.some(function(a){return a.own==='minorinh'})) f.push(['i','Az örökölt és a saját keresményből szerzett vagyon a gyermek saját adóalapjába tartozik, saját 1 Mrd Ft-os sávval.'+ref('10. § (5)')]);
     if(S.bvks.length){
-      f.push(['c','A 2026. december 15-én már működő vagyonkezelési adóalanyt 2027. január 14-ig be kell jelenteni a NAV-hoz.'+ref('35. § (4)')]);
-      f.push(['i','A BVK adóját a vagyonkezelő vallja be és a kezelt vagyonból fizeti meg; a kedvezményezett a kiadásig nem adózik utána.'+ref('29. §')]);
-      if(diff>0.0005) f.push(['c','A BVK-szerkezet miatt évente kb. '+FT(diff)+'-tal több adó keletkezik, mint ha ugyanez a vagyon közvetlenül a vagyonrendelőé lenne'+(res.bel?'.':' – a magyar jogú BVK belföldi illetőségű, ezért a külföldi kezelt vagyon is adóköteles.')+ref('2. § 4. pont, 4. §')]);
-      if(diff<-0.0005) f.push(['w','A BVK külön mentes sávja miatt a teher kb. '+FT(-diff)+'-tal kisebb, mint közvetlen tulajdonnál. Ez csak akkor tartható, ha nincs kapcsolt BVK, és a létrehozásnak adótól független, dokumentált indoka van.'+ref('1. § (4)–(6), 24. § (3)')]);
-      S.bvks.forEach(function(b){if(b.law==='kulf'&&b.ctrl==='kulf'&&res.bel) f.push(['w',esc(b.name||'BVK')+': belföldi illetőségű vagyonrendelőnél a magyarországi irányítást vélelmezni kell; a külföldi döntéshozatalt iratokkal kell bizonyítani.'+ref('2. § 35. pont')])});
-      if(S.bvks.filter(function(b){return b.lnk}).length>1) f.push(['i','Kapcsolt BVK-k: az 1 Mrd Ft-os sávot együtt egyszer alkalmazhatják; megosztásukhoz azonos tartalmú nyilatkozat kell, ennek hiányában a létrejöttük sorrendje dönt – a kalkulátor így számol.'+ref('24. § (4)–(6)')]);
-      f.push(['w','Ha a BVK év közben megszűnik vagy teljesen kiadja a vagyont, ugyanaz a vagyon a BVK-nál és a kedvezményezettnél is adózhat.'+ref('2. § 33. pont c), 1. § (3)')]);
+      f.push(['c','A 2026. december 15-én már működő vagyonkezelési adóalanyt 2027. január 14-ig be kell jelenteni a NAV-hoz.'+ref('39. § (3)')]);
+      f.push(['i','A BVK adóját a vagyonkezelő vallja be és a kezelt vagyonból fizeti meg; a kedvezményezett a kiadásig nem adózik utána.'+ref('33. §')]);
+      if(diff>0.0005) f.push(['c','A BVK-szerkezet miatt évente kb. '+FT(diff)+'-tal több adó keletkezik, mint ha ugyanez a vagyon közvetlenül a vagyonrendelőé lenne'+(res.bel?'.':' – a magyar jogú BVK belföldi illetőségű, ezért a külföldi kezelt vagyon is adóköteles.')+ref('5. § 4. pont, 7. §')]);
+      if(diff<-0.0005) f.push(['w','A BVK külön mentes sávja miatt a teher kb. '+FT(-diff)+'-tal kisebb, mint közvetlen tulajdonnál. Ez csak akkor tartható, ha nincs kapcsolt BVK, és a létrehozásnak adótól független, dokumentált indoka van.'+ref('4. § (1)–(3), 28. § (3)')]);
+      S.bvks.forEach(function(b){if(b.law==='kulf'&&b.ctrl==='kulf'&&res.bel) f.push(['w',esc(b.name||'BVK')+': belföldi illetőségű vagyonrendelőnél a magyarországi irányítást vélelmezni kell; a külföldi döntéshozatalt iratokkal kell bizonyítani.'+ref('5. § 38. pont')])});
+      if(S.bvks.filter(function(b){return b.lnk}).length>1) f.push(['i','Kapcsolt BVK-k: az 1 Mrd Ft-os sávot együtt egyszer alkalmazhatják; megosztásukhoz azonos tartalmú nyilatkozat kell, ennek hiányában a létrejöttük sorrendje dönt – a kalkulátor így számol.'+ref('28. § (4)–(6)')]);
+      f.push(['w','Ha a BVK év közben megszűnik vagy teljesen kiadja a vagyont, ugyanaz a vagyon a BVK-nál és a kedvezményezettnél is adózhat.'+ref('5. § 35. pont c), 3. §')]);
     }
-    if(res.bel&&S.assets.some(function(a){return a.tr&&TYPES[a.t]&&TYPES[a.t].tr})) f.push(['w','Egyezményi mentesítés: a benyújtott javaslat szerint a levonás a mentesített külföldi vagyonra – a hozzá kapcsolódó tartozások és az 1 Mrd Ft-os mentes sáv levonása után – jutó adó; a kalkulátor így számol (példa: 3 Mrd belföldi + 2 Mrd mentesített külföldi vagyon → 40 M − 10 M = 30 M Ft). Egyezményenként ellenőrizni kell, kiterjed-e a vagyonadóra.'+ref('T/930 11. §, 12. § (2) c)')]);
-    if(r.total>0) f.push(['c','Vagyonátrendezés előtt: a NAV a vagyonadó köztudomásúvá válásától (az indokolás szerint 2026. május 14-től) vizsgálja, van-e az ügyletnek adótól független, valós gazdasági indoka.'+ref('1. § (4)–(6)')]);
+    if(res.bel&&S.assets.some(function(a){return a.tr&&TYPES[a.t]&&TYPES[a.t].tr})) f.push(['w','Egyezményi mentesítés: a benyújtott javaslat szerint a levonás a mentesített külföldi vagyonra – a hozzá kapcsolódó tartozások és az 1 Mrd Ft-os mentes sáv levonása után – jutó adó; a kalkulátor így számol (példa: 3 Mrd belföldi + 2 Mrd mentesített külföldi vagyon → 40 M − 10 M = 30 M Ft). Egyezményenként ellenőrizni kell, kiterjed-e a vagyonadóra.'+ref('11. §, 12. § (2) c)')]);
+    if(r.total>0) f.push(['c','Vagyonátrendezés előtt: a NAV a vagyonadó köztudomásúvá válásától (az indokolás szerint 2026. május 14-től) vizsgálja, van-e az ügyletnek adótól független, valós gazdasági indoka.'+ref('4. § (1)–(3)')]);
     return f;
   }
 
@@ -510,7 +510,7 @@ document.body.classList.add('js');
     $('kq-ab').hidden=p.cit!=='y';$('kq-fst').hidden=p.cit!=='n';$('kq-spres').hidden=!p.mar;
   }
   function renderAssets(){
-    $('kAssets').innerHTML=S.assets.length?S.assets.map(assetCard).join(''):'<div class="kstart"><h3>Kezdjük: válassza ki az első vagyonelemet</h3><p>Lakás, cégrészesedés, bankszámla, értékpapír – minden elemet a tervezet saját szabálya szerint értékelünk, és azonnal látja a becsült adót. Ha csak körülnézne, töltsön be egy példát a fenti menüből.</p><div class="ksteps"><span><b>1</b>Vagyonelem hozzáadása</span><span><b>2</b>Értékek megadása</span><span><b>3</b>Tartozások, BVK</span><span><b>4</b>Eredmény és jelentés</span></div></div>';
+    $('kAssets').innerHTML=S.assets.length?S.assets.map(assetCard).join(''):'<div class="kstart"><h3>Kezdjük: válassza ki az első vagyonelemet</h3><p>Lakás, cégrészesedés, bankszámla, értékpapír – minden elemet a törvényjavaslat saját szabálya szerint értékelünk, és azonnal látja a becsült adót. Ha csak körülnézne, töltsön be egy példát a fenti menüből.</p><div class="ksteps"><span><b>1</b>Vagyonelem hozzáadása</span><span><b>2</b>Értékek megadása</span><span><b>3</b>Tartozások, BVK</span><span><b>4</b>Eredmény és jelentés</span></div></div>';
     var add=document.querySelector('#kAssets + .kadd');if(add)add.classList.toggle('primary',!S.assets.length);
   }
   function renderDebts(){$('kDebts').innerHTML=S.debts.map(debtCard).join('')}
@@ -555,7 +555,7 @@ document.body.classList.add('js');
       var st=R.st.slice();
       if(a.own==='jointc'&&S.p.mar){var ch=opt.choice[a.id]||'half';st.push('Házastársi megosztás: '+(ch==='reg'?'csak '+(a.reg==='sp'?'a házastársnál':'Önnél'):'fele-fele')+((a.alloc||'auto')==='auto'?' (a kalkulátor választása)':''))}
       if(R.inc&&taxable<R.v-0.0005&&taxable>0) st.push('Adóköteles rész: '+M(taxable));
-      if(!R.inc||taxable===0) st.push('Nem adóköteles: '+(R.inc?'külföldi illetőségű adóalanynál kimarad (4. § (2))':R.why));
+      if(!R.inc||taxable===0) st.push('Nem adóköteles: '+(R.inc?'külföldi illetőségű adóalanynál kimarad (7. § (2))':R.why));
       $('ks_'+a.id).innerHTML=st.map(esc).join('<br>')+(R.ref?'<br><span class="ref">'+esc(R.ref)+'</span>':'');
       $('kfl_'+a.id).innerHTML=R.fl.map(function(x){return '<div class="'+(x[0]==='i'?'':x[0])+'">'+x[1]+'</div>'}).join('');
     });
@@ -597,7 +597,7 @@ document.body.classList.add('js');
     var L=LAST,r=L.r,ids=r.order,T2=function(id){return r.tp[id]};
     function row(lbl,fn,cls){return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+lbl+'</td>'+ids.map(function(id){return '<td class="num">'+fn(T2(id))+'</td>'}).join('')+(ids.length>1?'<td class="num">'+(fn.tot?fn.tot():'')+'</td>':'')+'</tr>'}
     function tot(key,f){var g=function(t){return f(t[key])};g.tot=function(){return f(ids.reduce(function(s,id){return s+T2(id)[key]},0))};return g}
-    var lev='<h4>Adóalap és adó adóalanyonként</h4><p class="kn">Minden adóalany külön mentes sávval számol. Az adó ezer forintra kerekítve.'+ref('6. §, 9. §, 25. § (6)')+'</p><table class="kt"><thead><tr><th scope="col"><span class="sr-only">Tétel</span></th>'+ids.map(function(id){var t=T2(id);return '<th scope="col" class="num">'+esc(t.name)+'<br><span class="thsub">'+(t.res?'belföldi':'külföldi')+' illetőségű</span></th>'}).join('')+(ids.length>1?'<th scope="col" class="num">Összesen</th>':'')+'</tr></thead><tbody>'+
+    var lev='<h4>Adóalap és adó adóalanyonként</h4><p class="kn">Minden adóalany külön mentes sávval számol. Az adó ezer forintra kerekítve.'+ref('9. §, 12. §, 29. § (7)')+'</p><table class="kt"><thead><tr><th scope="col"><span class="sr-only">Tétel</span></th>'+ids.map(function(id){var t=T2(id);return '<th scope="col" class="num">'+esc(t.name)+'<br><span class="thsub">'+(t.res?'belföldi':'külföldi')+' illetőségű</span></th>'}).join('')+(ids.length>1?'<th scope="col" class="num">Összesen</th>':'')+'</tr></thead><tbody>'+
       row('Adóköteles vagyon (számított érték)',tot('gross',M))+
       (ids.some(function(id){return T2(id).treaty>0})?row('ebből egyezmény alapján mentesítendő',tot('treaty',M),'sub'):'')+
       row('Levonható tartozás',tot('debt',function(v){return '− '+M(v)}))+
@@ -607,7 +607,7 @@ document.body.classList.add('js');
       row('1%-os sávban',function(t){return M(Math.min(t.base,TOP))},'sub')+
       (ids.some(function(id){return T2(id).base>TOP})?row('1,5%-os sávban (100 Mrd Ft felett)',function(t){return M(Math.max(0,t.base-TOP))},'sub'):'')+
       row('Számított adó',tot('raw',EFT))+
-      (ids.some(function(id){return T2(id).trd>0})?row('Egyezményi mentesítés – a külföldi vagyonra (kapcsolódó tartozásai és a mentes sáv levonása után) jutó adó (T/930 11. §, 12. § (2) c))',tot('trd',function(v){return '− '+EFT(v)})):'')+
+      (ids.some(function(id){return T2(id).trd>0})?row('Egyezményi mentesítés – a külföldi vagyonra (kapcsolódó tartozásai és a mentes sáv levonása után) jutó adó (11. §, 12. § (2) c))',tot('trd',function(v){return '− '+EFT(v)})):'')+
       row('Helyi adó, gépjárműadó, értékelési díj 50%-a',tot('cred',function(v){return '− '+EFT(v)}))+
       row('Fizetendő vagyonadó',tot('tax',FT),'tot')+
       row('Tényleges teher a nettó vagyonra',function(t){return t.net>0?f2.format(t.tax/t.net*100)+'%':'–'})+
@@ -617,7 +617,7 @@ document.body.classList.add('js');
     $('kp-lev').innerHTML=lev;
     var nl=S.assets.map(function(a){var R=VC[a.id]||valOf(a),tx=0,who=[];ids.forEach(function(id){T2(id).items.forEach(function(it){if(it.a===a){tx+=it.amt;who.push(esc(T2(id).name)+(it.f!==1?' '+f0.format(it.f*100)+'%':''))}})});
       return '<tr><td><strong>'+esc(a.name||typeLabel(a))+'</strong><br><span class="ksub">'+esc(typeLabel(a))+'</span></td><td>'+who.join('<br>')+'</td><td>'+esc(R.meth)+'</td><td class="lv">'+R.st.map(esc).join('<br>')+'</td><td class="num">'+M(R.v)+'</td><td class="num">'+(tx>0?M(tx):'<span class="out">0</span>')+'</td><td><span class="ref">'+esc(R.ref)+'</span></td></tr>'});
-    $('kp-naplo').innerHTML='<h4>Értékelési napló</h4><p class="kn">Vagyonelemenként az alkalmazott módszer, a levezetés és a jogszabályhely – a bevalláshoz ezeket kell dokumentálni és az elévülésig megőrizni.'+ref('25. § (7)–(8)')+'</p>'+(nl.length?'<table class="kt"><thead><tr><th scope="col">Vagyonelem</th><th scope="col">Adóalany</th><th scope="col">Módszer</th><th scope="col">Levezetés</th><th scope="col" class="num">Számított érték</th><th scope="col" class="num">Adóköteles</th><th scope="col">Hivatkozás</th></tr></thead><tbody>'+nl.join('')+'</tbody></table>':'<p class="empty">Nincs vagyonelem.</p>');
+    $('kp-naplo').innerHTML='<h4>Értékelési napló</h4><p class="kn">Vagyonelemenként az alkalmazott módszer, a levezetés és a jogszabályhely – a bevalláshoz ezeket kell dokumentálni és az elévülésig megőrizni.'+ref('29. § (9)–(10)')+'</p>'+(nl.length?'<table class="kt"><thead><tr><th scope="col">Vagyonelem</th><th scope="col">Adóalany</th><th scope="col">Módszer</th><th scope="col">Levezetés</th><th scope="col" class="num">Számított érték</th><th scope="col" class="num">Adóköteles</th><th scope="col">Hivatkozás</th></tr></thead><tbody>'+nl.join('')+'</tbody></table>':'<p class="empty">Nincs vagyonelem.</p>');
     // előrejelzés
     var P0=L.proj,mx0=Math.max.apply(null,P0.map(function(p){return p.tax}).concat([0.001])),stp=niceStep(mx0/4),mxT=Math.ceil(mx0/stp)*stp,W=720,H=250,pl=56,pb=34,pt=24,bw=(W-pl-20)/P0.length,svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Előrejelzett vagyonadó évenként">';
     for(var i=0;i<=Math.round(mxT/stp);i++){var yv=stp*i,yy=H-pb-(H-pb-pt)*yv/mxT;svg+='<line class="kax" x1="'+pl+'" x2="'+(W-10)+'" y1="'+yy+'" y2="'+yy+'"/><text class="kaxl" x="'+(pl-6)+'" y="'+(yy+4)+'" text-anchor="end">'+f1.format(yv)+'</text>'}
@@ -634,7 +634,7 @@ document.body.classList.add('js');
     var optTxt=!S.p.mar?'Nem házas – nincs megosztási választás.':L.opt.ids.length?(L.opt.saving>0.0005?'A '+L.opt.ids.length+' választható közös elem legkedvezőbb megosztásával évente <strong>'+FT(L.opt.saving)+'</strong> takarítható meg a fele-fele megosztáshoz képest.':'A fele-fele megosztás már a legkedvezőbb.'):'Nincs „egyikük nevén nyilvántartott” közös vagyonelem; ilyen elemnél a kalkulátor kiszámolja a legkedvezőbb jogszerű megosztást.';
     $('kp-erz').innerHTML='<h4>Érzékenység és optimalizálás</h4><div class="kgrid">'+
       '<div class="kcard"><h5>Becslési sáv</h5><div class="kbig">'+FT(L.lo)+' – '+FT(L.hi)+'</div><p>A becsült értékek (NAV-modell, indexálás, még nem zárt '+YEAR+'-os beszámoló, árfolyamfüggő elemek) tipikus bizonytalanságával.</p></div>'+
-      '<div class="kcard"><h5>Házastársi megosztás</h5><p>'+optTxt+ref('7. § (2)–(3)')+'</p></div>'+
+      '<div class="kcard"><h5>Házastársi megosztás</h5><p>'+optTxt+ref('10. § (2)–(3)')+'</p></div>'+
       (S.bvks.length?'<div class="kcard"><h5>A BVK-szerkezet hatása</h5><div class="kbig">'+(L.diff>=0?'+ ':'− ')+FT(Math.abs(L.diff))+'/év</div><p>Ennyivel '+(L.diff>=0?'több':'kevesebb')+' az együttes adó, mint ha a kezelt vagyon közvetlenül a vagyonrendelőé lenne.</p></div>':'')+
       '<div class="kcard"><h5>Likviditási fedezet</h5><div class="kbig">'+(cov===null?'–':cov>=10?'10+ év':f1.format(cov)+' év')+'</div><p>A likvid vagyon (számla, értékpapír, alap, tőzsdei részvény, kripto, nemesfém) ennyi évnyi magánszemélyi vagyonadót fedez.'+(me.gross>0?' Nem likvid hányad (Ön): '+f0.format(me.illiq/me.gross*100)+'%.':'')+'</p></div>'+
       '</div><h4>Mi történik, ha a vagyon értéke változik?</h4>'+sens;

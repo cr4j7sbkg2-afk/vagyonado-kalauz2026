@@ -4,7 +4,7 @@
    V = [(ST + 2 × H) ÷ 3] × tulajdoni hányad, H = átlag(AE) ÷ T (T = 0,15)
    Holding (II.), induló cég (III.), rejtett tartalék (IV.), kisebbségi
    diszkont és tranzakciós ár (V.), külföldi tőkésítési ráta (VI.);
-   T/930 szerinti kiegészítések: negatív saját tőke = 0, egyszerűsített
+   szerinti kiegészítések: negatív saját tőke = 0, egyszerűsített
    értékelés ST ≤ 100 M Ft-nál, közeli hozzátartozói hányad összeszámítása.
    Ugyanaz a logika, mint a vagyonadó-kalkulátor vCo/coCore függvényében;
    a tests.html összeveti a kettőt.
@@ -32,7 +32,7 @@ function value(i){
   var ae=(i.ae||[]).filter(function(x){return x!==null&&x!==undefined&&!isNaN(x)});
   var avg=ae.length?ae.reduce(function(a,b){return a+b},0)/ae.length:0;
   var STa=ST<0?0:ST;
-  if(ST<0)st.push('Negatív saját tőke '+M(ST)+' → nullának tekintendő, a hozamértéket nem csökkenti (T/930 1. mell. V. a))');
+  if(ST<0)st.push('Negatív saját tőke '+M(ST)+' → nullának tekintendő, a hozamértéket nem csökkenti (1. mell. V. a))');
   if(ST>HIDDEN){var hr=Math.max(0,RT-DT);STa=ST+hr;st.push('Saját tőke '+M(ST)+' > 500 M Ft → + rejtett tartalék ('+M(RT)+' − halasztott adó '+M(DT)+(has(i.dtl)?'':' [becslés hiányában a rejtett tartalék 15%-a]')+') = '+M(STa));
     if(!has(i.rt))fl.push(['w','500 M Ft feletti saját tőkénél a rejtett tartalékkal növelt érték számít: adja meg a befektetett ingatlanok, részesedések és értékpapírok piaci és könyv szerinti értékének különbözetét.'+ref('1. mell. IV. b)–c)')])}
   else st.push('Saját tőke: '+M(ST));
@@ -41,7 +41,7 @@ function value(i){
   if(!ae.length)fl.push(['w','Adjon meg legalább egy lezárt év adózott eredményét.']);
   st.push('Átlagos adózott eredmény '+M(avg)+(ae.length&&ae.length<3?' ('+ae.length+' év adatából)':'')+(avg<0?' negatív → H = 0':' → H = '+M(avg)+' ÷ '+f1.format(T*100)+'% = '+M(H)));
   var V100;
-  if(i.simp&&ST<=100){V100=STa;mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = saját tőke = '+M(V100)+ref('T/930 15. § (9)'))}
+  if(i.simp&&ST<=100){V100=STa;mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = saját tőke = '+M(V100)+ref('15. § (9)'))}
   else if(i.hold){V100=STa;mode='II. pont (holding)';st.push('Holding: V = ST = '+M(V100))}
   else{
     if(i.fd&&i.fy-i.fd<=2&&i.fy-i.fd>=0){
@@ -51,16 +51,16 @@ function value(i){
     V100=(STa+2*H)/3;st.push('V = ('+M(STa)+' + 2 × '+M(H)+') ÷ 3 = '+M(V100));
   }
   var meth='Törvényi képlet, '+mode;
-  if(i.usetx&&fin(i.txv)>0){V100=fin(i.txv);meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100)+ref('1. mell. V. c)'))}
+  if(i.usetx&&fin(i.txv)>0){V100=fin(i.txv);meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100)+ref('1. mell. V. e)'))}
   var q=Math.max(0,Math.min(100,fin(i.sh)))/100,qi=Math.max(0,Math.min(100,fin(i.ish)))/100,qr=Math.max(0,Math.min(100,fin(i.rel)))/100,qt=q+qi+qr,v=V100*q,disc=0;
   if(q!==1)st.push('Tulajdoni hányad '+P(q*100)+': '+M(v));
   if(q>0&&qt<0.5&&i.disc){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'): '+M(v))}
-  else if(q>0&&qt<0.5)fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. mell. V. b), T/930 1. mell. V. d)')]);
-  else if(q>0&&q<0.5&&qt>=0.5)fl.push(['i','A közvetett és a közeli hozzátartozói hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható (a Ptk. szerinti közeli hozzátartozók hányadát össze kell számítani; az élettársét nem).'+ref('T/930 1. mell. V. d)')]);
-  if(!i.simp&&!i.hold&&!i.usetx&&ST<=100&&has(i.st))fl.push(['i','Legfeljebb 100 M Ft saját tőkénél a képlet helyett választható az egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része.'+ref('T/930 15. § (9)')]);
-  if(i.fy>=YEAR&&!i.usetx)fl.push(['i','A 2026-os adóhoz a bevalláskor elérhető utolsó lezárt beszámoló számít – naptári üzleti évnél a 2026-os. A 2026-os eredmény és az osztalékdöntés tehát még alakítja az értéket.'+ref('2. § 37. pont')]);
-  if(ST>HIDDEN)fl.push(['i','Az 500 M Ft feletti saját tőkéjű belföldi társaság a tulajdonos kérésére közli a rejtett tartalék adatait; könyvvizsgálói felülvizsgálat nem kell, ha a piaci értéket a törvény szerinti számítással állapítják meg.'+ref('T/930 34. § (1)–(2), 1. mell. IV. c)')]);
-  if(i.kulf)fl.push(['i','Külföldi társaságnál, ha a rejtett tartalék adatai nem állnak rendelkezésre, független cégértékelés kötelező.'+ref('12. § (8)')]);
+  else if(q>0&&qt<0.5)fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. mell. V. d)')]);
+  else if(q>0&&q<0.5&&qt>=0.5)fl.push(['i','A közvetett és a közeli hozzátartozói hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható (a Ptk. szerinti közeli hozzátartozók hányadát össze kell számítani; az élettársét nem).'+ref('1. mell. V. d)')]);
+  if(!i.simp&&!i.hold&&!i.usetx&&ST<=100&&has(i.st))fl.push(['i','Legfeljebb 100 M Ft saját tőkénél a képlet helyett választható az egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része.'+ref('15. § (9)')]);
+  if(i.fy>=YEAR&&!i.usetx)fl.push(['i','A 2026-os adóhoz a bevalláskor elérhető utolsó lezárt beszámoló számít – naptári üzleti évnél a 2026-os. A 2026-os eredmény és az osztalékdöntés tehát még alakítja az értéket.'+ref('5. § 40. pont')]);
+  if(ST>HIDDEN)fl.push(['i','Az 500 M Ft feletti saját tőkéjű belföldi társaság a tulajdonos kérésére közli a rejtett tartalék adatait; könyvvizsgálói felülvizsgálat nem kell, ha a piaci értéket a törvény szerinti számítással állapítják meg.'+ref('34. § (1)–(2), 1. mell. IV. c)')]);
+  if(i.kulf)fl.push(['i','Külföldi társaságnál, ha a rejtett tartalék adatai nem állnak rendelkezésre, független cégértékelés kötelező.'+ref('15. § (8)')]);
   return {v:Math.max(0,fin(v)),V100:Math.max(0,fin(V100)),STa:STa,H:H,avg:avg,q:q,qt:qt,disc:disc,mode:mode,meth:meth,st:st,fl:fl,ST:ST};
 }
 
@@ -86,7 +86,7 @@ function paint(){
   $('cRows').innerHTML='<div class="r-row"><span class="tpn">Számított érték, 100%<small>'+esc(r.mode)+'</small></span><span>'+M(r.V100)+'</span></div>'+
     '<div class="r-row"><span class="tpn">Az Ön részesedése ('+P(r.q*100)+(r.disc?', diszkont −'+f0.format(r.disc*100)+'%':'')+')</span><span>'+M(r.v)+'</span></div>'+
     '<div class="r-row total"><span class="tpn">Erre jutó vagyonadó a mentes sáv felett<small>1% (100 Mrd Ft adóalap felett 1,5%) – ha az 1 Mrd Ft-os sávot más vagyon már kimeríti</small></span><span>'+FT(top)+' / év</span></div>';
-  $('cSteps').innerHTML=r.st.map(esc).join('<br>')+'<br><span class="ref">1. melléklet I.–VI., 12. § (3)</span>';
+  $('cSteps').innerHTML=r.st.map(esc).join('<br>')+'<br><span class="ref">1. melléklet I.–VIII., 15. § (3)</span>';
   $('cFlags').innerHTML=r.fl.length?r.fl.map(function(x){return '<div class="flag '+(x[0]==='i'?'':x[0])+'">'+x[1]+'</div>'}).join(''):'<p class="empty">Nincs külön tudnivaló.</p>';
   if(window.VagyonadoLinkRefs)window.VagyonadoLinkRefs($('cSum'));
 }

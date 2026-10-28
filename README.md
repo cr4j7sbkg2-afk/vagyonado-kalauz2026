@@ -36,7 +36,7 @@ A build a **bekespartners.com arculatát** követi (mintha a főoldal egy extra 
 - „Teljes kalauz” fül: a II–IV. fül egy oldalon, görgetve.
 - A szakmai szabályok a tervezet szövegével egyeztetve (2026. 10. 20.): kisebbségi diszkont választható, közvetlen + közvetett hányaddal (1. mell. V. b)); halasztott adó becslés hiányában a rejtett tartalék 15 %-a (2. § 14.); közös szülői felügyelet házasságtól függetlenül fele-fele (7. § (4)); névre szóló közös elem csak a nyilvántartott házastársnál 100 % vagy fele-fele (7. § (2) b)); házastárs illetősége külön kérdés; termőföld kivétel az 500 M Ft-os szakértői szabály alól (19. § (3)); értékelési díj csak kötelező értékelésnél (9. § (2) a)).
 
-- T/930 (2026. 10. 28.) szerinti kiegészítések a kalkulátorokban: negatív saját tőke = 0 (1. mell. V. a)); egyszerűsített értékelés ST ≤ 100 M Ft-nál (`simp` mező, 15. § (9)); a kisebbségi teszthez a Ptk. szerinti közeli hozzátartozók hányada is összeszámítandó (`rel` mező, 1. mell. V. d)); külföldi ingatlantartó cégnél az ingatlanhoz kapcsolódó tartozás levonható (`hdebt`, 18. §); egyezményi beszámítás = a külföldi vagyonra (tartozásai és a mentes sáv levonása után) jutó adó (11. §, 12. § (2) c)); részvényeknél nincs 2026-os átlagár-választás (39. §). **Nyitott:** a §-hivatkozások még az egyeztetési tervezet számozását követik (a „T/930” előtagúak a javaslatét); a tételes átszámozás és a szöveg szerinti ellenőrzés a T/930 PDF alapján következik.
+- T/930 (2026. 10. 28.) szerinti kiegészítések a kalkulátorokban: negatív saját tőke = 0 (1. mell. V. a)); egyszerűsített értékelés ST ≤ 100 M Ft-nál (`simp` mező, 15. § (9)); a kisebbségi teszthez a Ptk. szerinti közeli hozzátartozók hányada is összeszámítandó (`rel` mező, 1. mell. V. d)); külföldi ingatlantartó cégnél az ingatlanhoz kapcsolódó tartozás levonható (`hdebt`, 18. §); egyezményi beszámítás = a külföldi vagyonra (tartozásai és a mentes sáv levonása után) jutó adó (11. §, 12. § (2) c)); részvényeknél nincs 2026-os átlagár-választás (39. §). A §-hivatkozások (HTML `span.ref` és JS `ref()`) 2026. 10. 28-tól a T/930 számozását követik (a tervezethez képest: 2–14. § → +3, 15–35. § → +4, 1. § (4)–(6) → 4. §, 12. § (9) → 18. §, 1. mell. V. b)/c) → V. d)/e)).
 
 ## Tartalom módosítása
 
@@ -45,7 +45,7 @@ A build a **bekespartners.com arculatát** követi (mintha a főoldal egy extra 
 
 ## Jogszabályi hivatkozások (kattintható §-ok)
 
-Minden `<span class="ref">…</span>` hivatkozás automatikusan linkké válik (`app.js`, `LAWS` objektum): a tervezet §-ai a kormany.hu-n közzétett PDF-re, a `T/930` előtagúak a parlament.hu-n közzétett törvényjavaslatra (`LAWS.bill`), az `Itv.`, `Ptk.`, `Szja tv.` előtagú hivatkozások az njt.hu megfelelő törvényére mutatnak (`#SZ<szám>` horgonnyal). **Kihirdetés után** az `app.js` elején a `LAWS.draft.url`-t az njt.hu-s címre kell cserélni és `anchor:true`-ra állítani – ezzel minden tervezet-hivatkozás egyszerre átáll az élő törvényszövegre.
+Minden `<span class="ref">…</span>` hivatkozás automatikusan linkké válik (`app.js`, `LAWS` objektum): a törvény §-ai a parlament.hu-n közzétett T/930 törvényjavaslatra (`LAWS.draft.url`), az `Itv.`, `Ptk.`, `Szja tv.` előtagú hivatkozások az njt.hu megfelelő törvényére mutatnak (`#SZ<szám>` horgonnyal). **Kihirdetés után** az `app.js` elején a `LAWS.draft.url`-t az njt.hu-s címre kell cserélni és `anchor:true`-ra állítani – ezzel minden tervezet-hivatkozás egyszerre átáll az élő törvényszövegre.
 
 ## Biztonsági és adatvédelmi tulajdonságok
 
