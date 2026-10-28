@@ -67,6 +67,12 @@
     t('cegertek.js rejtett tartalék 15%-os halasztott adó',C.value({st:600,ae:[0,0,0],rt:100,dtl:'',sh:100,fy:2026,T:15}).v,(600+85)/3);
     t('cegertek.js induló cég H=0 (H ≤ ST 25%-a)',C.value({st:100,ae:[2,2,2],sh:100,fy:2026,fd:2025,T:15}).v,100/3);
     t('cegertek.js induló cég, de H > ST 25%-a → I. pont',C.value({st:100,ae:[10,10,10],sh:100,fy:2026,fd:2025,T:15}).v,(100+2*10/0.15)/3);
+    // T/930 szerinti kiegészítések
+    t('T/930: negatív saját tőke = 0 (ST −100, AE 60)',C.value({st:-100,ae:[60,60,60],sh:100,fy:2026,T:15}).v,(0+2*60/0.15)/3);
+    t('T/930: egyszerűsített értékelés ST ≤ 100 M (ST 90, 50%)',C.value({st:90,ae:[60,60,60],sh:50,fy:2026,T:15,simp:true}).v,45);
+    t('T/930: egyszerűsítés nem jár ST > 100 M-nál',C.value({st:150,ae:[120,120,120],sh:100,fy:2026,T:15,simp:true}).v,(150+2*120/0.15)/3);
+    t('T/930: házastársak 30% + 30% → nincs diszkont',C.value({st:150,ae:[120,120,120],sh:30,rel:30,fy:2026,T:15,disc:true}).v,(150+2*120/0.15)/3*0.3);
+    t('T/930: testvérek 20% + 20% → 25% diszkont',C.value({st:150,ae:[120,120,120],sh:20,rel:20,fy:2026,T:15,disc:true}).v,(150+2*120/0.15)/3*0.2*0.75);
   } else t('cegertek.js betöltődött',0,1);
   // RULES
   t('Mentes sáv 1 000 M',V.RULES.LIMIT,1000);

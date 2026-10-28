@@ -122,9 +122,12 @@
           <div class="fld"><label for="c_dtl">Halasztott adókötelezettség</label><span class="sub">üresen hagyva a rejtett tartalék 15%-a <span class="ref">2. § 14. pont</span></span><div class="inp"><input type="number" step="any" min="0" id="c_dtl" inputmode="decimal"><span>M Ft</span></div></div>
         </div>
         <div class="kopts">
-          <label class="chk"><input type="checkbox" id="c_hold"> Holdingvállalkozás (a részesedések az eszközök legalább 90%-át adják) – csak a saját tőke számít <span class="ref">1. mell. II.</span></label>
+          <label class="chk"><input type="checkbox" id="c_hold"> Holdingvállalkozás (elsődleges célja részesedések birtoklása és irányítása; a részesedések, értékpapírok, pénzeszközök és a tulajdonolt cégekkel szembeni követelések az eszközök legalább 90%-a) – csak a saját tőke számít <span class="ref">1. mell. II., T/930 5. § 16. pont</span></label>
           <label class="chk"><input type="checkbox" id="c_new"> Jogelőd nélkül alapított társaság</label>
           <label class="chk"><input type="checkbox" id="c_kulf"> Külföldi társaság – saját tőkésítési ráta</label>
+        </div>
+        <div class="kopts" id="c_simprow" hidden>
+          <label class="chk"><input type="checkbox" id="c_simp"> Egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része (választható, ha a saját tőke legfeljebb 100 M Ft) <span class="ref">T/930 15. § (9)</span></label>
         </div>
         <div class="grid3" id="c_newrow" hidden>
           <div class="fld"><label for="c_fd">Az alapítás éve</label><span class="sub">az alapítás évében és az azt követő két évben H = 0, kivéve ha ST &gt; 500 M Ft vagy H &gt; ST 25%-a <span class="ref">1. mell. III.</span></span><div class="inp"><input type="number" step="1" id="c_fd" inputmode="numeric"><span>év</span></div></div>
@@ -138,10 +141,11 @@
         <div class="grid3">
           <div class="fld"><label for="c_sh">Közvetlen tulajdoni hányad</label><div class="inp"><input type="number" step="any" min="0" max="100" id="c_sh" value="100" inputmode="decimal"><span>%</span></div></div>
           <div class="fld"><label for="c_ish">Közvetett tulajdoni hányad</label><span class="sub">más társaságon keresztül; a kisebbségi teszthez</span><div class="inp"><input type="number" step="any" min="0" max="100" id="c_ish" inputmode="decimal"><span>%</span></div></div>
+          <div class="fld"><label for="c_rel">Közeli hozzátartozók együttes hányada</label><span class="sub">házastárs, szülő, gyermek, testvér stb. (Ptk.) – a kisebbségi teszthez össze kell számítani; az élettársé nem <span class="ref">T/930 1. mell. V. d)</span></span><div class="inp"><input type="number" step="any" min="0" max="100" id="c_rel" inputmode="decimal"><span>%</span></div></div>
           <div class="fld"><label for="c_txv">Független eladás ára (100%-ra), ha volt</label><span class="sub">10% feletti részesedés független félnek, egy éven belül – figyelembe vehető <span class="ref">1. mell. V. c)</span></span><div class="inp"><input type="number" step="any" min="0" id="c_txv" inputmode="decimal"><span>M Ft</span></div></div>
         </div>
         <div class="kopts">
-          <label class="chk"><input type="checkbox" id="c_disc" checked> Kisebbségi diszkont alkalmazása (választható: 33%-ot elérő hányadnál 25%, az alatt 30%) <span class="ref">1. mell. V. b)</span></label>
+          <label class="chk"><input type="checkbox" id="c_disc" checked> Kisebbségi diszkont alkalmazása (választható: 33%-ot elérő együttes hányadnál 25%, az alatt 30%) <span class="ref">1. mell. V. b)</span></label>
           <label class="chk"><input type="checkbox" id="c_usetx"> A független eladás árát alkalmazom a képlet helyett</label>
         </div>
       </fieldset>

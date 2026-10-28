@@ -3,7 +3,9 @@
    A vagyonadó-tervezet 1. melléklete szerinti számított érték:
    V = [(ST + 2 × H) ÷ 3] × tulajdoni hányad, H = átlag(AE) ÷ T (T = 0,15)
    Holding (II.), induló cég (III.), rejtett tartalék (IV.), kisebbségi
-   diszkont és tranzakciós ár (V.), külföldi tőkésítési ráta (VI.).
+   diszkont és tranzakciós ár (V.), külföldi tőkésítési ráta (VI.);
+   T/930 szerinti kiegészítések: negatív saját tőke = 0, egyszerűsített
+   értékelés ST ≤ 100 M Ft-nál, közeli hozzátartozói hányad összeszámítása.
    Ugyanaz a logika, mint a vagyonadó-kalkulátor vCo/coCore függvényében;
    a tests.html összeveti a kettőt.
    ===================================================================== */
@@ -29,7 +31,8 @@ function value(i){
   var T=i.kulf&&fin(i.T)>0?fin(i.T)/100:CAP;
   var ae=(i.ae||[]).filter(function(x){return x!==null&&x!==undefined&&!isNaN(x)});
   var avg=ae.length?ae.reduce(function(a,b){return a+b},0)/ae.length:0;
-  var STa=ST;
+  var STa=ST<0?0:ST;
+  if(ST<0)st.push('Negatív saját tőke '+M(ST)+' → nullának tekintendő, a hozamértéket nem csökkenti (T/930 1. mell. V. a))');
   if(ST>HIDDEN){var hr=Math.max(0,RT-DT);STa=ST+hr;st.push('Saját tőke '+M(ST)+' > 500 M Ft → + rejtett tartalék ('+M(RT)+' − halasztott adó '+M(DT)+(has(i.dtl)?'':' [becslés hiányában a rejtett tartalék 15%-a]')+') = '+M(STa));
     if(!has(i.rt))fl.push(['w','500 M Ft feletti saját tőkénél a rejtett tartalékkal növelt érték számít: adja meg a befektetett ingatlanok, részesedések és értékpapírok piaci és könyv szerinti értékének különbözetét.'+ref('1. mell. IV. b)–c)')])}
   else st.push('Saját tőke: '+M(ST));
@@ -38,7 +41,8 @@ function value(i){
   if(!ae.length)fl.push(['w','Adjon meg legalább egy lezárt év adózott eredményét.']);
   st.push('Átlagos adózott eredmény '+M(avg)+(ae.length&&ae.length<3?' ('+ae.length+' év adatából)':'')+(avg<0?' negatív → H = 0':' → H = '+M(avg)+' ÷ '+f1.format(T*100)+'% = '+M(H)));
   var V100;
-  if(i.hold){V100=STa;mode='II. pont (holding)';st.push('Holding: V = ST = '+M(V100))}
+  if(i.simp&&ST<=100){V100=STa;mode='egyszerűsített (saját tőke)';st.push('Egyszerűsített értékelés (ST ≤ 100 M Ft): V = saját tőke = '+M(V100)+ref('T/930 15. § (9)'))}
+  else if(i.hold){V100=STa;mode='II. pont (holding)';st.push('Holding: V = ST = '+M(V100))}
   else{
     if(i.fd&&i.fy-i.fd<=2&&i.fy-i.fd>=0){
       if(ST<=HIDDEN&&!(H>0.25*ST)){H=0;mode='III. pont (induló cég)';st.push('Alapítás '+i.fd+', beszámoló '+i.fy+' → induló időszak, H = 0')}
@@ -48,13 +52,14 @@ function value(i){
   }
   var meth='Törvényi képlet, '+mode;
   if(i.usetx&&fin(i.txv)>0){V100=fin(i.txv);meth='Tranzakciós ár';st.push('Független felek közötti, 10% feletti eladás ára (100%-ra): '+M(V100)+ref('1. mell. V. c)'))}
-  var q=Math.max(0,Math.min(100,fin(i.sh)))/100,qi=Math.max(0,Math.min(100,fin(i.ish)))/100,qt=q+qi,v=V100*q,disc=0;
+  var q=Math.max(0,Math.min(100,fin(i.sh)))/100,qi=Math.max(0,Math.min(100,fin(i.ish)))/100,qr=Math.max(0,Math.min(100,fin(i.rel)))/100,qt=q+qi+qr,v=V100*q,disc=0;
   if(q!==1)st.push('Tulajdoni hányad '+P(q*100)+': '+M(v));
-  if(q>0&&qt<0.5&&i.disc){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett hányad '+P(qt*100)+'): '+M(v))}
-  else if(q>0&&qt<0.5)fl.push(['i','50% alatti (közvetlen + közvetett) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. mell. V. b)')]);
-  else if(q>0&&q<0.5&&qt>=0.5)fl.push(['i','A közvetett hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható.'+ref('1. mell. V. b)')]);
+  if(q>0&&qt<0.5&&i.disc){disc=qt>=0.33?0.25:0.30;v*=1-disc;st.push('Kisebbségi diszkont − '+f0.format(disc*100)+'% (közvetlen + közvetett + közeli hozzátartozói hányad '+P(qt*100)+'): '+M(v))}
+  else if(q>0&&qt<0.5)fl.push(['i','50% alatti (közvetlen + közvetett + közeli hozzátartozói) részesedésnél '+(qt>=0.33?'25':'30')+'%-os kisebbségi diszkont választható.'+ref('1. mell. V. b), T/930 1. mell. V. d)')]);
+  else if(q>0&&q<0.5&&qt>=0.5)fl.push(['i','A közvetett és a közeli hozzátartozói hányaddal együtt a részesedés eléri az 50%-ot, ezért kisebbségi diszkont nem alkalmazható (a Ptk. szerinti közeli hozzátartozók hányadát össze kell számítani; az élettársét nem).'+ref('T/930 1. mell. V. d)')]);
+  if(!i.simp&&!i.hold&&!i.usetx&&ST<=100&&has(i.st))fl.push(['i','Legfeljebb 100 M Ft saját tőkénél a képlet helyett választható az egyszerűsített értékelés: a saját tőke tulajdoni hányadra jutó része.'+ref('T/930 15. § (9)')]);
   if(i.fy>=YEAR&&!i.usetx)fl.push(['i','A 2026-os adóhoz a bevalláskor elérhető utolsó lezárt beszámoló számít – naptári üzleti évnél a 2026-os. A 2026-os eredmény és az osztalékdöntés tehát még alakítja az értéket.'+ref('2. § 37. pont')]);
-  if(ST>HIDDEN)fl.push(['i','Az 500 M Ft feletti saját tőkéjű belföldi társaság a beszámoló elfogadásától 30 napon belül megküldi a rejtett tartalék könyvvizsgált adatait a tulajdonosoknak és a NAV-nak.'+ref('30. § (1)')]);
+  if(ST>HIDDEN)fl.push(['i','Az 500 M Ft feletti saját tőkéjű belföldi társaság a tulajdonos kérésére közli a rejtett tartalék adatait; könyvvizsgálói felülvizsgálat nem kell, ha a piaci értéket a törvény szerinti számítással állapítják meg.'+ref('T/930 34. § (1)–(2), 1. mell. IV. c)')]);
   if(i.kulf)fl.push(['i','Külföldi társaságnál, ha a rejtett tartalék adatai nem állnak rendelkezésre, független cégértékelés kötelező.'+ref('12. § (8)')]);
   return {v:Math.max(0,fin(v)),V100:Math.max(0,fin(V100)),STa:STa,H:H,avg:avg,q:q,qt:qt,disc:disc,mode:mode,meth:meth,st:st,fl:fl,ST:ST};
 }
@@ -63,12 +68,12 @@ function read(){
   var fy=Math.round(n($('c_fy').value))||YEAR;
   return {st:n($('c_st').value),fy:fy,div:n($('c_div').value),ae:['c_ae1','c_ae2','c_ae3'].filter(function(k){return has($(k).value)}).map(function(k){return n($(k).value)}),
     rt:n($('c_rt').value),dtl:$('c_dtl').value,hold:$('c_hold').checked,fd:$('c_new').checked&&has($('c_fd').value)?Math.round(n($('c_fd').value)):0,
-    kulf:$('c_kulf').checked,T:n($('c_T').value),sh:has($('c_sh').value)?n($('c_sh').value):100,ish:n($('c_ish').value),disc:$('c_disc').checked,usetx:$('c_usetx').checked,txv:n($('c_txv').value)};
+    kulf:$('c_kulf').checked,T:n($('c_T').value),sh:has($('c_sh').value)?n($('c_sh').value):100,ish:n($('c_ish').value),rel:n($('c_rel').value),disc:$('c_disc').checked,simp:$('c_simp').checked,usetx:$('c_usetx').checked,txv:n($('c_txv').value)};
 }
 function paint(){
   var i=read();
   $('l_ae1').textContent='Adózott eredmény – '+i.fy;$('l_ae2').textContent='Adózott eredmény – '+(i.fy-1);$('l_ae3').textContent='Adózott eredmény – '+(i.fy-2);
-  $('c_hidden').hidden=!(i.st>HIDDEN);$('c_newrow').hidden=!$('c_new').checked;$('c_kulfrow').hidden=!$('c_kulf').checked;
+  $('c_hidden').hidden=!(i.st>HIDDEN);$('c_simprow').hidden=!(has($('c_st').value)&&i.st<=100);$('c_newrow').hidden=!$('c_new').checked;$('c_kulfrow').hidden=!$('c_kulf').checked;
   var any=has($('c_st').value)||has($('c_ae1').value)||has($('c_ae2').value)||has($('c_ae3').value);
   if(!any){$('cBadge').className='badge b-info';$('cBadge').textContent='Adja meg a saját tőkét és az eredményt';$('cVal').textContent='–';$('cRatio').textContent='';$('cRows').innerHTML='';$('cSteps').innerHTML='';$('cFlags').innerHTML='<p class="empty">A levezetés a számok megadása után jelenik meg.</p>';return}
   var r=value(i);
@@ -92,8 +97,8 @@ var EX={
   veszteseges:{st:900,ae:[-50,-50,-50],sh:100}
 };
 function setEx(k){
-  ['c_st','c_div','c_ae1','c_ae2','c_ae3','c_rt','c_dtl','c_fd','c_ish','c_txv'].forEach(function(id){$(id).value=''});
-  $('c_fy').value=YEAR;$('c_T').value=15;$('c_sh').value=100;$('c_hold').checked=false;$('c_new').checked=false;$('c_kulf').checked=false;$('c_disc').checked=true;$('c_usetx').checked=false;
+  ['c_st','c_div','c_ae1','c_ae2','c_ae3','c_rt','c_dtl','c_fd','c_ish','c_rel','c_txv'].forEach(function(id){$(id).value=''});
+  $('c_fy').value=YEAR;$('c_T').value=15;$('c_sh').value=100;$('c_hold').checked=false;$('c_new').checked=false;$('c_kulf').checked=false;$('c_disc').checked=true;$('c_usetx').checked=false;$('c_simp').checked=false;
   var e=EX[k];if(e){$('c_st').value=e.st;$('c_ae1').value=e.ae[0];$('c_ae2').value=e.ae[1];$('c_ae3').value=e.ae[2];$('c_sh').value=e.sh;if(e.rt!==undefined){$('c_rt').value=e.rt;$('c_dtl').value=e.dtl}}
   paint();
 }
