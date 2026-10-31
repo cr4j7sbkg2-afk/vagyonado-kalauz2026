@@ -40,6 +40,14 @@ A build a **bekespartners.com arculatát** követi (mintha a főoldal egy extra 
 
 - 2026. 10. 28. – három független felülvizsgálat (adójogi a T/930 normaszövege ellen, matematikai, technikai-biztonsági) utáni javítások: egyezményi beszámítás a 12. § (2) c) szerint (fix 1 Mrd, a külföldi helyi adó a levonást csökkenti – nem kétszeres); kisebbségi diszkont csak az 1. mell. I–III. szerinti értékre; egyszerűsített értékelés = beszámoló szerinti ST; értékelési díj levonhatósága a kötelező értékeléshez kötve (`mand` mező), nem az 500 M-hoz; `re_udulo` típus (NAV-modell), `re_egy` modell nélkül; külföldi cégnél 75%-os ingatlanos feltétel (`ivt`); `co_val` típus; `jointc` tartozás a kapcsolt elem megosztását követi; induló cég évszám-őr; indexálás egész/fél év; negatív összegek nullára vágva a számításban és a sanitizerben; prototípus-kulcsú id-k kizárva; hashchange-navigáció; általános print-szabályok; mobil kulcsadatok 2×2 rács; ktab ARIA + nyílbillentyűk; frame-busting.
 
+## Élesítés a bekespartners.com-ra (2026-10-31-től)
+
+Az oldal a `https://www.bekespartners.com/vagyonado-kalauz2026/` alatt fut, önálló statikus mappaként (nem WordPress-oldal). **Egyetlen forrás ez a GitHub-repó**: élesítéskor a repó teljes tartalmát kell a szerver `vagyonado-kalauz2026/` mappájába másolni, felülírva a régit (`index.html`, `cegertek.html`, `styles.css`, `app.js`, `cegertek.js`, `logo.png`, `hero.jpg`, `logo-kibomlas.gif`, `sqn-logo.png`, `fonts/`). A `tests.html` és a `README.md` nem kell az éles mappába. Ha a szerver kézzel módosított fájlt tartalmaz (pl. a főmenü linkjei), azt előbb a repóba kell visszavezetni, különben a következő élesítés felülírja.
+
+A fejléc, a page-top sáv, a szolgáltatás-oldalmenü és a lábléc a főoldal mása (container 1140 px, fejléc 77 px, page-top 230/180 px, oldalmenü 255 px). A logó, a page-top fotó és a PrimeGlobal-logó közvetlenül a `www.bekespartners.com/wp-content/...` alól töltődik (a CSP `img-src` ezt engedi); ha nem érhető el, a helyi `logo.png` és `hero.jpg` jelenik meg, a PrimeGlobal-logó elmarad. Ha a WordPress-téma képeinek útvonala változik, az `index.html` és a `cegertek.html` fejlécében, page-top szabályában (`styles.css`, `.page-top`) és láblécében kell átírni.
+
+**Ismert, örökölt akadálymentességi eltérés:** az oldalmenü fehér felirata a szürke (#B7B7B7) gombokon (2,0:1) és a lábléc TAX / LEGAL / FOUNDATION színei a világosszürke háttéren (1,7–2,9:1) a főoldal arculatából jönnek, és nem érik el a WCAG AA 4,5:1 kontrasztot. Javítás egy helyen: `styles.css` → `--sb-grey:#767676` (és a lábléc színei); ezt a főoldalon is érdemes egyszerre megtenni.
+
 ## Tartalom módosítása
 
 - A II–IV. fül szövege az `index.html` megfelelő `<section>` elemében van; a `§`-hivatkozások `<span class="ref">…</span>` jelöléssel.

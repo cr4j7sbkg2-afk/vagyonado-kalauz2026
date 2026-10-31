@@ -71,12 +71,31 @@ try{window.VagyonadoLinkRefs=linkRefs}catch(e){}
 document.body.classList.add('js');
 (function(){
   if(!('IntersectionObserver' in window))return;
-  var els=document.querySelectorAll('.prose > *, .statband, .band, .sqn-head, .sqn-statement, fieldset, .result, .kdetail, .kbar, .k-intro > *');
+  /* csak a kiemelő blokkok úsznak be; a jogi szöveg, a táblázatok és az űrlap azonnal látszik */
+  var els=document.querySelectorAll('.statband, .band, .sqn-head, .sqn-statement, .ins-card');
   els.forEach(function(e){e.classList.add('reveal')});
   var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -6% 0px',threshold:0.05});
   els.forEach(function(e){io.observe(e)});
   /* ami fül-váltáskor már a képernyőn van, azonnal jelenjen meg */
   document.querySelectorAll('.tabs [role="tab"]').forEach(function(t){t.addEventListener('click',function(){setTimeout(function(){document.querySelectorAll('.reveal:not(.in)').forEach(function(e){var r=e.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0)e.classList.add('in')})},30)})});
+})();
+
+/* ---------- Főoldali képek tartaléka (ha a www.bekespartners.com kép nem töltődik) ---------- */
+(function(){
+  document.querySelectorAll('img[data-fallback]').forEach(function(img){
+    function fb(){var f=img.getAttribute('data-fallback');if(f==='hide'){var p=img.closest('a')||img;p.style.display='none'}else if(img.getAttribute('src')!==f){img.removeAttribute('width');img.setAttribute('src',f)}}
+    img.addEventListener('error',fb);if(img.complete&&img.naturalWidth===0)fb();
+  });
+})();
+
+/* ---------- Mobilmenü (hamburger) ---------- */
+function closeMM(){var m=$('mmenu'),b=$('hdrBurger');if(!m||m.hidden)return;m.hidden=true;document.body.classList.remove('mm-open');if(b){b.setAttribute('aria-expanded','false');b.focus()}}
+(function(){
+  var m=$('mmenu'),b=$('hdrBurger'),c=$('mmClose');if(!m||!b)return;
+  b.addEventListener('click',function(){m.hidden=false;document.body.classList.add('mm-open');b.setAttribute('aria-expanded','true');var f=m.querySelector('a,button');if(f)f.focus()});
+  if(c)c.addEventListener('click',closeMM);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMM()});
+  window.addEventListener('resize',function(){if(window.innerWidth>991)closeMM()});
 })();
 
 /* ---------- Fülek ---------- */
@@ -96,6 +115,8 @@ document.body.classList.add('js');
       var p=$(t.dataset.target);if(p)p.hidden=all?(t.dataset.target==='teszt'):!on;
     });
     document.body.classList.toggle('on-bvk',id==='bvk');
+    var ts=$('tabSel');if(ts&&ts.value!==id)ts.value=id;
+    try{document.dispatchEvent(new CustomEvent('vk:tab',{detail:id}))}catch(e){}
     if(!init){try{history.replaceState(null,'','#'+id)}catch(e){}}
     if(scroll){var nav=document.querySelector('.tabbar'),bar=$('brandbar'),pn=$(id);if(nav&&pn){try{var top=pn.getBoundingClientRect().top+window.pageYOffset-nav.offsetHeight-(bar?bar.offsetHeight:0);window.scrollTo({top:Math.max(0,top),behavior:'auto'})}catch(e){}}}
   }
@@ -109,6 +130,9 @@ document.body.classList.add('js');
     });
   });
   document.querySelectorAll('[data-goto]').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.goto,true)})});
+  var tsel=$('tabSel');if(tsel)tsel.addEventListener('change',function(){show(tsel.value,true)});
+  /* a fejléc menüjében / oldalmenüben a „Vagyonadó-kalkulátor” (#teszt) a kalkulátor fülre visz */
+  document.querySelectorAll('a[href="#teszt"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();closeMM();show('teszt',true)})});
   show((location.hash||'').replace('#',''),false,true);
   var bar=$('brandbar');if(bar){var st=function(){bar.classList.toggle('stuck',window.pageYOffset>4)};window.addEventListener('scroll',st,{passive:true});st()}
 })();
@@ -117,6 +141,9 @@ document.body.classList.add('js');
 (function(){
   if(!$('kf')) return;
   var YEAR=RULES.YEAR, LIMIT=RULES.LIMIT, TOP=RULES.TOP;
+  /* mobil alsó sáv: csak a kalkulátor fülön, ha van vagyonelem és az eredménypanel nem látszik */
+  var miniData=false,sumVis=false;
+  function mini(){var p=$('teszt'),on=p&&!p.hidden&&!document.body.classList.contains('all-view');document.body.classList.toggle('mini-on',!!(miniData&&on&&!sumVis))}
   var STORE='vagyonado-kalkulator-v3', REMEMBER='vagyonado-kalkulator-megjegyez', MAX_FILE=512*1024;
   var f0=new Intl.NumberFormat('hu-HU',{maximumFractionDigits:0,useGrouping:'always'});
   var f1=new Intl.NumberFormat('hu-HU',{maximumFractionDigits:1,useGrouping:'always'});
@@ -615,6 +642,7 @@ document.body.classList.add('js');
     var st=$('kStatus'),pre=S.src&&S.src.indexOf('preset:')===0?PRESETS[S.src.slice(7)]:null;
     st.innerHTML=pre?'<strong>Példaadatok:</strong> '+esc(pre.name)+'. Írja felül a sajátjával.':'<strong>Saját adatok</strong> – '+(remembering()?'ezen az eszközön megjegyezve.':'csak ebben a lapfülben, bezáráskor törlődnek.');
     var mt=$('kMiniTax'),mb=$('kMiniBadge');if(mt){mt.textContent=FT(r.total);mb.textContent=b[1]}
+    miniData=S.assets.length>0;mini();
   }
   function allFlags(){var L=LAST,f=[];S.assets.forEach(function(a){var R=VC[a.id];if(!R)return;R.fl.forEach(function(x){if(x[0]!=='i')f.push([x[0],'<strong>'+esc(a.name||typeLabel(a))+':</strong> '+x[1]])})});return L.gf.concat(f)}
   function paintDetail(){
@@ -798,6 +826,8 @@ document.body.classList.add('js');
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){var d=document.querySelector('.kmenu[open]');if(d){d.open=false;var sm=d.querySelector('summary');if(sm)sm.focus()}}});
   $('kMini').addEventListener('click',function(){$('kSum').scrollIntoView({behavior:'smooth',block:'start'})});
   document.body.classList.add('has-mini');
+  if('IntersectionObserver' in window&&$('kSum')){new IntersectionObserver(function(en){sumVis=en[0].isIntersecting;mini()},{threshold:0.12}).observe($('kSum'))}
+  document.addEventListener('vk:tab',function(){mini()});
   $('kClear').addEventListener('click',function(){S=blank();S.src='user';renderAll()});
   $('kWipe').addEventListener('click',function(){wipe();try{localStorage.removeItem(REMEMBER)}catch(e){}S=blank();S.src='user';renderAll();msg('A tárolt adatok törölve.')});
   $('kRemember').addEventListener('change',function(){
