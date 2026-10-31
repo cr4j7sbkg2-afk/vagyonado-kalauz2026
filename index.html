@@ -53,6 +53,16 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<!-- Háttér-vízjel: a logó négy gyűrűje a tartalom mögött; a BVK fülön az SQN-logó (styles.css: .wm) -->
+<div class="wm" aria-hidden="true">
+  <svg class="wm-rings" viewBox="0 0 400 100" width="560" height="140">
+    <circle cx="50" cy="50" r="38" fill="none" stroke="#ECA520" stroke-width="13"/>
+    <circle cx="150" cy="50" r="38" fill="none" stroke="#52BC86" stroke-width="13"/>
+    <circle cx="250" cy="50" r="38" fill="none" stroke="#84425D" stroke-width="13"/>
+    <circle cx="350" cy="50" r="38" fill="none" stroke="#62919D" stroke-width="13"/>
+  </svg>
+  <img class="wm-sqn" src="sqn-logo.png" alt="" width="272" height="252">
+</div>
 <!-- FEJLÉC – a bekespartners.com fejlécének mása (logó, főmenü, nyelvválasztó; mobilon hamburger) -->
 <header class="sitehdr" id="brandbar">
   <div class="wrap hdr-row">
@@ -156,11 +166,11 @@
 <nav class="tabbar has-sel" aria-label="Fejezetek">
   <div class="wrap">
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="t-teszt" data-target="teszt" aria-controls="teszt" aria-selected="true"><span class="n">I.</span>Vagyonadó-kalkulátor</button>
-      <button class="tab" role="tab" id="t-osszefoglalo" data-target="osszefoglalo" aria-controls="osszefoglalo" aria-selected="false"><span class="n">II.</span>Kit és mit érint</button>
-      <button class="tab" role="tab" id="t-szakmai" data-target="szakmai" aria-controls="szakmai" aria-selected="false"><span class="n">III.</span>Adótanácsadói elemzés</button>
-      <button class="tab" role="tab" id="t-bvk" data-target="bvk" aria-controls="bvk" aria-selected="false"><span class="n">IV.</span>Bizalmi vagyonkezelés</button>
-      <button class="tab tab-all" role="tab" id="t-all" data-target="all" aria-controls="osszefoglalo szakmai bvk" aria-selected="false"><span class="n">≡</span>Teljes kalauz</button>
+      <button type="button" class="tab" role="tab" id="t-teszt" data-target="teszt" aria-controls="teszt" aria-selected="true"><span class="n">I.</span>Vagyonadó-kalkulátor</button>
+      <button type="button" class="tab" role="tab" id="t-osszefoglalo" data-target="osszefoglalo" aria-controls="osszefoglalo" aria-selected="false"><span class="n">II.</span>Kit és mit érint</button>
+      <button type="button" class="tab" role="tab" id="t-szakmai" data-target="szakmai" aria-controls="szakmai" aria-selected="false"><span class="n">III.</span>Adótanácsadói elemzés</button>
+      <button type="button" class="tab" role="tab" id="t-bvk" data-target="bvk" aria-controls="bvk" aria-selected="false"><span class="n">IV.</span>Bizalmi vagyonkezelés</button>
+      <button type="button" class="tab tab-all" role="tab" id="t-all" data-target="all" aria-controls="osszefoglalo szakmai bvk" aria-selected="false"><span class="n">≡</span>Teljes kalauz</button>
     </div>
     <label class="tabsel"><span class="sr-only">Fejezet választása</span>
       <select id="tabSel">

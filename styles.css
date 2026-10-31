@@ -695,7 +695,7 @@ body.all-view #teszt{display:none !important}
 
 /* Nyomtatás: csak a jelentés */
 @media print{
-  .sitehdr,.svc-side,.sfooter,.tabbar,.kmini,.quick,.mmenu,.reveal-hint{display:none !important}
+  .sitehdr,.svc-side,.sfooter,.tabbar,.kmini,.quick,.mmenu,.reveal-hint,.wm{display:none !important}
   .page-top{background:none !important;height:auto !important;padding:0 0 8pt !important}
   .page-top .pt-title,.page-top .pt-sub{color:#000 !important}
   .svc{display:block !important;padding-top:0 !important}
@@ -719,8 +719,9 @@ body.all-view #teszt{display:none !important}
    FŐOLDAL-ILLESZTÉS (2026-10-31) – a bekespartners.com fejléce, page-top
    sávja, szolgáltatás-oldalmenüje és lábléce. Méretek és színek a főoldalról
    lemérve (container 1140 px, fejléc 77 px, page-top 230/180 px, oldalmenü
-   255 px). A korábbi .brandbar/.masthead/.practice-rule/.site-footer/.wm
-   elemek kikerültek a HTML-ből.
+   255 px). A korábbi .brandbar/.masthead/.practice-rule/.site-footer
+   elemek kikerültek a HTML-ből; a .wm háttér-vízjel (négy gyűrű,
+   BVK fülön SQN) szándékosan megmaradt – a főoldalon nincs ilyen.
    ===================================================================== */
 :root{--bar-h:77px;--sb-grey:#B7B7B7;--sb-grey-h:#999999;--bp-orange:#EBA420}
 @media (max-width:991.98px){:root{--bar-h:64px}}
@@ -910,3 +911,42 @@ body.mm-open{overflow:hidden}
 /* SQN-fül: a gombok és a sötét sáv felirata WCAG AA kontraszttal */
 .sqn .cta,.sqn button.cta{background:var(--sqn-blue-text);border-color:var(--sqn-blue-text);font-weight:600}
 .band.slate .eyebrow{color:#DCE6EE}
+
+/* =====================================================================
+   TELEFON / ÉRINTŐKÉPERNYŐ (2026-10-31)
+   - iOS Safari a 16 px-nél kisebb betűs mezőknél fókuszkor ránagyít: 16 px
+   - érintési célok legalább 44 px (Apple HIG) – álló és fekvő nézetben is
+   - kivágásos iPhone fekvő nézetben a tartalom ne kerüljön a kivágás alá
+   ===================================================================== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.wrap{padding-left:max(15px,env(safe-area-inset-left,0px));padding-right:max(15px,env(safe-area-inset-right,0px))}
+@media (pointer:coarse), (max-width:900px){
+  input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea,.sel,.sel.small,.ka-name,.ktxt{font-size:16px}
+}
+@media (pointer:coarse){
+  .btn,.btn.small,.sel,.sel.small,summary.btn,.ka-name,.linkbtn,.cta,.q-go,.tab,.ktab{min-height:44px}
+  .ka-name{padding-block:8px}
+  .q-chips button{min-height:44px;padding-inline:10px}
+  label.chk,.choice label{min-height:44px;align-items:center}
+  .chk input,.choice input,input[type=checkbox],input[type=radio]{width:20px;height:20px;flex:0 0 20px;margin-top:0}
+  .q-details summary,.kfold summary,details > summary{min-height:44px;display:flex;align-items:center}
+  .k-intro a,.qfld small a,.prose a:not(.reflink):not(.cta){padding-block:6px;display:inline-block}
+  .hdr-logo{padding-block:8px}
+  .sf-nav a{padding-block:14px}
+  .sf-contact a{min-height:44px}
+  .sf-share a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px}
+  .kmenu-list .btn{min-height:44px}
+}
+.mm-close svg,.hdr-burger span{pointer-events:none}
+.mm-close{position:relative;z-index:1;flex:0 0 44px}
+
+/* Keskeny kijelző: a leghosszabb opció ne szélesítse ki a select-et (320 px-en 327 px volt) */
+select,.sel{max-width:100%}
+.bar-actions,.bar-actions > *{min-width:0;max-width:100%}
+.mmenu{width:min(100vw,420px)}
+@media (pointer:coarse){
+  .tabsel select{font-size:16px}
+  .qopts .chk{min-height:44px;align-items:center}
+  .qfld small a{padding-block:10px;display:inline-block}
+  .sf-pg a{display:inline-block;padding-block:12px}
+}
