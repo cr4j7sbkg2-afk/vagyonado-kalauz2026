@@ -420,15 +420,17 @@ label.btn{display:inline-block;cursor:pointer}
 .kt .ref{white-space:normal}
 .kreport{display:none}
 
-/* Háttér-vízjel (márkajelzés a tartalom mögött) */
+/* Vízjel (márkajelzés). A tartalom FÖLÖTT, áttetszően és kattintás-átengedően
+   (pointer-events:none) fut, mert a főoldali arculat fehér dobozai mögött
+   nem látszott. A ragadós fejléc/fülsor/menü (z 5–40) alatt marad. */
 body{position:relative;z-index:0}
-.wm{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.wm-rings,.wm-sqn{position:absolute;right:28px;bottom:36px;opacity:.09;transition:opacity .3s}
+.wm{position:fixed;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.wm-rings,.wm-sqn{position:absolute;right:28px;bottom:36px;opacity:.11;transition:opacity .3s}
 .wm-rings{width:560px;height:140px}
 .wm-sqn{width:340px;height:auto;opacity:0;filter:grayscale(1)}
 body.on-bvk .wm-rings{opacity:0}
-body.on-bvk .wm-sqn{opacity:.07}
-@media (max-width:720px){.wm-rings{width:300px;height:75px;right:12px;bottom:20px;opacity:.08}.wm-sqn{width:200px}}
+body.on-bvk .wm-sqn{opacity:.08}
+@media (max-width:720px){.wm-rings{width:300px;height:75px;right:12px;bottom:20px;opacity:.10}.wm-sqn{width:200px}}
 
 /* Sablon-eszközök: címke narancs négyzettel, gyűrűs idővonal, navy táblázatfejléc, számsáv */
 .eyebrow::before{content:"";display:inline-block;width:8px;height:8px;background:var(--seg1);margin-right:10px;vertical-align:1px}
